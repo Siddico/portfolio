@@ -38,7 +38,38 @@
     });
     renderProjects();
     renderCerts();
+    renderExperience();
     store.set("lang", lang);
+  }
+
+  function renderExperience() {
+    const E = window.CONTENT && window.CONTENT.experience;
+    if (!E || !E.items) return;
+    const listEl = $("#experienceList");
+    if (!listEl) return;
+    const L = (o) => {
+      if (!o) return "";
+      if (typeof o === "string" && o.startsWith("tl.")) {
+        return lang === "ar" ? (window.I18N_AR[o] || o) : (EN[o] || o);
+      }
+      if (typeof o === "object") return o[lang] || o.en || o.ar || "";
+      return String(o);
+    };
+    const items = E.items.filter(x => x.visible !== false);
+    listEl.innerHTML = items.map(x => `
+      <li class="tl">
+        <div class="tl__meta">
+          <span class="tl__date">${esc(L(x.date))}</span>
+          <span class="tl__place">${esc(L(x.place || x.company))}</span>
+        </div>
+        <div class="tl__card">
+          <h3>${esc(L(x.t || x.title))}</h3>
+          <ul>
+            ${(x.points || []).map(p => `<li>${esc(L(p))}</li>`).join('')}
+          </ul>
+        </div>
+      </li>
+    `).join('');
   }
 
   function renderCerts() {
@@ -47,7 +78,7 @@
     const listEl = $("#certList");
     if (!listEl) return;
     listEl.innerHTML = items.map((c) => `<a class="cert" href="${esc(c.href || c.url || '#')}" target="_blank" rel="noopener">
-      <span class="cert__mark" style="background:${c.tone || c.color || '#2F5BEA'}" aria-hidden="true">${esc(c.mark || c.badge || '✓')}</span>
+      <span class="cert__mark" style="background:${c.tone || c.color || '#2F5BEA'}" aria-hidden="true">${c.badgeImage ? `<img src="${esc(c.badgeImage)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" alt="">` : esc(c.mark || c.badge || '✓')}</span>
       <span class="cert__body"><b>${esc(L(c.name))}</b><span>${esc(c.issuer)}</span><em>${esc(L(c.date))}${c.credentialId || c.id ? ` · ${L(C.idLabel)} ${esc(c.credentialId || c.id)}` : ""}</em></span>
       <span class="cert__go">${L(C.show)} ↗</span></a>`).join("");
   }
@@ -60,8 +91,8 @@
   function renderProjects() {
     const activeProjects = (window.PROJECTS || []).filter(p => p.visible !== false);
     $("#projectList").innerHTML = activeProjects.map((p) => {
-      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc(window.SCREENS[k])}" alt="${esc(p.name.en)} screen" loading="lazy" width="540" height="1200">`;
-      const sc = p.screens;
+      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc(window.SCREENS[k] || k)}" alt="${esc(p.name.en)} screen" loading="lazy" width="540" height="1200">`;
+      const sc = p.screens && p.screens.length ? p.screens : ["brainguard-home"];
       const devices = sc.length === 1
         ? `<div class="device" data-depth="1"><div class="device__screens">${img(sc[0], true)}</div></div>`
         : `<div class="device" data-depth=".6"><div class="device__screens">${img(sc[0], true)}</div></div>`
@@ -167,12 +198,51 @@
         window.__PORTFOLIO_DATA = portData;
         window.__SCRAPBOOK_SETTINGS = portData.scrapbookSettings || {};
 
+        // 1. Profile Photo & Bio sync
+        if (portData.profile) {
+          const pr = portData.profile;
+          if (pr.photo) {
+            document.querySelectorAll('.hero__photo, .about__img, #heroPhoto').forEach(img => {
+              img.src = pr.photo;
+            });
+            if (window.CONTENT) {
+              window.CONTENT.photo = pr.photo;
+              window.CONTENT.aboutPhoto = pr.photo;
+            }
+          }
+          if (pr.name) {
+            document.querySelectorAll('.brand__name, #aboutName').forEach(el => el.textContent = pr.name);
+          }
+          if (pr.email) {
+            document.querySelectorAll('.mailcard__mail').forEach(el => {
+              el.textContent = pr.email;
+              const link = el.tagName === 'A' ? el : el.closest('a');
+              if (link) link.href = `mailto:${pr.email}`;
+            });
+          }
+          if (pr.phone) {
+            const cleanNum = pr.phone.replace(/[^0-9+]/g, '');
+            document.querySelectorAll('.whatsapp').forEach(el => el.href = `https://wa.me/${cleanNum.replace('+', '')}`);
+            document.querySelectorAll('.whatsapp__num').forEach(el => el.textContent = pr.phone);
+          }
+          if (pr.github) {
+            document.querySelectorAll('a[href*="github.com"]').forEach(el => {
+              if (!el.classList.contains('brand')) el.href = pr.github;
+            });
+          }
+          if (pr.linkedin) {
+            document.querySelectorAll('a[href*="linkedin.com"]').forEach(el => el.href = pr.linkedin);
+          }
+        }
+
+        // 2. Projects sync
         if (portData.projects && Array.isArray(portData.projects) && portData.projects.length) {
           window.PROJECTS = portData.projects;
           window.SITE.projects = portData.projects;
           renderProjects();
         }
 
+        // 3. Certifications sync
         if (portData.certs && Array.isArray(portData.certs) && portData.certs.length) {
           if (window.CONTENT && window.CONTENT.certs) {
             window.CONTENT.certs.items = portData.certs;
@@ -180,6 +250,15 @@
           renderCerts();
         }
 
+        // 4. Experience timeline sync
+        if (portData.experience && Array.isArray(portData.experience) && portData.experience.length) {
+          if (window.CONTENT && window.CONTENT.experience) {
+            window.CONTENT.experience.items = portData.experience;
+          }
+          renderExperience();
+        }
+
+        // 5. Section & Component Granular Visibility
         if (portData.sectionVisibility) {
           const vis = portData.sectionVisibility;
           const secMap = {
@@ -191,7 +270,11 @@
             experience: "#experience",
             certs: "#certs",
             about: "#about",
-            contact: "#contact"
+            contact: "#contact",
+            whatsapp: ".whatsapp",
+            mailcard: ".mailcard",
+            socials: ".socials",
+            cvBtn: ".nav__actions .btn, #heroCvBtn"
           };
           for (const [key, selector] of Object.entries(secMap)) {
             const el = document.querySelector(selector);

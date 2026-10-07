@@ -12,7 +12,7 @@
     const rot = (i, k = 2.2) => ((i * 37) % 7 - 3) * k / 3;
     const activeProjects = (S.projects || []).filter(p => p.visible !== false);
     const proj = activeProjects.map((p, i) => {
-      const shots = p.screens.slice(0, 3).map((k, j) => `<figure class="sb-pol sb-pol--s" style="--r:${[-6, 3, -2][j]}deg"><i class="sb-tape"></i><img src="${e(S.screens[k])}" alt="${e(p.name.en)} screen" loading="lazy"></figure>`).join("");
+      const shots = (p.screens || ["brainguard-home"]).slice(0, 3).map((k, j) => `<figure class="sb-pol sb-pol--s" style="--r:${[-6, 3, -2][j]}deg"><i class="sb-tape"></i><img src="${e(S.screens[k] || k)}" alt="${e(p.name.en)} screen" loading="lazy"></figure>`).join("");
       const stampsHtml = p.metrics && p.metrics.length ? `<div class="sb-stamps">${p.metrics.map((m, j) => {
         const val = String(m.v || "");
         const vClass = val.length > 7 ? "sb-stamp-val--xs" : val.length > 4 ? "sb-stamp-val--s" : "";
