@@ -1,0 +1,1916 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بوابة إدارة البورتفوليو · Mohammed Siddiq</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232F5BEA'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' text-anchor='middle' fill='%23fff'%3EMS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #FAF8F5;
+    --surface: #FFFFFF;
+    --tint: #F2F0EB;
+    --ink: #0E1B2C;
+    --muted: #546070;
+    --line: #E6E3DD;
+    --primary: #2F5BEA;
+    --primary-dark: #2547C9;
+    --soft: #EEF2FE;
+    --amber: #F5A524;
+    --mint: #10B981;
+    --danger: #EF4444;
+    --on-primary: #ffffff;
+    --radius: 20px;
+    --shadow: 0 1px 2px rgba(14, 27, 44, .04), 0 12px 32px -12px rgba(14, 27, 44, .14);
+    --f-sans: "IBM Plex Sans Arabic", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  }
+  [dir="ltr"] {
+    --f-sans: "Plus Jakarta Sans", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1rem/1.6 var(--f-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Buttons matching portfolio style */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    font: 700 .92rem var(--f-sans);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .2s ease;
+  }
+  .btn--primary {
+    background: var(--primary);
+    color: var(--on-primary);
+    box-shadow: 0 8px 20px -10px rgba(47, 91, 234, .7);
+  }
+  .btn--primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+  }
+  .btn--ghost {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .btn--ghost:hover {
+    border-color: var(--ink);
+    background: var(--tint);
+  }
+  .btn--danger {
+    background: #FEF2F2;
+    color: #DC2626;
+    border-color: #FECACA;
+  }
+  .btn--danger:hover {
+    background: #DC2626;
+    color: #fff;
+  }
+  .btn--sm {
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: .84rem;
+    border-radius: 9px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* Switch Toggle */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #CBD5E1;
+    transition: .3s cubic-bezier(.4, 0, .2, 1);
+    border-radius: 26px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    inset-inline-start: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s cubic-bezier(.4, 0, .2, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+  }
+  input:checked + .slider {
+    background-color: var(--primary);
+  }
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+  [dir="rtl"] input:checked + .slider:before {
+    transform: translateX(-22px);
+  }
+
+  /* Header */
+  header.admin-bar {
+    background: rgba(250, 248, 245, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-group img, .brand-group .avatar-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: top;
+    background: var(--soft);
+    border: 1px solid var(--line);
+  }
+  .brand-text h1 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--ink);
+  }
+  .brand-text span {
+    font-size: .8rem;
+    color: var(--mint);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+  .brand-text span::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mint);
+  }
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Layout */
+  .admin-container {
+    max-width: 1320px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    display: flex;
+    gap: 32px;
+  }
+  @media (max-width: 900px) {
+    .admin-container { flex-direction: column; gap: 20px; padding: 18px 16px 40px; }
+  }
+
+  /* Sidebar */
+  aside.admin-nav {
+    width: 250px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  @media (max-width: 900px) {
+    aside.admin-nav {
+      width: 100%;
+      flex-direction: row;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+  }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font: 700 .94rem var(--f-sans);
+    cursor: pointer;
+    text-align: start;
+    transition: all .18s ease;
+    white-space: nowrap;
+  }
+  .tab-btn:hover {
+    background: var(--tint);
+    color: var(--ink);
+  }
+  .tab-btn.active {
+    background: var(--surface);
+    color: var(--primary);
+    box-shadow: 0 4px 16px -8px rgba(47, 91, 234, .3);
+    border: 1px solid var(--line);
+  }
+  .tab-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  main.admin-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .tab-pane {
+    display: none;
+    animation: fadeIn .2s ease;
+  }
+  .tab-pane.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Form controls */
+  .field {
+    margin-bottom: 18px;
+    text-align: start;
+  }
+  .field label {
+    display: block;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    font: 500 .95rem var(--f-sans);
+    color: var(--ink);
+    transition: all .2s;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--soft);
+  }
+  .field textarea {
+    min-height: 95px;
+    resize: vertical;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card span {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  .stat-card b {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+
+  /* Items rows */
+  .item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(14, 27, 44, .03);
+    transition: all .2s ease;
+  }
+  .item-row:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .item-row.is-hidden {
+    opacity: 0.6;
+    background: #F8F9FA;
+  }
+  .item-badge {
+    font-size: .78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: var(--tint);
+    color: var(--muted);
+  }
+  .status-pill {
+    font-size: .75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+  .status-pill.is-active {
+    background: #E8F7F0;
+    color: #0E7444;
+  }
+  .status-pill.is-off {
+    background: #FEE2E2;
+    color: #B91C1C;
+  }
+
+  /* Section Visibility Cards */
+  .vis-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    transition: all .2s;
+  }
+  .vis-card:hover {
+    border-color: var(--primary);
+  }
+  .vis-info h4 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .vis-info p {
+    font-size: .84rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Dedicated Login Page */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 440px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px -20px rgba(14, 27, 44, 0.2);
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .login-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    margin: 0 auto 18px;
+    object-fit: cover;
+    object-position: top;
+    background: linear-gradient(145deg, #EEF2FE, #DCE6FD);
+    border: 2px solid var(--line);
+    box-shadow: 0 8px 18px -6px rgba(47, 91, 234, 0.3);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(14, 27, 44, .45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+  }
+  .modal-window {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(14, 27, 44, .3);
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    inset-inline-end: 24px;
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font: 600 .9rem var(--f-sans);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .25s cubic-bezier(.3, 1.4, .5, 1);
+    z-index: 200;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ DEDICATED LOGIN SCREEN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <img class="login-avatar" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq">
+    <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 4px;" id="loginTitle">بوابة إدارة البورتفوليو</h2>
+    <p style="color: var(--muted); font-size: .9rem; margin-bottom: 26px;" id="loginSub">أهلاً بك يا باشمهندس محمد. أدخل كلمة المرور للمتابعة.</p>
+    
+    <form id="loginForm">
+      <div class="field">
+        <label id="loginPassLabel">كلمة مرور لوحة التحكم</label>
+        <div style="position: relative;">
+          <input type="password" id="pwdInput" placeholder="أدخل كلمة المرور" required autofocus style="padding-inline-end: 42px;">
+          <button type="button" id="togglePwdBtn" style="position: absolute; inset-inline-end: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.1rem;" title="Show/Hide">👁️</button>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; font-size: .88rem; color: var(--muted);">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="rememberMe" checked style="width: 16px; height: 16px;">
+          <span id="rememberLabel">تذكر تسجيل الدخول</span>
+        </label>
+        <button type="button" id="langSwitchLogin" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer;">English</button>
+      </div>
+      <button type="submit" class="btn btn--primary" id="loginBtn" style="width: 100%; min-height: 48px;">
+        <span id="loginBtnText">تسجيل الدخول إلى اللوحة</span> →
+      </button>
+      <div style="margin-top: 20px;">
+        <a href="index.html" style="font-size: .88rem; color: var(--muted); text-decoration: none;" id="returnSiteLink">← العودة إلى الموقع الرئيسي</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ TOP BAR ============ -->
+<header class="admin-bar" id="appHeader" style="display: none;">
+  <div class="brand-group">
+    <img src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq">
+    <div class="brand-text">
+      <h1>Mohammed Siddiq <span class="item-badge" style="background: var(--soft); color: var(--primary); font-weight: 800;">ADMIN</span></h1>
+      <span id="backendStatusText">متصل بالباكاند وقاعدة البيانات</span>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button class="btn btn--ghost btn--sm" id="langToggleBtn" type="button">
+      🌐 <span id="langLabel">English</span>
+    </button>
+    <a class="btn btn--ghost btn--sm" href="index.html" target="_blank" rel="noopener">
+      <span id="viewSiteText">معاينة الموقع الحقيقي</span> ↗
+    </a>
+    <button class="btn btn--danger btn--sm" id="logoutBtn" type="button">
+      <span id="logoutText">تسجيل الخروج</span> ⎋
+    </button>
+  </div>
+</header>
+
+<!-- ============ MAIN DASHBOARD LAYOUT ============ -->
+<div class="admin-container" id="appLayout" style="display: none;">
+  
+  <!-- Sidebar Navigation -->
+  <aside class="admin-nav">
+    <button class="tab-btn active" data-tab="overview">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span data-k="tab.overview">نظرة عامة</span>
+    </button>
+    <button class="tab-btn" data-tab="projects">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <span data-k="tab.projects">المشاريع والتطبيقات</span>
+    </button>
+    <button class="tab-btn" data-tab="skills">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <span data-k="tab.skills">المهارات والتقنيات</span>
+    </button>
+    <button class="tab-btn" data-tab="certs">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+      <span data-k="tab.certs">الشهادات والكورسات</span>
+    </button>
+    <button class="tab-btn" data-tab="visibility">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      <span data-k="tab.visibility">طريقة العرض والتنسيق</span>
+    </button>
+    <button class="tab-btn" data-tab="design">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 10 10 0 0 0 0-20"></path></svg>
+      <span data-k="tab.design">الألوان والثيم</span>
+    </button>
+    <button class="tab-btn" data-tab="profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span data-k="tab.profile">البيانات الشخصية</span>
+    </button>
+    <button class="tab-btn" data-tab="messages">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      <span data-k="tab.messages">رسائل التواصل</span>
+    </button>
+  </aside>
+
+  <!-- Main Content Panes -->
+  <main class="admin-main">
+
+    <!-- 1. Overview Tab -->
+    <section class="tab-pane active" id="pane-overview">
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 6px;" data-k="ov.head">لوحة التحكم وإدارة المحتوى</h2>
+      <p style="color: var(--muted); font-size: .95rem; margin-bottom: 24px;" data-k="ov.sub">تحكم كامل بكل ما يظهر في البورتفوليو ونمط الـ Hot Reload والرسائل.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span data-k="ov.stat1">إجمالي المشاريع</span>
+          <b id="ovProjCount">4</b>
+        </div>
+        <div class="stat-card">
+          <span data-k="ov.stat2">الشهادات والكورسات</span>
+          <b id="ovCertsCount">3</b>
+        </div>
+        <div class="stat-card">
+          <span data-k="ov.stat3">مجموعات المهارات</span>
+          <b id="ovSkillsCount">4</b>
+        </div>
+        <div class="stat-card">
+          <span data-k="ov.stat4">رسائل التواصل الواردة</span>
+          <b id="ovInboxCount">0</b>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;" data-k="ov.quickTitle">إجراءات سريعة</h3>
+        <p style="color: var(--muted); font-size: .88rem; margin-bottom: 18px;" data-k="ov.quickSub">يمكنك إضافة محتوى جديد أو تعديل خيارات العرض بضغطة واحدة:</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn--primary btn--sm" onclick="openAddProjectModal()">+ إضافة مشروع جديد</button>
+          <button class="btn btn--ghost btn--sm" onclick="openAddCertModal()">+ إضافة شهادة أو كورس</button>
+          <button class="btn btn--ghost btn--sm" onclick="setTab('visibility')">👁️ ضبط أقسام العرض والـ Hot Reload</button>
+          <button class="btn btn--ghost btn--sm" onclick="setTab('design')">🎨 تغيير ألوان الموقع</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Projects Tab -->
+    <section class="tab-pane" id="pane-projects">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="proj.head">إدارة المشاريع والتطبيقات</h2>
+          <p style="color: var(--muted); font-size: .9rem;" data-k="proj.sub">إضافة وتعديل المشاريع والتحكم في ظهورها في الموقع الرئيسي والـ Hot Reload.</p>
+        </div>
+        <button class="btn btn--primary" onclick="openAddProjectModal()">
+          <span>+</span> <span data-k="proj.addBtn">إضافة مشروع جديد</span>
+        </button>
+      </div>
+
+      <div id="projectsListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- 3. Skills Tab -->
+    <section class="tab-pane" id="pane-skills">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="skills.head">المهارات والتقنيات (Tech Stack)</h2>
+          <p style="color: var(--muted); font-size: .9rem;" data-k="skills.sub">التحكم في مجموعات المهارات التي تظهر في شريط التقنيات وقسم المهارات وكروت الـ Sticky Notes.</p>
+        </div>
+      </div>
+
+      <div id="skillsListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- 4. Certs Tab -->
+    <section class="tab-pane" id="pane-certs">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="certs.head">الشهادات والكورسات (Certifications)</h2>
+          <p style="color: var(--muted); font-size: .9rem;" data-k="certs.sub">إضافة وتعديل الشهادات والاعتمادات وأرقام التحقق والروابط.</p>
+        </div>
+        <button class="btn btn--primary" onclick="openAddCertModal()">
+          <span>+</span> <span data-k="certs.addBtn">إضافة شهادة أو كورس</span>
+        </button>
+      </div>
+
+      <div id="certsListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- 5. Visibility Controls Tab (CRITICAL) -->
+    <section class="tab-pane" id="pane-visibility">
+      <div style="margin-bottom: 24px;">
+        <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="vis.head">التحكم في طريقة العرض والتنسيق</h2>
+        <p style="color: var(--muted); font-size: .95rem;" data-k="vis.sub">تحكم منفصل في ما يظهر في البورتفوليو الرئيسي وما يظهر عند تفعيل الـ Hot Reload.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
+        
+        <!-- Main Portfolio Sections -->
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span style="font-size: 1.4rem;">🌐</span>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800;" data-k="vis.mainTitle">أقسام البورتفوليو الرئيسي</h3>
+              <p style="color: var(--muted); font-size: .84rem;">تفعيل أو إخفاء أقسام الصفحة الرئيسية فورياً</p>
+            </div>
+          </div>
+          <div id="mainSecVisibilityList">
+            <!-- Toggles for main portfolio -->
+          </div>
+        </div>
+
+        <!-- Hot Reload / Scrapbook Controls -->
+        <div class="card">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <span style="font-size: 1.4rem;">⚡</span>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800;" data-k="vis.scrapTitle">التحكم في الـ Hot Reload (Scrapbook)</h3>
+              <p style="color: var(--muted); font-size: .84rem;">تخصيص مكونات شاشة الـ Scrapbook عند ضغط 'r'</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px; padding: 12px 16px; background: var(--tint); border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <b>تفعيل ميزة الـ Hot Reload كلياً</b>
+              <p style="color: var(--muted); font-size: .8rem;">إتاحة الضغط على الزر واختصار 'r' للزوار</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="chkScrapEnabled" checked onchange="saveScrapbookSettings()">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="field">
+            <label>شريط التيرمينال التوضيحي (Terminal Tag)</label>
+            <input type="text" id="scrapTerminalTag" value="Flutter 3.24 · Clean Architecture · Dart" onchange="saveScrapbookSettings()">
+          </div>
+
+          <div id="scrapSecVisibilityList">
+            <!-- Scrapbook section toggles -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. Design & Theme Tab -->
+    <section class="tab-pane" id="pane-design">
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 16px;" data-k="des.head">الألوان والثيم والهوية البصرية</h2>
+      <div class="card" style="max-width: 720px;">
+        <form id="designForm">
+          <div class="field">
+            <label data-k="des.primary">اللون الأساسي للبراند (Primary Brand Color)</label>
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+              <input type="color" id="primaryColorPick" style="width: 50px; height: 42px; padding: 2px; border-radius: 8px; cursor: pointer;" value="#2F5BEA">
+              <input type="text" id="primaryColorText" style="max-width: 140px;" value="#2F5BEA">
+            </div>
+            <!-- Presets -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn--sm btn--ghost" style="border-color:#2F5BEA; color:#2F5BEA;" onclick="pickColor('#2F5BEA')">Cobalt (#2F5BEA)</button>
+              <button type="button" class="btn btn--sm btn--ghost" style="border-color:#2563EB; color:#2563EB;" onclick="pickColor('#2563EB')">Blue (#2563EB)</button>
+              <button type="button" class="btn btn--sm btn--ghost" style="border-color:#4F46E5; color:#4F46E5;" onclick="pickColor('#4F46E5')">Indigo (#4F46E5)</button>
+              <button type="button" class="btn btn--sm btn--ghost" style="border-color:#059669; color:#059669;" onclick="pickColor('#059669')">Emerald (#059669)</button>
+              <button type="button" class="btn btn--sm btn--ghost" style="border-color:#D97706; color:#D97706;" onclick="pickColor('#D97706')">Amber (#D97706)</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-k="des.accent">لون الإضاءة والتمييز (Accent Color)</label>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <input type="color" id="accentColorPick" style="width: 50px; height: 42px; padding: 2px; border-radius: 8px; cursor: pointer;" value="#F5A524">
+              <input type="text" id="accentColorText" style="max-width: 140px;" value="#F5A524">
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-k="des.statusAr">حالة العمل الحالية (باللغة العربية)</label>
+            <input type="text" id="heroStatusAr" dir="rtl" value="متاح لفرص Flutter · متاح للعمل عن بُعد أو بالقاهرة">
+          </div>
+
+          <div class="field">
+            <label data-k="des.statusEn">حالة العمل الحالية (باللغة الإنجليزية)</label>
+            <input type="text" id="heroStatusEn" dir="ltr" value="Available for Flutter roles · Cairo / Remote">
+          </div>
+
+          <button type="submit" class="btn btn--primary" id="saveDesignBtn">
+            <span data-k="des.saveBtn">حفظ إعدادات المظهر والهوية ✓</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 7. Profile Tab -->
+    <section class="tab-pane" id="pane-profile">
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 16px;" data-k="prof.head">البيانات الشخصية وروابط التواصل</h2>
+      <div class="card" style="max-width: 720px;">
+        <form id="profileForm">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="field">
+              <label data-k="prof.name">الاسم الكامل</label>
+              <input type="text" id="profName" value="Mohammed Siddiq" required>
+            </div>
+            <div class="field">
+              <label data-k="prof.title">المسمى الوظيفي</label>
+              <input type="text" id="profTitle" value="Software Engineer | Flutter Developer" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="field">
+              <label data-k="prof.email">البريد الإلكتروني</label>
+              <input type="email" id="profEmail" dir="ltr" value="mohammedasiddiqdev@gmail.com" required>
+            </div>
+            <div class="field">
+              <label data-k="prof.phone">رقم الهاتف / واتساب</label>
+              <input type="text" id="profPhone" dir="ltr" value="+20 122 789 7361" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-k="prof.location">الموقع / المدينة</label>
+            <input type="text" id="profLoc" value="Cairo, Egypt">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="field">
+              <label>رابط حساب GitHub</label>
+              <input type="url" id="profGithub" dir="ltr" value="https://github.com/Siddico">
+            </div>
+            <div class="field">
+              <label>رابط حساب LinkedIn</label>
+              <input type="url" id="profLinkedin" dir="ltr" value="https://www.linkedin.com/in/mohammedsiddico/">
+            </div>
+          </div>
+
+          <div class="field">
+            <label data-k="prof.summary">الملخص المهني (Bio / Summary)</label>
+            <textarea id="profSummary">Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces.</textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary" id="saveProfileBtn">
+            <span data-k="prof.saveBtn">حفظ وتحديث البيانات الشخصية ✓</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 8. Messages Tab -->
+    <section class="tab-pane" id="pane-messages">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="msg.head">صندوق رسائل التواصل</h2>
+          <p style="color: var(--muted); font-size: .9rem;" data-k="msg.sub">الرسائل الواردة مباشرة من نموذج الاتصال في البورتفوليو.</p>
+        </div>
+      </div>
+      <div id="messagesListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Project Modal -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 style="font-size: 1.3rem; font-weight: 800;" id="projModalTitle">إضافة مشروع</h3>
+      <button class="btn btn--ghost btn--sm" onclick="closeProjectModal()" type="button">✕</button>
+    </div>
+    <form id="projectForm">
+      <input type="hidden" id="editProjId">
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>معرف المشروع (ID Slug)</label>
+          <input type="text" id="fProjId" dir="ltr" placeholder="brainguard" required>
+        </div>
+        <div class="field" style="display: flex; align-items: center; gap: 10px; margin-top: 24px;">
+          <input type="checkbox" id="fProjVisible" checked style="width: 20px; height: 20px;">
+          <label for="fProjVisible" style="margin: 0; cursor: pointer;">إظهار المشروع في الموقع</label>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>اسم المشروع (بالعربية)</label>
+          <input type="text" id="fNameAr" dir="rtl" placeholder="BrainGuard" required>
+        </div>
+        <div class="field">
+          <label>اسم المشروع (بالإنجليزية)</label>
+          <input type="text" id="fNameEn" dir="ltr" placeholder="BrainGuard" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>وصف مصغر / تاغ (بالعربية)</label>
+          <input type="text" id="fTagAr" dir="rtl" placeholder="مشروع التخرج · تنبؤ بالسكتات بالذكاء الاصطناعي">
+        </div>
+        <div class="field">
+          <label>وصف مصغر / تاغ (بالإنجليزية)</label>
+          <input type="text" id="fTagEn" dir="ltr" placeholder="AI Stroke Prediction & Tele-monitoring">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>الوصف التفصيلي (بالعربية)</label>
+        <textarea id="fDescAr" dir="rtl" placeholder="منظومة رعاية صحية متكاملة..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>الوصف التفصيلي (بالإنجليزية)</label>
+        <textarea id="fDescEn" dir="ltr" placeholder="A cross-platform healthcare ecosystem..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>التقنيات المستخدمة (مفصولة بفواصل)</label>
+        <input type="text" id="fStack" dir="ltr" placeholder="Flutter, Firebase, Clean Architecture, BLoC">
+      </div>
+
+      <div class="field">
+        <label>أبرز الإنجازات (سطر لكل نقطة - بالعربية)</label>
+        <textarea id="fPointsAr" dir="rtl" placeholder="دمج عدة خدمات ذكاء اصطناعي...\nربط لحظي بين المريض والطبيب..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>أبرز الإنجازات (سطر لكل نقطة - بالإنجليزية)</label>
+        <textarea id="fPointsEn" dir="ltr" placeholder="Integrated multiple AI services...\nReal-time patient-doctor connectivity..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>رابط المشروع (GitHub / المتجر)</label>
+        <input type="url" id="fLink" dir="ltr" placeholder="https://github.com/Siddico/...">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn btn--ghost" onclick="closeProjectModal()">إلغاء</button>
+        <button type="submit" class="btn btn--primary" id="saveProjModalBtn">حفظ المشروع ✓</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Certificate Modal -->
+<div class="modal-overlay" id="certModal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 style="font-size: 1.3rem; font-weight: 800;" id="certModalTitle">إضافة شهادة أو كورس</h3>
+      <button class="btn btn--ghost btn--sm" onclick="closeCertModal()" type="button">✕</button>
+    </div>
+    <form id="certForm">
+      <input type="hidden" id="editCertId">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>عنوان الشهادة (بالعربية)</label>
+          <input type="text" id="cNameAr" dir="rtl" placeholder="دليل فلاتر ودارت الشامل" required>
+        </div>
+        <div class="field">
+          <label>عنوان الشهادة (بالإنجليزية)</label>
+          <input type="text" id="cNameEn" dir="ltr" placeholder="Flutter & Dart - The Complete Guide" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>الجهة المانحة (Issuer / Provider)</label>
+          <input type="text" id="cIssuer" placeholder="Udemy / Maximillian Schwarzmüller" required>
+        </div>
+        <div class="field">
+          <label>سنة الحصول (Date / Year)</label>
+          <input type="text" id="cDate" placeholder="2024" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>رقم الاعتماد (Credential ID)</label>
+          <input type="text" id="cCredId" dir="ltr" placeholder="UC-FLUTTER-2024">
+        </div>
+        <div class="field">
+          <label>شارة الختم (Badge Tag)</label>
+          <input type="text" id="cBadge" placeholder="Flutter">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>رابط التحقق (Credential URL)</label>
+          <input type="url" id="cUrl" dir="ltr" placeholder="https://udemy.com/certificate/...">
+        </div>
+        <div class="field">
+          <label>لون الختم (Tone Color)</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="color" id="cColorPick" value="#2F5BEA" style="width: 44px; height: 38px; border-radius: 8px;">
+            <input type="text" id="cColorText" value="#2F5BEA" style="flex: 1;">
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="cVisible" checked style="width: 20px; height: 20px;">
+        <label for="cVisible" style="margin: 0; cursor: pointer;">إظهار هذه الشهادة في الموقع</label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn btn--ghost" onclick="closeCertModal()">إلغاء</button>
+        <button type="submit" class="btn btn--primary" id="saveCertModalBtn">حفظ الشهادة ✓</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="adminToast">تم الحفظ بنجاح</div>
+
+<!-- Scripts -->
+<script>
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+
+  let currentLang = 'ar';
+  let token = localStorage.getItem('ms_admin_token') || sessionStorage.getItem('ms_admin_token');
+  let portfolioData = {};
+  let settingsData = {};
+
+  // Translations dictionary for admin UI
+  const I18N = {
+    ar: {
+      "login.title": "بوابة إدارة البورتفوليو",
+      "login.sub": "أهلاً بك يا باشمهندس محمد. أدخل كلمة المرور للمتابعة.",
+      "login.pass": "كلمة مرور لوحة التحكم",
+      "login.remember": "تذكر تسجيل الدخول",
+      "login.btn": "تسجيل الدخول إلى اللوحة",
+      "login.return": "← العودة إلى الموقع الرئيسي",
+      "tab.overview": "نظرة عامة",
+      "tab.projects": "المشاريع والتطبيقات",
+      "tab.skills": "المهارات والتقنيات",
+      "tab.certs": "الشهادات والكورسات",
+      "tab.visibility": "طريقة العرض والتنسيق",
+      "tab.design": "الألوان والثيم",
+      "tab.profile": "البيانات الشخصية",
+      "tab.messages": "رسائل التواصل",
+      "ov.head": "لوحة التحكم وإدارة المحتوى",
+      "ov.sub": "تحكم كامل بكل ما يظهر في البورتفوليو ونمط الـ Hot Reload والرسائل.",
+      "ov.stat1": "إجمالي المشاريع",
+      "ov.stat2": "الشهادات والكورسات",
+      "ov.stat3": "مجموعات المهارات",
+      "ov.stat4": "رسائل التواصل الواردة",
+      "ov.quickTitle": "إجراءات سريعة",
+      "ov.quickSub": "يمكنك إضافة محتوى جديد أو تعديل خيارات العرض بضغطة واحدة:",
+      "proj.head": "إدارة المشاريع والتطبيقات",
+      "proj.sub": "إضافة وتعديل المشاريع والتحكم في ظهورها في الموقع الرئيسي والـ Hot Reload.",
+      "proj.addBtn": "إضافة مشروع جديد",
+      "skills.head": "المهارات والتقنيات (Tech Stack)",
+      "skills.sub": "التحكم في مجموعات المهارات التي تظهر في شريط التقنيات وقسم المهارات وكروت الـ Sticky Notes.",
+      "certs.head": "الشهادات والكورسات (Certifications)",
+      "certs.sub": "إضافة وتعديل الشهادات والاعتمادات وأرقام التحقق والروابط.",
+      "certs.addBtn": "إضافة شهادة أو كورس",
+      "vis.head": "التحكم في طريقة العرض والتنسيق",
+      "vis.sub": "تحكم منفصل في ما يظهر في البورتفوليو الرئيسي وما يظهر عند تفعيل الـ Hot Reload.",
+      "vis.mainTitle": "أقسام البورتفوليو الرئيسي",
+      "vis.scrapTitle": "التحكم في الـ Hot Reload (Scrapbook)",
+      "des.head": "الألوان والثيم والهوية البصرية",
+      "des.primary": "اللون الأساسي للبراند",
+      "des.accent": "لون الإضاءة والتمييز",
+      "des.statusAr": "حالة العمل الحالية (بالعربية)",
+      "des.statusEn": "حالة العمل الحالية (بالإنجليزية)",
+      "des.saveBtn": "حفظ إعدادات المظهر والهوية ✓",
+      "prof.head": "البيانات الشخصية وروابط التواصل",
+      "prof.name": "الاسم الكامل",
+      "prof.title": "المسمى الوظيفي",
+      "prof.email": "البريد الإلكتروني",
+      "prof.phone": "رقم الهاتف / واتساب",
+      "prof.location": "الموقع / المدينة",
+      "prof.summary": "الملخص المهني (Bio / Summary)",
+      "prof.saveBtn": "حفظ وتحديث البيانات الشخصية ✓",
+      "msg.head": "صندوق رسائل التواصل",
+      "msg.sub": "الرسائل الواردة مباشرة من نموذج الاتصال في البورتفوليو.",
+      "viewSite": "معاينة الموقع الحقيقي",
+      "logout": "تسجيل الخروج"
+    },
+    en: {
+      "login.title": "Portfolio Admin Portal",
+      "login.sub": "Welcome back, Eng. Mohammed. Enter password to continue.",
+      "login.pass": "Admin Password",
+      "login.remember": "Remember my login",
+      "login.btn": "Sign In to Dashboard",
+      "login.return": "← Return to Main Portfolio",
+      "tab.overview": "Overview",
+      "tab.projects": "Projects & Apps",
+      "tab.skills": "Skills & Stack",
+      "tab.certs": "Certificates & Courses",
+      "tab.visibility": "Display & Visibility",
+      "tab.design": "Theme & Colors",
+      "tab.profile": "Profile & Bio",
+      "tab.messages": "Inquiries Inbox",
+      "ov.head": "Dashboard & Content Manager",
+      "ov.sub": "Complete control over your live portfolio, Hot Reload Scrapbook, and inquiries.",
+      "ov.stat1": "Total Projects",
+      "ov.stat2": "Certificates",
+      "ov.stat3": "Skill Groups",
+      "ov.stat4": "Inquiries Inbox",
+      "ov.quickTitle": "Quick Actions",
+      "ov.quickSub": "Add new items or modify visibility settings with one click:",
+      "proj.head": "Projects & Mobile Applications",
+      "proj.sub": "Add, edit, or toggle visibility of your showcase projects.",
+      "proj.addBtn": "Add New Project",
+      "skills.head": "Skills & Tech Stack",
+      "skills.sub": "Manage technical competencies for ticker, skills grid, and scrapbook sticky notes.",
+      "certs.head": "Certifications & Courses",
+      "certs.sub": "Manage your verified credentials, issuers, and badges.",
+      "certs.addBtn": "Add Certification",
+      "vis.head": "Display & Visibility Controls",
+      "vis.sub": "Independent granular control for main portfolio and Hot Reload edition.",
+      "vis.mainTitle": "Main Portfolio Sections",
+      "vis.scrapTitle": "Hot Reload Scrapbook Controls",
+      "des.head": "Visual Identity & Theme",
+      "des.primary": "Primary Brand Color",
+      "des.accent": "Accent Color",
+      "des.statusAr": "Work Status (Arabic)",
+      "des.statusEn": "Work Status (English)",
+      "des.saveBtn": "Save Visual Settings ✓",
+      "prof.head": "Profile & Contacts",
+      "prof.name": "Full Name",
+      "prof.title": "Job Title",
+      "prof.email": "Email Address",
+      "prof.phone": "Phone / WhatsApp",
+      "prof.location": "Location",
+      "prof.summary": "Professional Summary",
+      "prof.saveBtn": "Save Profile Details ✓",
+      "msg.head": "Inquiries Inbox",
+      "msg.sub": "Messages received directly from your portfolio contact form.",
+      "viewSite": "Preview Live Site",
+      "logout": "Log Out"
+    }
+  };
+
+  function applyAdminLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    $('#langLabel').textContent = lang === 'ar' ? 'English' : 'عربي';
+    $('#langSwitchLogin').textContent = lang === 'ar' ? 'English' : 'عربي';
+
+    $$('[data-k]').forEach(el => {
+      const k = el.dataset.k;
+      if (I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
+    });
+
+    $('#viewSiteText').textContent = I18N[lang]["viewSite"];
+    $('#logoutText').textContent = I18N[lang]["logout"];
+    $('#loginTitle').textContent = I18N[lang]["login.title"];
+    $('#loginSub').textContent = I18N[lang]["login.sub"];
+    $('#loginPassLabel').textContent = I18N[lang]["login.pass"];
+    $('#rememberLabel').textContent = I18N[lang]["login.remember"];
+    $('#loginBtnText').textContent = I18N[lang]["login.btn"];
+    $('#returnSiteLink').textContent = I18N[lang]["login.return"];
+  }
+
+  $('#langToggleBtn').addEventListener('click', () => applyAdminLang(currentLang === 'ar' ? 'en' : 'ar'));
+  $('#langSwitchLogin').addEventListener('click', () => applyAdminLang(currentLang === 'ar' ? 'en' : 'ar'));
+
+  function showToast(msg) {
+    const t = $('#adminToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // Password toggle
+  $('#togglePwdBtn').addEventListener('click', () => {
+    const input = $('#pwdInput');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  });
+
+  // Navigation Tabs
+  function setTab(tabId) {
+    $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+    $$('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `pane-${tabId}`));
+  }
+  $$('.tab-btn').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+  // Auth flow
+  async function checkAuth() {
+    if (!token) {
+      $('#loginScreen').style.display = 'flex';
+      $('#appHeader').style.display = 'none';
+      $('#appLayout').style.display = 'none';
+      return;
+    }
+    try {
+      const res = await fetch('/api/auth/check', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        $('#loginScreen').style.display = 'none';
+        $('#appHeader').style.display = 'flex';
+        $('#appLayout').style.display = 'flex';
+        loadData();
+      } else {
+        logout();
+      }
+    } catch (e) {
+      // In case of local dev offline, show dashboard if token stored
+      $('#loginScreen').style.display = 'none';
+      $('#appHeader').style.display = 'flex';
+      $('#appLayout').style.display = 'flex';
+      loadData();
+    }
+  }
+
+  $('#loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const password = $('#pwdInput').value.trim();
+    const remember = $('#rememberMe').checked;
+    const btn = $('#loginBtn');
+    btn.disabled = true;
+    $('#loginBtnText').textContent = currentLang === 'ar' ? 'جاري التحقق...' : 'Checking...';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        token = data.token;
+        if (remember) localStorage.setItem('ms_admin_token', token);
+        sessionStorage.setItem('ms_admin_token', token);
+        showToast(currentLang === 'ar' ? 'أهلاً بك يا باشمهندس محمد!' : 'Welcome back, Mohammed!');
+        checkAuth();
+      } else {
+        alert(data.error || (currentLang === 'ar' ? 'كلمة المرور غير صحيحة!' : 'Incorrect password'));
+      }
+    } catch (err) {
+      alert(currentLang === 'ar' ? 'فشل الاتصال بالباكاند' : 'Error connecting to backend');
+    } finally {
+      btn.disabled = false;
+      $('#loginBtnText').textContent = I18N[currentLang]["login.btn"];
+    }
+  });
+
+  function logout() {
+    token = null;
+    localStorage.removeItem('ms_admin_token');
+    sessionStorage.removeItem('ms_admin_token');
+    $('#loginScreen').style.display = 'flex';
+    $('#appHeader').style.display = 'none';
+    $('#appLayout').style.display = 'none';
+    $('#pwdInput').value = '';
+  }
+  $('#logoutBtn').addEventListener('click', logout);
+
+  // Load Dashboard Data
+  async function loadData() {
+    try {
+      const [pRes, sRes, mRes] = await Promise.all([
+        fetch('/api/portfolio'),
+        fetch('/api/settings'),
+        fetch('/api/messages', { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ json: () => [] }))
+      ]);
+      portfolioData = await pRes.json();
+      settingsData = await sRes.json();
+      const messages = await mRes.json();
+
+      // Stats
+      $('#ovProjCount').textContent = (portfolioData.projects || []).length;
+      $('#ovCertsCount').textContent = (portfolioData.certs || []).length;
+      $('#ovSkillsCount').textContent = (portfolioData.skills || []).length;
+      $('#ovInboxCount').textContent = Array.isArray(messages) ? messages.length : 0;
+
+      // Settings inputs
+      const primaryCol = settingsData.primaryColor || '#2F5BEA';
+      $('#primaryColorPick').value = primaryCol;
+      $('#primaryColorText').value = primaryCol;
+      if (settingsData.accentColor) {
+        $('#accentColorPick').value = settingsData.accentColor;
+        $('#accentColorText').value = settingsData.accentColor;
+      }
+      if (settingsData.heroStatus) {
+        $('#heroStatusEn').value = settingsData.heroStatus.en || '';
+        $('#heroStatusAr').value = settingsData.heroStatus.ar || '';
+      }
+
+      // Profile inputs
+      if (portfolioData.profile) {
+        const pr = portfolioData.profile;
+        if (pr.name) $('#profName').value = pr.name;
+        if (pr.title) $('#profTitle').value = pr.title;
+        if (pr.email) $('#profEmail').value = pr.email;
+        if (pr.phone) $('#profPhone').value = pr.phone;
+        if (pr.location) $('#profLoc').value = pr.location;
+        if (pr.github) $('#profGithub').value = pr.github;
+        if (pr.linkedin) $('#profLinkedin').value = pr.linkedin;
+        if (pr.summary) $('#profSummary').value = pr.summary;
+      }
+
+      // Render tab components
+      renderProjectsList(portfolioData.projects || []);
+      renderSkillsList(portfolioData.skills || []);
+      renderCertsList(portfolioData.certs || []);
+      renderVisibilityControls(portfolioData.sectionVisibility || {}, portfolioData.scrapbookSettings || {});
+      renderMessagesList(Array.isArray(messages) ? messages : []);
+    } catch (e) {
+      console.error('Error loading data:', e);
+    }
+  }
+
+  // Render Projects List
+  function renderProjectsList(projects) {
+    const box = $('#projectsListContainer');
+    if (!projects.length) {
+      box.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">لا توجد مشاريع مضافة حتى الآن.</div>';
+      return;
+    }
+    box.innerHTML = projects.map(p => {
+      const isVis = p.visible !== false;
+      const name = p.name?.ar || p.name?.en || p.name;
+      const tag = p.tag?.ar || p.tag?.en || p.tag || 'تطبيق فلاتر';
+      const desc = p.desc?.ar || p.desc?.en || '';
+      return `
+        <div class="item-row ${isVis ? '' : 'is-hidden'}">
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h3 style="font-size: 1.15rem; font-weight: 800;">${name}</h3>
+              <span class="item-badge">${tag}</span>
+              <span class="status-pill ${isVis ? 'is-active' : 'is-off'}">${isVis ? 'ظاهر في الموقع' : 'مخفي'}</span>
+            </div>
+            <p style="font-size: .88rem; color: var(--muted); margin-top: 4px; max-width: 700px;">
+              ${desc}
+            </p>
+            <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+              ${(p.stack || []).map(s => `<span style="font-size:.75rem; background:var(--tint); padding:2px 8px; border-radius:6px; font-weight:700;">${s}</span>`).join('')}
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+            <button class="btn btn--ghost btn--sm" onclick="toggleProjectVisibility('${p.id}')">
+              ${isVis ? 'إخفاء 👁️' : 'إظهار 👁️'}
+            </button>
+            <button class="btn btn--ghost btn--sm" onclick="openEditProjectModal('${p.id}')">تعديل ✏️</button>
+            <button class="btn btn--danger btn--sm" onclick="deleteProject('${p.id}')">حذف 🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render Skills List
+  function renderSkillsList(skills) {
+    const box = $('#skillsListContainer');
+    if (!skills.length) {
+      box.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">لا توجد مهارات مسجلة.</div>';
+      return;
+    }
+    box.innerHTML = skills.map(g => {
+      const isVis = g.visible !== false;
+      const title = g.title?.ar || g.title?.en || g.title;
+      return `
+        <div class="card" style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h3 style="font-size: 1.15rem; font-weight: 800;">${title}</h3>
+              <span class="status-pill ${isVis ? 'is-active' : 'is-off'}">${isVis ? 'مفعل' : 'معطل'}</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn--ghost btn--sm" onclick="toggleSkillGroupVisibility('${g.id}')">
+                ${isVis ? 'تعطيل المجموعة' : 'تفعيل المجموعة'}
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            ${(g.items || []).map(item => `
+              <span style="background: var(--tint); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; font-weight: 700; font-size: .88rem; display: inline-flex; align-items: center; gap: 6px;">
+                ${item}
+                <button onclick="removeSkillItem('${g.id}', '${item}')" style="background:none; border:none; cursor:pointer; color:var(--danger); font-size:.8rem; padding:0 2px;">✕</button>
+              </span>
+            `).join('')}
+          </div>
+          <div style="margin-top: 14px; display: flex; gap: 8px; max-width: 360px;">
+            <input type="text" id="addSkillInput_${g.id}" placeholder="إضافة مهارة جديدة..." style="padding: 8px 12px; border-radius: 8px; border: 1.5px solid var(--line); font-size: .88rem; flex: 1;">
+            <button class="btn btn--primary btn--sm" onclick="addSkillItem('${g.id}')">+ إضافة</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render Certs List
+  function renderCertsList(certs) {
+    const box = $('#certsListContainer');
+    if (!certs.length) {
+      box.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">لا توجد شهادات مسجلة.</div>';
+      return;
+    }
+    box.innerHTML = certs.map(c => {
+      const isVis = c.visible !== false;
+      const name = c.name?.ar || c.name?.en || c.name;
+      return `
+        <div class="item-row ${isVis ? '' : 'is-hidden'}">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: ${c.color || '#2F5BEA'}; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: .85rem; flex-shrink: 0;">
+              ${c.badge || '✓'}
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <b style="font-size: 1.05rem;">${name}</b>
+                <span class="status-pill ${isVis ? 'is-active' : 'is-off'}">${isVis ? 'ظاهرة' : 'مخفية'}</span>
+              </div>
+              <p style="font-size: .85rem; color: var(--muted); margin-top: 2px;">
+                ${c.issuer} · ${c.date} ${c.credentialId ? `· ID: ${c.credentialId}` : ''}
+              </p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+            <button class="btn btn--ghost btn--sm" onclick="toggleCertVisibility('${c.id}')">
+              ${isVis ? 'إخفاء 👁️' : 'إظهار 👁️'}
+            </button>
+            <button class="btn btn--ghost btn--sm" onclick="openEditCertModal('${c.id}')">تعديل ✏️</button>
+            <button class="btn btn--danger btn--sm" onclick="deleteCert('${c.id}')">حذف 🗑️</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render Visibility Controls
+  function renderVisibilityControls(secVis, scrapSet) {
+    const mainList = $('#mainSecVisibilityList');
+    const sections = [
+      { key: "hero", label: "قسم البطل والـ 3D Hero التفاعلي", desc: "الصورة ثلاثية الأبعاد والشعار التفاعلي والنصوص الرئيسية" },
+      { key: "stats", label: "شريط الإحصائيات السريعة", desc: "+2 سنوات خبرة، +4 تطبيقات، 100% كود نظيف" },
+      { key: "stackStrip", label: "شريط التقنيات المتحرك (Ticker)", desc: "الشريط المتحرك أسفل قسم البطل" },
+      { key: "projects", label: "قسم المشاريع وتطبيقات الموبايل", desc: "كروت الموبايل التفاعلية (BrainGuard, Biscofa, Al Hayah, Event Time)" },
+      { key: "experience", label: "قسم الخبرة والمسار والتعليم", desc: "الجدول الزمني للخبرات العملية ومشاريع التخرج" },
+      { key: "skills", label: "قسم المهارات والمكتبات", desc: "بطاقات المهارات الأربعة ومكتبات فلاتر" },
+      { key: "certs", label: "قسم الشهادات والكورسات", desc: "بطاقات الشهادات المعتمدة وأرقام التوثيق" },
+      { key: "about", label: "قسم نبذة عني وصورة البورتريه", desc: "الصورة الشخصية للاستوديو والنبذة ولغات العمل" },
+      { key: "contact", label: "قسم التواصل ونموذج الرسائل", desc: "قنوات التواصل المباشرة ونموذج إرسال الاستفسارات" }
+    ];
+
+    mainList.innerHTML = sections.map(s => {
+      const isChecked = secVis[s.key] !== false;
+      return `
+        <div class="vis-card">
+          <div class="vis-info">
+            <h4>${s.label}</h4>
+            <p>${s.desc}</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSectionVis('${s.key}', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      `;
+    }).join('');
+
+    const scrapList = $('#scrapSecVisibilityList');
+    const scrapSecs = [
+      { key: "showPolaroidHero", label: "كارت البولارويد والصورة الشخصية", desc: "صورة البولارويد الكلاسيكية المثبتة بشريط لاصق" },
+      { key: "showProjects", label: "صفحات المشاريع المقصوصة بدقة", desc: "صفحات المشاريع مع طوابع الإحصائيات غير المتداخلة" },
+      { key: "showExperienceReceipt", label: "فاتورة الخبرة (Experience Receipt)", desc: "تصميم الفاتورة الورقية الأنيقة" },
+      { key: "showCertsWax", label: "شهادات الختم الشمعي (Wax Seal Certs)", desc: "كروت الشهادات بختم شمعي ملون" },
+      { key: "showSkillsSticky", label: "كروت الملاحظات اللاصقة القابلة للسحب", desc: "ملاحظات المهارات التي يمكن تحريكها بالماوس" },
+      { key: "showContact", label: "مغلف الرسائل والاتصال (Contact Envelope)", desc: "مغلف البريد وختم البريد بالقاهرة" }
+    ];
+
+    scrapList.innerHTML = scrapSecs.map(s => {
+      const isChecked = scrapSet[s.key] !== false;
+      return `
+        <div class="vis-card">
+          <div class="vis-info">
+            <h4>${s.label}</h4>
+            <p>${s.desc}</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleScrapbookSec('${s.key}', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      `;
+    }).join('');
+
+    $('#chkScrapEnabled').checked = scrapSet.enabled !== false;
+    if (scrapSet.terminalTag) $('#scrapTerminalTag').value = scrapSet.terminalTag;
+  }
+
+  // Section Vis toggling
+  async function toggleSectionVis(key, enabled) {
+    if (!portfolioData.sectionVisibility) portfolioData.sectionVisibility = {};
+    portfolioData.sectionVisibility[key] = enabled;
+    try {
+      const res = await fetch('/api/visibility', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(portfolioData.sectionVisibility)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? `تم تحديث حالة ${key} في الموقع!` : `Updated ${key} visibility!`);
+      }
+    } catch (e) {
+      showToast('Error saving visibility');
+    }
+  }
+
+  // Scrapbook section toggling
+  async function toggleScrapbookSec(key, enabled) {
+    if (!portfolioData.scrapbookSettings) portfolioData.scrapbookSettings = {};
+    portfolioData.scrapbookSettings[key] = enabled;
+    saveScrapbookSettings();
+  }
+
+  async function saveScrapbookSettings() {
+    if (!portfolioData.scrapbookSettings) portfolioData.scrapbookSettings = {};
+    portfolioData.scrapbookSettings.enabled = $('#chkScrapEnabled').checked;
+    portfolioData.scrapbookSettings.terminalTag = $('#scrapTerminalTag').value.trim();
+    try {
+      const res = await fetch('/api/scrapbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(portfolioData.scrapbookSettings)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم تحديث إعدادات الـ Hot Reload!' : 'Hot Reload settings saved!');
+      }
+    } catch (e) {
+      showToast('Error saving settings');
+    }
+  }
+
+  // Project Actions
+  async function toggleProjectVisibility(id) {
+    const p = (portfolioData.projects || []).find(x => x.id === id);
+    if (!p) return;
+    p.visible = !(p.visible !== false);
+    try {
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(p)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? (p.visible ? 'المشروع الآن ظاهر للزوار' : 'تم إخفاء المشروع بنجاح') : 'Project visibility updated');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error updating project');
+    }
+  }
+
+  function openAddProjectModal() {
+    $('#projModalTitle').textContent = currentLang === 'ar' ? 'إضافة مشروع جديد' : 'Add New Project';
+    $('#projectForm').reset();
+    $('#editProjId').value = '';
+    $('#fProjId').readOnly = false;
+    $('#fProjVisible').checked = true;
+    $('#projectModal').style.display = 'flex';
+  }
+
+  function openEditProjectModal(id) {
+    const p = (portfolioData.projects || []).find(x => x.id === id);
+    if (!p) return;
+    $('#projModalTitle').textContent = currentLang === 'ar' ? 'تعديل المشروع' : 'Edit Project';
+    $('#editProjId').value = p.id;
+    $('#fProjId').value = p.id;
+    $('#fProjId').readOnly = true;
+    $('#fProjVisible').checked = p.visible !== false;
+    $('#fNameAr').value = p.name?.ar || p.name || '';
+    $('#fNameEn').value = p.name?.en || p.name || '';
+    $('#fTagAr').value = p.tag?.ar || p.tag || '';
+    $('#fTagEn').value = p.tag?.en || p.tag || '';
+    $('#fDescAr').value = p.desc?.ar || p.desc || '';
+    $('#fDescEn').value = p.desc?.en || p.desc || '';
+    $('#fStack').value = (p.stack || []).join(', ');
+    $('#fPointsAr').value = (p.points?.ar || []).join('\n');
+    $('#fPointsEn').value = (p.points?.en || []).join('\n');
+    $('#fLink').value = p.links?.[0]?.href || '';
+    $('#projectModal').style.display = 'flex';
+  }
+
+  function closeProjectModal() {
+    $('#projectModal').style.display = 'none';
+  }
+
+  $('#projectForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const editId = $('#editProjId').value;
+    const isEdit = !!editId;
+    const stack = $('#fStack').value.split(',').map(s => s.trim()).filter(Boolean);
+    const pointsAr = $('#fPointsAr').value.split('\n').map(s => s.trim()).filter(Boolean);
+    const pointsEn = $('#fPointsEn').value.split('\n').map(s => s.trim()).filter(Boolean);
+    const linkHref = $('#fLink').value.trim();
+
+    const projObj = {
+      id: $('#fProjId').value.trim(),
+      visible: $('#fProjVisible').checked,
+      name: { ar: $('#fNameAr').value, en: $('#fNameEn').value },
+      tag: { ar: $('#fTagAr').value, en: $('#fTagEn').value },
+      desc: { ar: $('#fDescAr').value, en: $('#fDescEn').value },
+      bg: "linear-gradient(160deg, #1E293B 0%, #0F172A 100%)",
+      screens: ["brainguard-home"],
+      points: {
+        ar: pointsAr.length ? pointsAr : ["تطبيق فلاتر عالي الأداء"],
+        en: pointsEn.length ? pointsEn : ["High-performance Flutter application"]
+      },
+      metrics: [{ v: "100%", l: { ar: "دقة وجودة", en: "Quality" } }],
+      stack: stack.length ? stack : ["Flutter"],
+      links: linkHref ? [{ label: { ar: "رابط المشروع", en: "Project Link" }, href: linkHref }] : []
+    };
+
+    try {
+      const url = isEdit ? `/api/projects/${editId}` : '/api/projects';
+      const method = isEdit ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(projObj)
+      });
+      if (res.ok) {
+        showToast(isEdit ? 'تم تحديث بيانات المشروع بنجاح!' : 'تمت إضافة المشروع الجديد بنجاح!');
+        closeProjectModal();
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error saving project');
+    }
+  });
+
+  async function deleteProject(id) {
+    if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المشروع نهائياً؟' : 'Delete this project permanently?')) return;
+    try {
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم حذف المشروع بنجاح' : 'Project removed');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error deleting project');
+    }
+  }
+
+  // Skills Actions
+  async function toggleSkillGroupVisibility(id) {
+    const g = (portfolioData.skills || []).find(x => x.id === id);
+    if (!g) return;
+    g.visible = !(g.visible !== false);
+    try {
+      const res = await fetch(`/api/skills/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(g)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم تحديث حالة مجموعة المهارات' : 'Skill group updated');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error updating skills');
+    }
+  }
+
+  async function addSkillItem(id) {
+    const input = $(`#addSkillInput_${id}`);
+    const val = input.value.trim();
+    if (!val) return;
+    const g = (portfolioData.skills || []).find(x => x.id === id);
+    if (!g) return;
+    if (!g.items) g.items = [];
+    g.items.push(val);
+    try {
+      const res = await fetch(`/api/skills/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(g)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? `تمت إضافة "${val}"!` : `Added "${val}"!`);
+        input.value = '';
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error adding skill');
+    }
+  }
+
+  async function removeSkillItem(id, item) {
+    const g = (portfolioData.skills || []).find(x => x.id === id);
+    if (!g || !g.items) return;
+    g.items = g.items.filter(x => x !== item);
+    try {
+      const res = await fetch(`/api/skills/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(g)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? `تم حذف "${item}"` : `Removed "${item}"`);
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error removing skill');
+    }
+  }
+
+  // Certs Actions
+  function openAddCertModal() {
+    $('#certModalTitle').textContent = currentLang === 'ar' ? 'إضافة شهادة أو كورس' : 'Add Certification';
+    $('#certForm').reset();
+    $('#editCertId').value = '';
+    $('#cVisible').checked = true;
+    $('#certModal').style.display = 'flex';
+  }
+
+  function openEditCertModal(id) {
+    const c = (portfolioData.certs || []).find(x => x.id === id);
+    if (!c) return;
+    $('#certModalTitle').textContent = currentLang === 'ar' ? 'تعديل الشهادة' : 'Edit Certification';
+    $('#editCertId').value = c.id;
+    $('#cNameAr').value = c.name?.ar || c.name || '';
+    $('#cNameEn').value = c.name?.en || c.name || '';
+    $('#cIssuer').value = c.issuer || '';
+    $('#cDate').value = c.date || '';
+    $('#cCredId').value = c.credentialId || '';
+    $('#cBadge').value = c.badge || '✓';
+    $('#cUrl').value = c.url || c.href || '';
+    $('#cColorPick').value = c.color || '#2F5BEA';
+    $('#cColorText').value = c.color || '#2F5BEA';
+    $('#cVisible').checked = c.visible !== false;
+    $('#certModal').style.display = 'flex';
+  }
+
+  function closeCertModal() {
+    $('#certModal').style.display = 'none';
+  }
+
+  $('#cColorPick').addEventListener('input', e => $('#cColorText').value = e.target.value);
+  $('#cColorText').addEventListener('input', e => $('#cColorPick').value = e.target.value);
+
+  $('#certForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const editId = $('#editCertId').value;
+    const isEdit = !!editId;
+
+    const certObj = {
+      id: editId || ('cert_' + Date.now()),
+      visible: $('#cVisible').checked,
+      name: { ar: $('#cNameAr').value, en: $('#cNameEn').value },
+      issuer: $('#cIssuer').value,
+      date: $('#cDate').value,
+      credentialId: $('#cCredId').value.trim(),
+      badge: $('#cBadge').value.trim() || '✓',
+      url: $('#cUrl').value.trim() || '#',
+      color: $('#cColorText').value
+    };
+
+    try {
+      const url = isEdit ? `/api/certs/${editId}` : '/api/certs';
+      const method = isEdit ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(certObj)
+      });
+      if (res.ok) {
+        showToast(isEdit ? 'تم تحديث الشهادة بنجاح!' : 'تمت إضافة الشهادة بنجاح!');
+        closeCertModal();
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error saving cert');
+    }
+  });
+
+  async function toggleCertVisibility(id) {
+    const c = (portfolioData.certs || []).find(x => x.id === id);
+    if (!c) return;
+    c.visible = !(c.visible !== false);
+    try {
+      const res = await fetch(`/api/certs/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(c)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? (c.visible ? 'الشهادة ظاهرة الآن' : 'تم إخفاء الشهادة') : 'Certificate visibility updated');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error updating cert');
+    }
+  }
+
+  async function deleteCert(id) {
+    if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الشهادة؟' : 'Delete this certification?')) return;
+    try {
+      const res = await fetch(`/api/certs/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم حذف الشهادة' : 'Certificate removed');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error deleting cert');
+    }
+  }
+
+  // Render Messages List
+  function renderMessagesList(messages) {
+    const box = $('#messagesListContainer');
+    if (!messages.length) {
+      box.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">صندوق الرسائل فارغ حالياً.</div>';
+      return;
+    }
+    box.innerHTML = messages.map(m => `
+      <div class="card" style="margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <b style="font-size: 1.05rem;">${m.name}</b>
+            <span style="font-size: .85rem; color: var(--muted); margin-inline-start: 8px;" dir="ltr">&lt;${m.email}&gt;</span>
+          </div>
+          <span style="font-size: .8rem; color: var(--muted);">${new Date(m.date).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</span>
+        </div>
+        <p style="color: var(--ink); line-height: 1.5; margin: 10px 0 16px; white-space: pre-wrap; font-size: .95rem;">${m.message}</p>
+        <div style="display: flex; gap: 8px;">
+          <a class="btn btn--primary btn--sm" href="mailto:${m.email}?subject=Re: Portfolio Inquiry">الرد عبر الإيميل ✉️</a>
+          <button class="btn btn--danger btn--sm" onclick="deleteMessage('${m.id}')">حذف 🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function deleteMessage(id) {
+    if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الرسالة؟' : 'Delete this message?')) return;
+    try {
+      const res = await fetch(`/api/messages/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم حذف الرسالة' : 'Message deleted');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error deleting message');
+    }
+  }
+
+  // Color Pickers
+  function pickColor(hex) {
+    $('#primaryColorPick').value = hex;
+    $('#primaryColorText').value = hex;
+  }
+  $('#primaryColorPick').addEventListener('input', (e) => $('#primaryColorText').value = e.target.value);
+  $('#primaryColorText').addEventListener('input', (e) => $('#primaryColorPick').value = e.target.value);
+  $('#accentColorPick').addEventListener('input', (e) => $('#accentColorText').value = e.target.value);
+  $('#accentColorText').addEventListener('input', (e) => $('#accentColorPick').value = e.target.value);
+
+  // Save Design
+  $('#designForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const primaryColor = $('#primaryColorText').value;
+    const accentColor = $('#accentColorText').value;
+    const heroStatus = {
+      en: $('#heroStatusEn').value,
+      ar: $('#heroStatusAr').value
+    };
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ primaryColor, accentColor, heroStatus })
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم حفظ إعدادات المظهر بنجاح!' : 'Appearance saved successfully!');
+        loadData();
+      }
+    } catch (e) {
+      showToast('Error saving settings');
+    }
+  });
+
+  // Save Profile
+  $('#profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    portfolioData.profile = {
+      name: $('#profName').value,
+      title: $('#profTitle').value,
+      email: $('#profEmail').value,
+      phone: $('#profPhone').value,
+      location: $('#profLoc').value,
+      github: $('#profGithub').value,
+      linkedin: $('#profLinkedin').value,
+      summary: $('#profSummary').value
+    };
+    try {
+      const res = await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(portfolioData)
+      });
+      if (res.ok) {
+        showToast(currentLang === 'ar' ? 'تم حفظ البيانات الشخصية بنجاح!' : 'Profile updated successfully!');
+      }
+    } catch (e) {
+      showToast('Error saving profile');
+    }
+  });
+
+  // Initialize
+  applyAdminLang('ar');
+  checkAuth();
+</script>
+</body>
+</html>

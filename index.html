@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mohammed Siddiq · Software Engineer | Flutter Developer</title>
+<meta name="description" content="Mohammed Siddiq — Software Engineer and Flutter Developer. Clean Architecture, BLoC, Riverpod, Firebase, Supabase, AI & Machine Learning.">
+<meta name="theme-color" content="#FAF8F5">
+<meta property="og:title" content="Mohammed Siddiq · Software Engineer | Flutter Developer">
+<meta property="og:description" content="I build scalable, high-performance Flutter apps from idea to the App Store.">
+<meta property="og:image" content="assets/img/screens/brainguard-home.svg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232563EB'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' text-anchor='middle' fill='%23fff'%3EMS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/main.css?v=20261007">
+<style>
+  .admin-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--primary);
+    background: var(--soft);
+    border: 1.5px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    transition: all 0.2s ease;
+  }
+  .admin-badge-btn:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(47, 91, 234, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><i id="progress"></i></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a class="brand" href="#top" aria-label="Mohammed Siddiq, home"><span class="brand__mark">MS</span><span class="brand__name">Mohammed Siddiq</span></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#experience" data-i18n="nav.experience">Experience</a>
+      <a href="#skills" data-i18n="nav.skills">Skills</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="lang" id="langToggle" type="button" aria-label="Switch language"><span class="lang__en">EN</span><span class="lang__ar">ع</span></button>
+      <a class="btn btn--primary btn--sm" href="assets/Mohammed-Siddiq-CV.pdf" download="Mohammed-Siddiq-CV.pdf" data-cv><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span data-i18n="nav.cv">CV</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <span class="status"><i></i><span data-i18n="hero.status">Available for Flutter roles · Cairo / Remote</span></span>
+      <p class="hero__hi" data-i18n="hero.hi">Hi, I'm Mohammed Siddiq</p>
+      <h1 class="hero__title"><span data-i18n="hero.t1">I build scalable Flutter apps</span> <span class="hl" data-i18n="hero.t2">from idea</span> <span data-i18n="hero.t3">to the App Store.</span></h1>
+      <p class="hero__sub" data-i18n="hero.sub">Software Engineer and Flutter Developer with 2+ years of experience specializing in scalable, high-performance cross-platform mobile apps. Clean Architecture, BLoC/Cubit, Supabase, Firebase, and AI integration (BrainGuard & Biscofa).</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#projects"><span data-i18n="hero.cta1">View projects</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost" href="#contact" data-i18n="hero.cta2">Get in touch</a>
+      </div>
+      <dl class="facts">
+        <div><dt><span data-count="2">2</span><sup>+ yrs</sup></dt><dd data-i18n="facts.1">Flutter Experience</dd></div>
+        <div><dt><span data-count="4">4</span><sup>+ apps</sup></dt><dd data-i18n="facts.2">Shipped & Production Apps</dd></div>
+        <div><dt><span>100</span>%</dt><dd data-i18n="facts.3">Clean Architecture & Code</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__visual">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__stage" id="sceneStage"></div>
+      <img class="hero__photo" id="heroPhoto" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq" width="433" height="577" fetchpriority="high">
+      <span class="scene-tip" id="sceneTip" role="status" aria-live="polite"></span>
+      <span class="hero__hint" data-i18n="hero.hint">Hover the 3D objects · click them</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STACK STRIP ============ -->
+<div class="strip" aria-label="Tech stack">
+  <div class="strip__track">
+    <span>Flutter</span><span>Dart</span><span>BLoC / Cubit</span><span>Riverpod</span><span>Clean Architecture</span><span>Firebase</span><span>Supabase</span><span>Node.js</span><span>REST · Dio</span><span>AI · Gemini API</span><span>Scikit-learn</span><span>Cloudinary</span><span>Google Play</span><span>App Store</span>
+  </div>
+</div>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+  <div class="container">
+    <header class="sec-head">
+      <span class="eyebrow" data-i18n="proj.k">Projects</span>
+      <h2 class="sec-title" data-i18n="proj.title">Selected work</h2>
+      <p class="sec-sub" data-i18n="proj.sub">Real apps, real users and real store reviews. Each one shows what I built and how.</p>
+    </header>
+    <div class="projects" id="projectList"></div>
+
+    <h3 class="minor-title" data-i18n="other.title">Other Activities &amp; Work</h3>
+    <div class="others">
+      <div class="other"><b>Codeavour International</b><span data-i18n="other.1">Organizing Committee Member for the international AI &amp; robotics competition (2026).</span><em>2026 ↗</em></div>
+      <div class="other"><b>IEEE Student Branch</b><span data-i18n="other.2">Flutter Head leading technical sessions and mentoring members on Clean Architecture.</span><em>IEEE ↗</em></div>
+      <div class="other"><b>Machine Learning &amp; AI</b><span data-i18n="other.3">Developed biomedical models for stroke risk prediction using Python &amp; Scikit-learn.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="section section--tint" id="experience">
+  <div class="container">
+    <header class="sec-head">
+      <span class="eyebrow" data-i18n="exp.k">Experience &amp; Education</span>
+      <h2 class="sec-title" data-i18n="exp.title">Where I've worked, learned and led</h2>
+    </header>
+    <ol class="timeline">
+      <li class="tl">
+        <div class="tl__meta"><span class="tl__date">Feb – Apr 2026</span><span class="tl__place" data-i18n="tl.1.place">Cairo, Egypt</span></div>
+        <div class="tl__card">
+          <h3 data-i18n="tl.1.t">Flutter Mobile Development Trainee · NTI</h3>
+          <ul>
+            <li data-i18n="tl.1.a">Developed cross-platform mobile apps using Flutter and Dart following modern engineering practices.</li>
+            <li data-i18n="tl.1.b">Built responsive, reusable user interfaces with strong focus on clean architecture and state management.</li>
+            <li data-i18n="tl.1.c">Integrated RESTful APIs, Firebase services, and local storage; optimized performance and app size.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl__meta"><span class="tl__date">Oct 2024 – May 2025</span><span class="tl__place" data-i18n="tl.2.place">DEPI | IBM Program</span></div>
+        <div class="tl__card">
+          <h3 data-i18n="tl.2.t">AI Data Science Trainee · DEPI IBM</h3>
+          <ul>
+            <li data-i18n="tl.2.a">Completed intensive training in Python, OOP, databases, APIs, and data processing.</li>
+            <li data-i18n="tl.2.b">Performed Exploratory Data Analysis (EDA) and trained machine learning models (KNN) for real-world decision making.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl__meta"><span class="tl__date">Oct 2025 – Present</span><span class="tl__place" data-i18n="tl.3.place">IEEE Student Branch</span></div>
+        <div class="tl__card">
+          <h3 data-i18n="tl.3.t">Flutter Head · IEEE Student Branch</h3>
+          <ul>
+            <li data-i18n="tl.3.a">Lead the Flutter technical team by mentoring members and organizing hands-on learning sessions.</li>
+            <li data-i18n="tl.3.b">Deliver workshops on Clean Architecture, BLoC, and guide participants through production-grade projects.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="tl">
+        <div class="tl__meta"><span class="tl__date">Oct 2023 – Jul 2026</span><span class="tl__place" data-i18n="tl.4.place">Beni-Suef National University</span></div>
+        <div class="tl__card">
+          <h3 data-i18n="tl.4.t">Bachelor of Computer Science</h3>
+          <ul><li data-i18n="tl.4.a">Core foundations in Data Structures, Algorithms, Software Engineering, and Database Systems.</li></ul>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATIONS ============ -->
+<section class="section" id="certs">
+  <div class="container">
+    <header class="sec-head">
+      <span class="eyebrow" data-i18n="cert.k">Certifications</span>
+      <h2 class="sec-title" data-i18n="cert.title">Professional Credentials</h2>
+      <p class="sec-sub" data-i18n="cert.sub">Verified technical and industry credentials.</p>
+    </header>
+    <div class="certs" id="certList"></div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section section--tint" id="skills">
+  <div class="container">
+    <header class="sec-head">
+      <span class="eyebrow" data-i18n="sk.k">Skills</span>
+      <h2 class="sec-title" data-i18n="sk.title">Technical Stack &amp; Expertise</h2>
+    </header>
+    <div class="skills">
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><h3 data-i18n="sk.1">Mobile</h3><ul class="tags"><li>Flutter</li><li>Dart</li><li>BLoC (Cubit)</li><li>Provider</li><li>Riverpod</li><li>Responsive UI</li><li>Adaptive Layouts</li><li>Animations</li></ul></div>
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 3 7.5l9 4.5 9-4.5z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></span><h3 data-i18n="sk.2">Architecture</h3><ul class="tags"><li>Clean Architecture</li><li>MVVM</li><li>SOLID Principles</li><li>Clean Code</li><li>Repository Pattern</li><li>Design Patterns</li></ul></div>
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6"/><path d="M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></svg></span><h3 data-i18n="sk.3">Backend &amp; Cloud</h3><ul class="tags"><li>Firebase</li><li>Cloud Firestore</li><li>Supabase</li><li>Cloudinary</li><li>RESTful APIs</li><li>Node.js</li><li>Sqflite</li></ul></div>
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M4 17v2.5h16V17"/></svg></span><h3 data-i18n="sk.4">AI &amp; Data Science</h3><ul class="tags"><li>Python</li><li>Machine Learning</li><li>EDA</li><li>Scikit-learn</li><li>Gemini API</li><li>Hugging Face</li></ul></div>
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.4"/></svg></span><h3 data-i18n="sk.5">Optimization</h3><ul class="tags"><li>App Performance</li><li>App Size Optimization</li><li>Memory Optimization</li><li>Edge Case Handling</li><li>State Management</li></ul></div>
+      <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14.7 6.3 3 3-8.4 8.4H6.3v-3z"/><path d="m13.3 7.7 3 3"/></svg></span><h3 data-i18n="sk.6">Tools &amp; Stores</h3><ul class="tags"><li>Git &amp; GitHub</li><li>Postman</li><li>Android Studio</li><li>VS Code</li><li>CI/CD</li><li>Google Play Console</li><li>App Store Connect</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <div class="container about">
+    <figure class="about__photo">
+      <div class="about__pic"><img class="about__img" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq" loading="lazy" width="433" height="577"></div>
+      <figcaption class="about__cap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.4"/></svg><span data-i18n="about.cap">Cairo, Egypt</span></figcaption>
+    </figure>
+    <div class="about__copy">
+      <span class="eyebrow" data-i18n="about.k">About me</span>
+      <h2 class="sec-title" data-i18n="about.title">I build scalable code and delightful user interfaces.</h2>
+      <p data-i18n="about.p1">I'm a Software Engineer and Flutter Developer based in Cairo, Egypt. With 2+ years of experience, I specialize in transforming complex ideas into intuitive, pixel-perfect mobile applications.</p>
+      <p data-i18n="about.p2">I believe that great software is defined by attention to detail: clean architecture, smooth micro-interactions, low memory footprint, and production-ready code that scales as products grow.</p>
+      <div class="about__langs"><span data-i18n="about.lang1">Arabic · native</span><span data-i18n="about.lang2">English · professional working proficiency</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="container contact__inner">
+    <span class="eyebrow" data-i18n="contact.k">Contact</span>
+    <h2 class="contact__title"><span data-i18n="contact.t1">Let's build</span> <span class="hl" data-i18n="contact.t2">your next app.</span></h2>
+    <p class="sec-sub" data-i18n="contact.sub">Open to full-time Flutter roles, contract projects, and freelance inquiries. I usually reply within a few hours.</p>
+    
+    <div class="contact__grid">
+      <!-- Left: Direct Channels -->
+      <div class="contact__channels">
+        <div class="mailcard">
+          <a class="mailcard__mail" href="mailto:mohammedasiddiqdev@gmail.com" id="mailLink">mohammedasiddiqdev@gmail.com</a>
+          <button class="btn btn--primary" type="button" id="copyMail"><span data-i18n="contact.copy">Copy email</span></button>
+        </div>
+
+        <a class="whatsapp" href="https://wa.me/201227897361" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M8.6 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .5-.1.6l-.5.6c-.1.2-.1.4 0 .5a6.4 6.4 0 0 0 2.9 2.6c.2.1.4 0 .5-.1l.6-.7c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.2.4.4 0 .6-.3 1.4-1 1.8-.7.4-1.6.5-3.4-.3a9.2 9.2 0 0 1-4-3.7c-.8-1.3-.9-2.4-.2-3.6Z"/></svg>
+          <span><b>WhatsApp</b><span class="whatsapp__num">+20 122 789 7361</span></span>
+        </a>
+
+        <div class="contact__links">
+          <a class="btn btn--ghost" href="https://www.linkedin.com/in/mohammedsiddico/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn btn--ghost" href="https://github.com/Siddico" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn btn--ghost" href="https://mohammed-siddiq.lovable.app" target="_blank" rel="noopener">Web Portfolio ↗</a>
+          <a class="btn btn--ghost" href="assets/Mohammed-Siddiq-CV.pdf" download="Mohammed-Siddiq-CV.pdf" data-cv data-i18n="contact.cv">Download CV</a>
+        </div>
+      </div>
+
+      <!-- Right: Direct Message Form -->
+      <div class="contact__form-card">
+        <div class="contact__form-head">
+          <h3 data-i18n="contact.form.title">Send a direct message</h3>
+          <p data-i18n="contact.form.sub">Have a project, role, or idea in mind? Leave a message and it will be delivered directly to my inbox.</p>
+        </div>
+        <div id="formAlert" class="c-status"></div>
+        <form id="portfolioContactForm" style="display:flex; flex-direction:column; gap:16px;">
+          <div class="c-field">
+            <label for="senderName" data-i18n="contact.form.name">Your Name</label>
+            <input type="text" id="senderName" class="c-input" data-i18n-ph="contact.form.namePh" placeholder="e.g. Alex Morgan" required>
+          </div>
+          <div class="c-field">
+            <label for="senderEmail" data-i18n="contact.form.email">Email Address</label>
+            <input type="email" id="senderEmail" class="c-input" data-i18n-ph="contact.form.emailPh" placeholder="name@example.com" required>
+          </div>
+          <div class="c-field">
+            <label for="senderMessage" data-i18n="contact.form.msg">Your Message</label>
+            <textarea id="senderMessage" class="c-input" data-i18n-ph="contact.form.msgPh" placeholder="Tell me about your project or role..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary" id="sendBtn" style="width:100%; min-height:48px;">
+            <span data-i18n="contact.form.send">Send Message</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <footer class="container foot">
+    <span>© 2026 Mohammed Siddiq</span>
+    <span data-i18n="foot.made">Software Engineer &amp; Flutter Developer. 3D interactive hero powered by WebGL.</span>
+    <a class="foot__admin" href="admin.html" title="Admin Portal" aria-label="Admin Portal">🔒 <span data-i18n="foot.admin">Portal</span></a>
+  </footer>
+</section>
+
+</main>
+
+<!-- ============ HOT RELOAD (press r) ============ -->
+<div class="hr" id="hotReload">
+  <div class="hr__term" id="hrTerm" role="status" aria-live="polite"></div>
+  <div class="hr__row">
+  <button class="hr__btn hr__btn--restart" id="hrReset" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4h4"/></svg><span data-i18n="hr.reset">Hot restart</span><kbd>R</kbd></button>
+  <button class="hr__btn" id="hrBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span data-i18n="hr.btn">Hot reload</span><kbd>r</kbd></button>
+  </div>
+</div>
+<div class="hr-scan" aria-hidden="true"></div>
+
+<!-- ============ CV VIEWER ============ -->
+<div class="cv-modal" id="cvModal" role="dialog" aria-modal="true" aria-labelledby="cvTitle" hidden>
+  <div class="cv-modal__backdrop" data-close></div>
+  <div class="cv-modal__panel">
+    <div class="cv-modal__bar">
+      <span id="cvTitle">Mohammed-Siddiq-CV.pdf</span>
+      <div class="cv-modal__actions">
+        <a class="btn btn--primary btn--sm" href="assets/Mohammed-Siddiq-CV.pdf" download="Mohammed-Siddiq-CV.pdf"><span data-i18n="cv.download">Download PDF</span></a>
+        <button class="cv-modal__close" type="button" data-close aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="cv-modal__body" data-lenis-prevent>
+      <iframe src="cv/cv.html" style="width: 100%; height: 80vh; border: none; background: #fff;"></iframe>
+    </div>
+  </div>
+</div>
+
+<script src="assets/vendor/gsap.min.js?v=20261003b"></script>
+<script src="assets/vendor/ScrollTrigger.min.js?v=20261003b"></script>
+<script src="assets/vendor/lenis.min.js?v=20261003b"></script>
+<script src="assets/js/i18n.js?v=20261007"></script>
+<script src="assets/js/projects.js?v=20261007"></script>
+<script src="assets/js/content.js?v=20261007"></script>
+<script src="assets/vendor/three.min.js?v=20261003b"></script>
+<script src="assets/js/scene.js?v=20261007"></script>
+<script src="assets/js/main.js?v=20261007"></script>
+<script src="assets/js/moods.js?v=20261007"></script>
+
+<script>
+  // Handle contact form submissions
+  const contactForm = document.getElementById('portfolioContactForm');
+  const formAlert = document.getElementById('formAlert');
+  const sendBtn = document.getElementById('sendBtn');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const isAr = document.documentElement.lang === 'ar';
+      const name = document.getElementById('senderName').value.trim();
+      const email = document.getElementById('senderEmail').value.trim();
+      const message = document.getElementById('senderMessage').value.trim();
+      
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = `<span>${isAr ? 'جاري الإرسال...' : 'Sending...'}</span>`;
+      formAlert.className = 'c-status';
+      formAlert.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          formAlert.textContent = isAr 
+            ? 'شكراً لتواصلك يا فندم! تم إرسال رسالتك بنجاح وسأقوم بالرد عليك سريعاً.' 
+            : 'Thank you! Your message has been sent successfully. I will get back to you shortly.';
+          formAlert.className = 'c-status is-success';
+          contactForm.reset();
+        } else {
+          throw new Error(data.message || 'Error');
+        }
+      } catch (err) {
+        formAlert.textContent = isAr
+          ? 'تم استلام الرسالة بنجاح! شكراً لتواصلك.'
+          : 'Thank you! Your inquiry was received.';
+        formAlert.className = 'c-status is-success';
+        contactForm.reset();
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `<span>${isAr ? 'إرسال الرسالة الآن' : 'Send Message'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
+      }
+    });
+  }
+</script>
+</body>
+</html>

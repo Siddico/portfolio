@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1200" width="540" height="1200">
+  <defs>
+    <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="540" height="1200" rx="44" fill="url(#screenBg)"/>
+  
+  <!-- Status bar -->
+  <g fill="#ffffff" opacity="0.9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <text x="52" y="52" font-size="20" font-weight="700">9:41</text>
+    <circle cx="440" cy="46" r="4.5"/>
+    <circle cx="454" cy="46" r="4.5"/>
+    <circle cx="468" cy="46" r="4.5"/>
+    <rect x="486" y="38" width="28" height="15" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <rect x="490" y="42" width="16" height="7" rx="2" fill="#fff"/>
+  </g>
+
+  <!-- App Header -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="460" height="60" rx="16" fill="url(#cardGrad)"/>
+    <circle cx="36" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M40 22 L30 30 L40 38" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <text x="76" y="38" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="700">Biscofa Admin Portal</text>
+    <circle cx="424" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <circle cx="424" cy="30" r="4" fill="#ffffff"/>
+  </g>
+
+  
+  <g transform="translate(40, 170)">
+    <!-- KPI 1 -->
+    <rect width="218" height="130" rx="20" fill="#27272A"/>
+    <text x="20" y="38" fill="#A1A1AA" font-size="14">Today's Revenue</text>
+    <text x="20" y="80" fill="#10B981" font-size="28" font-weight="800">28,450 EGP</text>
+    <text x="20" y="108" fill="#10B981" font-size="13">▲ +18.4% vs yesterday</text>
+
+    <!-- KPI 2 -->
+    <rect x="242" width="218" height="130" rx="20" fill="#27272A"/>
+    <text x="262" y="38" fill="#A1A1AA" font-size="14">Active Orders</text>
+    <text x="262" y="80" fill="#38BDF8" font-size="28" font-weight="800">42 Orders</text>
+    <text x="262" y="108" fill="#94A3B8" font-size="13">7 in preparation</text>
+  </g>
+
+  <!-- Live Orders Queue -->
+  <g transform="translate(40, 330)" filter="url(#shadow)">
+    <rect width="460" height="400" rx="24" fill="#27272A"/>
+    <text x="24" y="42" fill="#FFFFFF" font-size="20" font-weight="700">Live Orders Management</text>
+    
+    <g transform="translate(20, 70)">
+      <rect width="420" height="85" rx="14" fill="#18181B"/>
+      <text x="20" y="35" fill="#FFFFFF" font-size="16" font-weight="700">#ORD-902 · Amr Khaled</text>
+      <text x="20" y="60" fill="#A1A1AA" font-size="13">2x Flat White, 1x Croissant · 210 EGP</text>
+      <rect x="310" y="24" width="90" height="36" rx="10" fill="#10B981"/>
+      <text x="355" y="47" fill="#FFF" font-size="13" font-weight="700" text-anchor="middle">Ready</text>
+    </g>
+
+    <g transform="translate(20, 170)">
+      <rect width="420" height="85" rx="14" fill="#18181B"/>
+      <text x="20" y="35" fill="#FFFFFF" font-size="16" font-weight="700">#ORD-903 · Sarah Nour</text>
+      <text x="20" y="60" fill="#A1A1AA" font-size="13">1x V60 Colombia · 95 EGP</text>
+      <rect x="310" y="24" width="90" height="36" rx="10" fill="#F59E0B"/>
+      <text x="355" y="47" fill="#FFF" font-size="13" font-weight="700" text-anchor="middle">Brewing</text>
+    </g>
+
+    <g transform="translate(20, 270)">
+      <rect width="420" height="85" rx="14" fill="#18181B"/>
+      <text x="20" y="35" fill="#FFFFFF" font-size="16" font-weight="700">#ORD-904 · Tarek Mostafa</text>
+      <text x="20" y="60" fill="#A1A1AA" font-size="13">3x Iced Latte, 2x Cheesecake</text>
+      <rect x="310" y="24" width="90" height="36" rx="10" fill="#3B82F6"/>
+      <text x="355" y="47" fill="#FFF" font-size="13" font-weight="700" text-anchor="middle">Accepted</text>
+    </g>
+  </g>
+  
+
+  <!-- Bottom Navigation Bar -->
+  <g transform="translate(40, 1100)">
+    <rect x="0" y="0" width="460" height="68" rx="34" fill="#12131A" filter="url(#shadow)"/>
+    <circle cx="80" cy="34" r="22" fill="#3B82F6" fill-opacity="0.2"/>
+    <circle cx="80" cy="34" r="8" fill="#3B82F6"/>
+    <circle cx="180" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="280" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="380" cy="34" r="8" fill="#6B7280"/>
+  </g>
+</svg>

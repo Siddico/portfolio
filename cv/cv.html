@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mohammed Siddiq — Software Engineer | Flutter Developer CV</title>
+<style>
+  @font-face { font-family: "Manrope"; font-weight: 400; src: url("fonts/manrope-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Manrope"; font-weight: 500; src: url("fonts/manrope-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Manrope"; font-weight: 600; src: url("fonts/manrope-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Manrope"; font-weight: 700; src: url("fonts/manrope-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Manrope"; font-weight: 800; src: url("fonts/manrope-latin-800-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Alexandria"; font-weight: 600; src: url("fonts/alexandria-arabic-600-normal.woff2") format("woff2"); }
+
+  :root {
+    --ink: #16141F;
+    --text: #2B2838;
+    --muted: #615C78;
+    --accent: #2563EB;
+    --rule: #DCD8EC;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    width: 210mm;
+    padding: 8mm 13mm 6mm;
+    font: 400 8.8pt/1.3 "Manrope", "Liberation Sans", Arial, sans-serif;
+    color: var(--text); background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  a { color: inherit; text-decoration: none; }
+  .ar { font-family: "Alexandria", "DejaVu Sans", sans-serif; font-weight: 600; }
+
+  header { display: grid; gap: 2.5pt; padding-bottom: 7pt; border-bottom: 1.5pt solid var(--ink); }
+  h1 { margin: 0; font: 800 22pt/1.05 "Manrope", sans-serif; letter-spacing: -.02em; color: var(--ink); }
+  .role { font: 600 10.5pt/1.3 "Manrope", sans-serif; color: var(--accent); }
+  .contact { display: flex; flex-wrap: wrap; gap: 2pt 0; font-size: 8.4pt; color: var(--muted); margin-top: 1.5pt; }
+  .contact span + span::before { content: "|"; margin: 0 5pt; color: var(--rule); }
+
+  section { margin-top: 4pt; }
+  h2 {
+    margin: 0 0 4pt; padding-bottom: 2pt;
+    font: 800 8.8pt/1 "Manrope", sans-serif; text-transform: uppercase;
+    color: var(--ink); border-bottom: .75pt solid var(--rule);
+  }
+  p { margin: 0; }
+  ul { margin: 2pt 0 0; padding-left: 11pt; }
+  li { margin: 1pt 0; padding-left: 1pt; }
+  li::marker { color: var(--accent); }
+  b, strong { font-weight: 700; color: var(--ink); }
+
+  .item + .item { margin-top: 4.5pt; }
+  .item-head { display: flex; justify-content: space-between; gap: 8pt; align-items: baseline; }
+  .item-title { font-weight: 700; font-size: 9.6pt; color: var(--ink); }
+  .item-meta { font-size: 8.2pt; color: var(--muted); white-space: nowrap; }
+  .item-sub { font-size: 8.3pt; color: var(--muted); margin-top: 1pt; }
+  .stack { color: var(--accent); font-weight: 600; }
+
+  .skills { display: grid; grid-template-columns: 44mm 1fr; gap: 2pt 8pt; }
+  .skills dt { font-weight: 700; color: var(--ink); }
+  .skills dd { margin: 0; }
+  .compact li { margin: 1pt 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Mohammed Siddiq</h1>
+  <div class="role">Software Engineer | Flutter Developer</div>
+  <div class="contact">
+    <span>Cairo, Egypt</span>
+    <span><a href="tel:+201227897361">+20 122 789 7361</a></span>
+    <span><a href="mailto:mohammedasiddiqdev@gmail.com">mohammedasiddiqdev@gmail.com</a></span>
+    <span><a href="https://mohammed-siddiq.lovable.app">Portfolio: mohammed-siddiq.lovable.app</a></span>
+  </div>
+  <div class="contact">
+    <span><a href="https://github.com/Siddico">github.com/Siddico</a></span>
+    <span><a href="https://linkedin.com/in/mohammedsiddico/">linkedin.com/in/mohammedsiddico</a></span>
+  </div>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <p>Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces. Leveraging Flutter, Dart, BLoC (Cubit), Riverpod, Provider, REST APIs, Firebase, Supabase, and Sqflite with strong emphasis on performance optimization, responsive layouts, reduced bundle size, and edge-case handling.</p>
+</section>
+
+<section>
+  <h2>Projects</h2>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">BrainGuard (Graduation Project) — AI Stroke Prediction &amp; Remote Patient Monitoring</span>
+      <span class="item-meta">Android · Flutter</span>
+    </div>
+    <div class="item-sub"><span class="stack">Flutter, Firebase, Node.js, Hugging Face, Gemini API, Cloudinary</span></div>
+    <ul>
+      <li>Developed a cross-platform healthcare application for patients and doctors featuring secure authentication, real-time communication, medical records, and AI stroke risk assessment.</li>
+      <li>Integrated PPG prediction from .mat files, EHR stroke risk prediction, Gemini-powered clinical chatbot, and OCR prescription parsing.</li>
+      <li>Built real-time patient-doctor connectivity with live chat, QR pairing, appointment scheduling, and cloud media management.</li>
+      <li>Architected with Clean Architecture, responsive UI, role-based access, and comprehensive edge-case handling.</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Biscofa — Café Management System</span>
+      <span class="item-meta">Google Play · App Store</span>
+    </div>
+    <div class="item-sub"><span class="stack">Flutter, Firebase, Cloud Firestore</span></div>
+    <ul>
+      <li>Built customer app with product browsing, ordering, live tracking, and loyalty rewards.</li>
+      <li>Developed admin app for managing products, categories, home content, promo codes, notifications, and orders.</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Al Hayah Shareholders App — Hospital Shareholders Portal</span>
+      <span class="item-meta">Google Play · App Store</span>
+    </div>
+    <div class="item-sub"><span class="stack">Flutter, Supabase, PostgreSQL, RLS</span></div>
+    <ul>
+      <li>Developed role-based authentication with dedicated experiences for Admin and Hospital Shareholders.</li>
+      <li>Implemented complaints handling, secure shareholder benefits, and realtime database management with Supabase.</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Event Time Management — Event Registration &amp; Attendee Management</span>
+      <span class="item-meta">Android · Flutter</span>
+    </div>
+    <div class="item-sub"><span class="stack">Flutter, Restful API, Firebase</span></div>
+    <ul>
+      <li>Developed event registration system connected to Firebase with real-time data sync and live attendee check-in tools.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Experience</h2>
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Flutter Mobile Development Trainee — National Telecommunication Institute (NTI)</span>
+      <span class="item-meta">Feb 2026 – Apr 2026</span>
+    </div>
+    <ul class="compact">
+      <li>Developed cross-platform mobile apps using Flutter and Dart with focus on clean architecture and state management.</li>
+      <li>Integrated RESTful APIs, Firebase services, and local storage; optimized performance and responsiveness.</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">AI Data Science Trainee — Digital Egypt Pioneers Initiative (DEPI) | IBM</span>
+      <span class="item-meta">Oct 2024 – May 2025</span>
+    </div>
+    <ul class="compact">
+      <li>Intensive training covering Python, OOP, databases, APIs, exploratory data analysis (EDA), and machine learning (KNN).</li>
+      <li>Built end-to-end data science projects involving data collection, preprocessing, model training, and evaluation.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Leadership &amp; Volunteering</h2>
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Flutter Head — IEEE Student Branch</span>
+      <span class="item-meta">Oct 2025 – Present</span>
+    </div>
+    <ul class="compact">
+      <li>Lead the Flutter technical team, deliver hands-on workshops, and provide code reviews and mentoring.</li>
+    </ul>
+  </div>
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Organizing Committee Member — Codeavour International</span>
+      <span class="item-meta">2026</span>
+    </div>
+    <ul class="compact">
+      <li>Assisted in event organization, participant registration, logistics, and smooth competition execution.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Technical Skills</h2>
+  <dl class="skills">
+    <dt>Mobile</dt><dd>Flutter, Dart, BLoC (Cubit), Provider, Riverpod, Responsive UI, Adaptive Layouts, Animations</dd>
+    <dt>Architecture</dt><dd>Clean Architecture, MVVM, SOLID Principles, Clean Code, Repository Pattern</dd>
+    <dt>Backend &amp; Cloud</dt><dd>RESTful APIs, Firebase, Supabase, Cloudinary, Node.js, Cloud Firestore, Sqflite</dd>
+    <dt>AI &amp; Data Science</dt><dd>Python, Machine Learning, Exploratory Data Analysis (EDA), Scikit-learn, Gemini API</dd>
+    <dt>Optimization</dt><dd>App Performance, App Size Optimization, Memory Optimization, Edge Case Handling</dd>
+    <dt>Tools &amp; Workflow</dt><dd>Git, GitHub, Postman, Android Studio, VS Code, Play Console, App Store Connect</dd>
+  </dl>
+</section>
+
+<section>
+  <h2>Education &amp; Certifications</h2>
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Beni-Suef National University — Bachelor of Computer Science</span>
+      <span class="item-meta">Oct 2023 – Jul 2026</span>
+    </div>
+  </div>
+  <ul class="compact" style="margin-top: 3pt;">
+    <li><b>Flutter Mobile Development</b> — National Telecommunication Institute (NTI) (Apr 2026)</li>
+    <li><b>IBM-Powered Data Science Program</b> — DEPI (May 2025)</li>
+    <li><b>Business English Track</b> — DEPI (OTO Courses) (May 2025)</li>
+  </ul>
+</section>
+
+</body>
+</html>

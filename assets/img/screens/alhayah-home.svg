@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1200" width="540" height="1200">
+  <defs>
+    <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F2D2E"/><stop offset="100%" stop-color="#081819"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="540" height="1200" rx="44" fill="url(#screenBg)"/>
+  
+  <!-- Status bar -->
+  <g fill="#ffffff" opacity="0.9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <text x="52" y="52" font-size="20" font-weight="700">9:41</text>
+    <circle cx="440" cy="46" r="4.5"/>
+    <circle cx="454" cy="46" r="4.5"/>
+    <circle cx="468" cy="46" r="4.5"/>
+    <rect x="486" y="38" width="28" height="15" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <rect x="490" y="42" width="16" height="7" rx="2" fill="#fff"/>
+  </g>
+
+  <!-- App Header -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="460" height="60" rx="16" fill="url(#cardGrad)"/>
+    <circle cx="36" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M40 22 L30 30 L40 38" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <text x="76" y="38" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="700">Al Hayah Hospital</text>
+    <circle cx="424" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <circle cx="424" cy="30" r="4" fill="#ffffff"/>
+  </g>
+
+  
+  <!-- Shareholder VIP Card -->
+  <g transform="translate(40, 170)" filter="url(#shadow)">
+    <rect width="460" height="230" rx="24" fill="linear-gradient(135deg, #0D9488, #115E59)"/>
+    <text x="30" y="45" fill="#CCFBF1" font-size="14" font-weight="700">PREMIUM SHAREHOLDER CARD</text>
+    <text x="30" y="90" fill="#FFFFFF" font-size="24" font-weight="700">Eng. Mohammed Siddiq</text>
+    <text x="30" y="118" fill="#99F6E4" font-size="14">ID: SH-20491 · Shares: 1,250</text>
+    <rect x="30" y="150" width="140" height="34" rx="17" fill="#042F2E" fill-opacity="0.4"/>
+    <text x="100" y="172" fill="#5EEAD4" font-size="13" font-weight="700" text-anchor="middle">40% VIP DISCOUNT</text>
+    <circle cx="390" cy="115" r="40" fill="#FFFFFF" fill-opacity="0.1"/>
+    <text x="390" y="125" fill="#CCFBF1" font-size="28" text-anchor="middle">🏥</text>
+  </g>
+
+  <!-- Shareholder Services -->
+  <g transform="translate(40, 430)">
+    <rect width="460" height="340" rx="24" fill="#133E3F"/>
+    <text x="24" y="40" fill="#FFFFFF" font-size="20" font-weight="700">Shareholder Privileges</text>
+    
+    <g transform="translate(20, 65)">
+      <rect width="195" height="110" rx="16" fill="#0A2526"/>
+      <text x="20" y="40" fill="#2DD4BF" font-size="22">📅</text>
+      <text x="20" y="70" fill="#FFFFFF" font-size="15" font-weight="700">VIP Clinic Booking</text>
+      <text x="20" y="92" fill="#99F6E4" font-size="12">Priority consultants</text>
+    </g>
+
+    <g transform="translate(245, 65)">
+      <rect width="195" height="110" rx="16" fill="#0A2526"/>
+      <text x="20" y="40" fill="#2DD4BF" font-size="22">💰</text>
+      <text x="20" y="70" fill="#FFFFFF" font-size="15" font-weight="700">Annual Dividends</text>
+      <text x="20" y="92" fill="#99F6E4" font-size="12">Realtime payout log</text>
+    </g>
+
+    <g transform="translate(20, 195)">
+      <rect width="195" height="110" rx="16" fill="#0A2526"/>
+      <text x="20" y="40" fill="#2DD4BF" font-size="22">📑</text>
+      <text x="20" y="70" fill="#FFFFFF" font-size="15" font-weight="700">Financial Reports</text>
+      <text x="20" y="92" fill="#99F6E4" font-size="12">Quarterly audits</text>
+    </g>
+
+    <g transform="translate(245, 195)">
+      <rect width="195" height="110" rx="16" fill="#0A2526"/>
+      <text x="20" y="40" fill="#2DD4BF" font-size="22">💬</text>
+      <text x="20" y="70" fill="#FFFFFF" font-size="15" font-weight="700">Direct Support</text>
+      <text x="20" y="92" fill="#99F6E4" font-size="12">Dedicated board liaison</text>
+    </g>
+  </g>
+  
+
+  <!-- Bottom Navigation Bar -->
+  <g transform="translate(40, 1100)">
+    <rect x="0" y="0" width="460" height="68" rx="34" fill="#12131A" filter="url(#shadow)"/>
+    <circle cx="80" cy="34" r="22" fill="#3B82F6" fill-opacity="0.2"/>
+    <circle cx="80" cy="34" r="8" fill="#3B82F6"/>
+    <circle cx="180" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="280" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="380" cy="34" r="8" fill="#6B7280"/>
+  </g>
+</svg>

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1200" width="540" height="1200">
+  <defs>
+    <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E1B4B"/><stop offset="100%" stop-color="#0F0E26"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="540" height="1200" rx="44" fill="url(#screenBg)"/>
+  
+  <!-- Status bar -->
+  <g fill="#ffffff" opacity="0.9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <text x="52" y="52" font-size="20" font-weight="700">9:41</text>
+    <circle cx="440" cy="46" r="4.5"/>
+    <circle cx="454" cy="46" r="4.5"/>
+    <circle cx="468" cy="46" r="4.5"/>
+    <rect x="486" y="38" width="28" height="15" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <rect x="490" y="42" width="16" height="7" rx="2" fill="#fff"/>
+  </g>
+
+  <!-- App Header -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="460" height="60" rx="16" fill="url(#cardGrad)"/>
+    <circle cx="36" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M40 22 L30 30 L40 38" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <text x="76" y="38" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="700">Event Time Manager</text>
+    <circle cx="424" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <circle cx="424" cy="30" r="4" fill="#ffffff"/>
+  </g>
+
+  
+  <!-- Active Conference Badge -->
+  <g transform="translate(40, 170)" filter="url(#shadow)">
+    <rect width="460" height="230" rx="24" fill="linear-gradient(135deg, #6366F1, #4338CA)"/>
+    <text x="30" y="45" fill="#E0E7FF" font-size="14" font-weight="700">LIVE EVENT PORTAL</text>
+    <text x="30" y="90" fill="#FFFFFF" font-size="24" font-weight="800">Tech Summit Cairo 2026</text>
+    <text x="30" y="120" fill="#C7D2FE" font-size="14">Grand Nile Hall · 850 Registered</text>
+    <rect x="30" y="150" width="180" height="38" rx="19" fill="#312E81"/>
+    <text x="120" y="174" fill="#FFFFFF" font-size="14" font-weight="700" text-anchor="middle">Scan Check-in QR ➔</text>
+  </g>
+
+  <!-- Live Attendee Statistics -->
+  <g transform="translate(40, 430)">
+    <rect width="218" height="120" rx="20" fill="#282566"/>
+    <text x="20" y="38" fill="#C7D2FE" font-size="14">Checked In</text>
+    <text x="20" y="80" fill="#34D399" font-size="32" font-weight="800">642 / 850</text>
+    <text x="20" y="105" fill="#A5B4FC" font-size="13">75.5% attendance rate</text>
+
+    <rect x="242" width="218" height="120" rx="20" fill="#282566"/>
+    <text x="262" y="38" fill="#C7D2FE" font-size="14">Live Sessions</text>
+    <text x="262" y="80" fill="#F472B6" font-size="32" font-weight="800">4 Stages</text>
+    <text x="262" y="105" fill="#A5B4FC" font-size="13">Flutter &amp; AI Tracks</text>
+  </g>
+
+  <!-- Attendee checkin queue -->
+  <g transform="translate(40, 580)" filter="url(#shadow)">
+    <rect width="460" height="280" rx="24" fill="#282566"/>
+    <text x="24" y="42" fill="#FFFFFF" font-size="20" font-weight="700">Recent Registrations</text>
+    
+    <g transform="translate(20, 65)">
+      <rect width="420" height="55" rx="12" fill="#1E1B4B"/>
+      <circle cx="28" cy="28" r="8" fill="#10B981"/>
+      <text x="50" y="34" fill="#FFFFFF" font-size="15" font-weight="600">Karim El-Sayed · VIP Pass</text>
+      <text x="340" y="34" fill="#10B981" font-size="13">Checked in</text>
+    </g>
+
+    <g transform="translate(20, 130)">
+      <rect width="420" height="55" rx="12" fill="#1E1B4B"/>
+      <circle cx="28" cy="28" r="8" fill="#10B981"/>
+      <text x="50" y="34" fill="#FFFFFF" font-size="15" font-weight="600">Mariam Adel · Speaker</text>
+      <text x="340" y="34" fill="#10B981" font-size="13">Checked in</text>
+    </g>
+
+    <g transform="translate(20, 195)">
+      <rect width="420" height="55" rx="12" fill="#1E1B4B"/>
+      <circle cx="28" cy="28" r="8" fill="#F59E0B"/>
+      <text x="50" y="34" fill="#FFFFFF" font-size="15" font-weight="600">Omar Farouk · General</text>
+      <text x="340" y="34" fill="#F59E0B" font-size="13">Pending</text>
+    </g>
+  </g>
+  
+
+  <!-- Bottom Navigation Bar -->
+  <g transform="translate(40, 1100)">
+    <rect x="0" y="0" width="460" height="68" rx="34" fill="#12131A" filter="url(#shadow)"/>
+    <circle cx="80" cy="34" r="22" fill="#3B82F6" fill-opacity="0.2"/>
+    <circle cx="80" cy="34" r="8" fill="#3B82F6"/>
+    <circle cx="180" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="280" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="380" cy="34" r="8" fill="#6B7280"/>
+  </g>
+</svg>

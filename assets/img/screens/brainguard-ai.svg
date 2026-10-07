@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1200" width="540" height="1200">
+  <defs>
+    <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#090D1A"/><stop offset="100%" stop-color="#141E33"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="540" height="1200" rx="44" fill="url(#screenBg)"/>
+  
+  <!-- Status bar -->
+  <g fill="#ffffff" opacity="0.9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <text x="52" y="52" font-size="20" font-weight="700">9:41</text>
+    <circle cx="440" cy="46" r="4.5"/>
+    <circle cx="454" cy="46" r="4.5"/>
+    <circle cx="468" cy="46" r="4.5"/>
+    <rect x="486" y="38" width="28" height="15" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <rect x="490" y="42" width="16" height="7" rx="2" fill="#fff"/>
+  </g>
+
+  <!-- App Header -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="460" height="60" rx="16" fill="url(#cardGrad)"/>
+    <circle cx="36" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M40 22 L30 30 L40 38" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <text x="76" y="38" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="700">AI Risk Engine</text>
+    <circle cx="424" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <circle cx="424" cy="30" r="4" fill="#ffffff"/>
+  </g>
+
+  
+  <g transform="translate(40, 170)" filter="url(#shadow)">
+    <rect width="460" height="280" rx="24" fill="#1B2438"/>
+    <text x="24" y="42" fill="#94A3B8" font-size="15" font-weight="600">MULTIMODAL DEEP LEARNING</text>
+    <text x="24" y="75" fill="#FFFFFF" font-size="24" font-weight="800">EHR &amp; PPG Prediction</text>
+    
+    <rect x="24" y="105" width="412" height="60" rx="14" fill="#0F172A"/>
+    <text x="44" y="132" fill="#94A3B8" font-size="13">Model Architecture</text>
+    <text x="44" y="152" fill="#38BDF8" font-size="15" font-weight="700">ResNet + BiLSTM + Gemini Clinical NLP</text>
+
+    <rect x="24" y="185" width="195" height="70" rx="14" fill="#0F172A"/>
+    <text x="40" y="212" fill="#94A3B8" font-size="13">Accuracy</text>
+    <text x="40" y="240" fill="#10B981" font-size="24" font-weight="800">96.8%</text>
+
+    <rect x="240" y="185" width="195" height="70" rx="14" fill="#0F172A"/>
+    <text x="256" y="212" fill="#94A3B8" font-size="13">Latency</text>
+    <text x="256" y="240" fill="#F59E0B" font-size="24" font-weight="800">140 ms</text>
+  </g>
+
+  <!-- Prediction Output Timeline -->
+  <g transform="translate(40, 475)" filter="url(#shadow)">
+    <rect width="460" height="420" rx="24" fill="#1B2438"/>
+    <text x="24" y="40" fill="#FFFFFF" font-size="20" font-weight="700">Historical Biomarkers</text>
+    
+    <g transform="translate(24, 70)">
+      <rect width="412" height="85" rx="14" fill="#0F172A"/>
+      <circle cx="36" cy="42" r="16" fill="#10B981" fill-opacity="0.2"/>
+      <text x="36" y="48" fill="#10B981" font-size="15" text-anchor="middle">✓</text>
+      <text x="70" y="35" fill="#FFFFFF" font-size="16" font-weight="600">PPG Mat File Stream #108</text>
+      <text x="70" y="60" fill="#94A3B8" font-size="13">No ischemic episode detected</text>
+      <text x="330" y="38" fill="#64748B" font-size="13">Today 14:20</text>
+    </g>
+
+    <g transform="translate(24, 175)">
+      <rect width="412" height="85" rx="14" fill="#0F172A"/>
+      <circle cx="36" cy="42" r="16" fill="#3B82F6" fill-opacity="0.2"/>
+      <text x="36" y="48" fill="#3B82F6" font-size="15" text-anchor="middle">i</text>
+      <text x="70" y="35" fill="#FFFFFF" font-size="16" font-weight="600">OCR Prescription Parsed</text>
+      <text x="70" y="60" fill="#94A3B8" font-size="13">Aspirin 81mg &amp; Atorvastatin 20mg</text>
+      <text x="330" y="38" fill="#64748B" font-size="13">Yesterday</text>
+    </g>
+
+    <g transform="translate(24, 280)">
+      <rect width="412" height="85" rx="14" fill="#0F172A"/>
+      <circle cx="36" cy="42" r="16" fill="#F59E0B" fill-opacity="0.2"/>
+      <text x="36" y="48" fill="#F59E0B" font-size="15" text-anchor="middle">!</text>
+      <text x="70" y="35" fill="#FFFFFF" font-size="16" font-weight="600">EHR Systolic Variation</text>
+      <text x="70" y="60" fill="#94A3B8" font-size="13">Mild spike logged · Notified doctor</text>
+      <text x="330" y="38" fill="#64748B" font-size="13">3 days ago</text>
+    </g>
+  </g>
+  
+
+  <!-- Bottom Navigation Bar -->
+  <g transform="translate(40, 1100)">
+    <rect x="0" y="0" width="460" height="68" rx="34" fill="#12131A" filter="url(#shadow)"/>
+    <circle cx="80" cy="34" r="22" fill="#3B82F6" fill-opacity="0.2"/>
+    <circle cx="80" cy="34" r="8" fill="#3B82F6"/>
+    <circle cx="180" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="280" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="380" cy="34" r="8" fill="#6B7280"/>
+  </g>
+</svg>

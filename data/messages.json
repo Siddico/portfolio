@@ -1,0 +1,34 @@
+[
+  {
+    "id": "msg_1791398574491",
+    "name": "م. خالد علي",
+    "email": "khaled@example.com",
+    "message": "مرحباً مهندس محمد، عمل ممتاز",
+    "date": "2026-10-07T18:42:54.491Z",
+    "read": false
+  },
+  {
+    "id": "msg_1791398545351",
+    "name": "Eng. Khaled Ali",
+    "email": "khaled@example.com",
+    "message": "Hello Eng. Mohammed, your project is awesome!",
+    "date": "2026-10-07T18:42:25.351Z",
+    "read": false
+  },
+  {
+    "id": "msg_1791396464697",
+    "name": "Recruiter Test",
+    "email": "hr@techcorp.com",
+    "message": "Hi Mohammed, impressive portfolio!",
+    "date": "2026-10-07T18:07:44.697Z",
+    "read": false
+  },
+  {
+    "id": "msg_welcome",
+    "name": "System Demo",
+    "email": "demo@portfolio.local",
+    "message": "Welcome to your new portfolio dashboard, Mohammed! Visitors who send messages through the contact form will show up here.",
+    "date": "2026-10-07T20:50:00.000Z",
+    "read": false
+  }
+]

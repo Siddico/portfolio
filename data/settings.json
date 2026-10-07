@@ -1,0 +1,11 @@
+{
+  "theme": "default",
+  "primaryColor": "#2563EB",
+  "accentColor": "#F59E0B",
+  "enableScrapMood": true,
+  "enable3DHero": true,
+  "heroStatus": {
+    "en": "Available for Flutter roles · Cairo / Remote",
+    "ar": "متاح لفرص Flutter · متاح للعمل عن بُعد أو بالقاهرة"
+  }
+}

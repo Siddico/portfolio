@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1200" width="540" height="1200">
+  <defs>
+    <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2D1B14"/><stop offset="100%" stop-color="#1A0F0A"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="540" height="1200" rx="44" fill="url(#screenBg)"/>
+  
+  <!-- Status bar -->
+  <g fill="#ffffff" opacity="0.9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <text x="52" y="52" font-size="20" font-weight="700">9:41</text>
+    <circle cx="440" cy="46" r="4.5"/>
+    <circle cx="454" cy="46" r="4.5"/>
+    <circle cx="468" cy="46" r="4.5"/>
+    <rect x="486" y="38" width="28" height="15" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/>
+    <rect x="490" y="42" width="16" height="7" rx="2" fill="#fff"/>
+  </g>
+
+  <!-- App Header -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="460" height="60" rx="16" fill="url(#cardGrad)"/>
+    <circle cx="36" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <path d="M40 22 L30 30 L40 38" stroke="#ffffff" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <text x="76" y="38" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22" font-weight="700">Biscofa Specialty Café</text>
+    <circle cx="424" cy="30" r="18" fill="#ffffff" fill-opacity="0.15"/>
+    <circle cx="424" cy="30" r="4" fill="#ffffff"/>
+  </g>
+
+  
+  <!-- Loyalty Card -->
+  <g transform="translate(40, 170)" filter="url(#shadow)">
+    <rect width="460" height="210" rx="24" fill="linear-gradient(135deg, #B45309, #78350F)"/>
+    <text x="30" y="45" fill="#FDE68A" font-size="15" font-weight="700">BISCOFA REWARDS</text>
+    <text x="30" y="95" fill="#FFFFFF" font-size="36" font-weight="800">480 Points</text>
+    <text x="30" y="130" fill="#FEF3C7" font-size="14">You are only 20 pts away from a free Flat White!</text>
+    <rect x="30" y="155" width="400" height="12" rx="6" fill="#000000" fill-opacity="0.3"/>
+    <rect x="30" y="155" width="340" height="12" rx="6" fill="#FBBF24"/>
+  </g>
+
+  <!-- Categories -->
+  <g transform="translate(40, 410)">
+    <rect x="0" y="0" width="105" height="42" rx="21" fill="#D97706"/>
+    <text x="52" y="26" fill="#FFF" font-size="14" font-weight="700" text-anchor="middle">☕ Coffee</text>
+    <rect x="115" y="0" width="105" height="42" rx="21" fill="#3B2519"/>
+    <text x="167" y="26" fill="#D1D5DB" font-size="14" font-weight="600" text-anchor="middle">Cold Brew</text>
+    <rect x="230" y="0" width="105" height="42" rx="21" fill="#3B2519"/>
+    <text x="282" y="26" fill="#D1D5DB" font-size="14" font-weight="600" text-anchor="middle">Desserts</text>
+    <rect x="345" y="0" width="105" height="42" rx="21" fill="#3B2519"/>
+    <text x="397" y="26" fill="#D1D5DB" font-size="14" font-weight="600" text-anchor="middle">Bakery</text>
+  </g>
+
+  <!-- Products grid -->
+  <g transform="translate(40, 480)" filter="url(#shadow)">
+    <!-- Item 1 -->
+    <rect width="218" height="270" rx="20" fill="#291811"/>
+    <circle cx="109" cy="80" r="50" fill="#452718"/>
+    <text x="109" y="90" fill="#FFF" font-size="34" text-anchor="middle">☕</text>
+    <text x="20" y="165" fill="#FFFFFF" font-size="17" font-weight="700">Spanish Latte</text>
+    <text x="20" y="190" fill="#9CA3AF" font-size="13">Sweet condensed milk</text>
+    <text x="20" y="235" fill="#FBBF24" font-size="20" font-weight="800">85 EGP</text>
+    <circle cx="185" cy="230" r="18" fill="#D97706"/>
+    <text x="185" y="237" fill="#FFF" font-size="18" font-weight="700" text-anchor="middle">+</text>
+
+    <!-- Item 2 -->
+    <rect x="242" width="218" height="270" rx="20" fill="#291811"/>
+    <circle cx="351" cy="80" r="50" fill="#452718"/>
+    <text x="351" y="90" fill="#FFF" font-size="34" text-anchor="middle">🥤</text>
+    <text x="262" y="165" fill="#FFFFFF" font-size="17" font-weight="700">Iced Pistachio</text>
+    <text x="262" y="190" fill="#9CA3AF" font-size="13">Creamy artisan blend</text>
+    <text x="262" y="235" fill="#FBBF24" font-size="20" font-weight="800">110 EGP</text>
+    <circle cx="427" cy="230" r="18" fill="#D97706"/>
+    <text x="427" y="237" fill="#FFF" font-size="18" font-weight="700" text-anchor="middle">+</text>
+  </g>
+
+  <!-- Live Active Order Bar -->
+  <g transform="translate(40, 780)" filter="url(#shadow)">
+    <rect width="460" height="100" rx="20" fill="#3B2519" stroke="#D97706" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="22" fill="#D97706"/>
+    <text x="50" y="58" fill="#FFF" font-size="18" text-anchor="middle">🚚</text>
+    <text x="90" y="42" fill="#FFFFFF" font-size="16" font-weight="700">Order #842 is on the way</text>
+    <text x="90" y="66" fill="#FBBF24" font-size="13">Estimated arrival in 8 mins · Live GPS</text>
+  </g>
+  
+
+  <!-- Bottom Navigation Bar -->
+  <g transform="translate(40, 1100)">
+    <rect x="0" y="0" width="460" height="68" rx="34" fill="#12131A" filter="url(#shadow)"/>
+    <circle cx="80" cy="34" r="22" fill="#3B82F6" fill-opacity="0.2"/>
+    <circle cx="80" cy="34" r="8" fill="#3B82F6"/>
+    <circle cx="180" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="280" cy="34" r="8" fill="#6B7280"/>
+    <circle cx="380" cy="34" r="8" fill="#6B7280"/>
+  </g>
+</svg>
