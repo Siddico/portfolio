@@ -7,287 +7,540 @@
     "location": "Cairo, Egypt",
     "github": "https://github.com/Siddico",
     "linkedin": "https://www.linkedin.com/in/mohammedsiddico/",
-    "portfolio": "https://mohammed-siddiq.lovable.app",
+    "portfolio": "https://siddico.github.io/portfolio/",
     "summary": "Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces.",
     "facts": {
       "yoe": "+2",
       "apps": "+4",
       "clean": "100%"
+    },
+    "motion": {
+      "hero3d": true,
+      "tilt3d": true,
+      "cardFlip": true,
+      "ambientGlow": true,
+      "tickerSpeed": "normal",
+      "smoothScroll": true
     }
   },
   "motionSettings": {
+    "hero3d": true,
     "tilt3d": true,
     "cardFlip": true,
-    "smoothScroll": true,
-    "hero3d": true,
+    "ambientGlow": true,
     "tickerSpeed": "normal",
-    "ambientGlow": true
+    "smoothScroll": true
   },
   "sectionVisibility": {
     "hero": true,
-    "stats": true,
-    "stackStrip": true,
-    "projects": true,
-    "skills": true,
-    "experience": true,
-    "certs": true,
     "about": true,
+    "certs": true,
+    "stats": true,
+    "skills": true,
     "contact": true,
-    "cvBtn": true,
-    "whatsapp": true,
-    "mailcard": true,
-    "socials": true
+    "projects": true,
+    "experience": true,
+    "stackStrip": true
   },
   "scrapbookSettings": {
+    "motion": {
+      "hero3d": true,
+      "tilt3d": true,
+      "cardFlip": true,
+      "ambientGlow": true,
+      "tickerSpeed": "normal",
+      "smoothScroll": true
+    },
     "enabled": true,
-    "showPolaroidHero": true,
-    "showProjects": true,
-    "showExperienceReceipt": true,
-    "showSkillsSticky": true,
-    "showCertsWax": true,
     "showContact": true,
-    "terminalTag": "Flutter 3.24 · Clean Architecture · Dart"
+    "terminalTag": "Flutter 3.24 · Clean Architecture · Dart",
+    "showCertsWax": true,
+    "showProjects": true,
+    "showPolaroidHero": true,
+    "showSkillsSticky": true,
+    "showExperienceReceipt": true
   },
   "projects": [
     {
-      "id": "brainguard",
-      "visible": true,
-      "name": { "en": "BrainGuard", "ar": "BrainGuard" },
-      "tag": { "en": "Graduation Project · AI Stroke Prediction & Patient Monitoring", "ar": "مشروع التخرج · تنبؤ بالسكتات بالذكاء الاصطناعي ومراقبة المرضى" },
       "bg": "linear-gradient(160deg, #0F172A 0%, #1E3A8A 100%)",
-      "screens": ["brainguard-ai", "brainguard-home"],
-      "desc": {
-        "en": "A cross-platform healthcare ecosystem for patients and doctors, featuring real-time biometric analysis, stroke risk assessment, and remote tele-monitoring.",
-        "ar": "منظومة رعاية صحية متكاملة عبر المنصات للمرضى والأطباء، تجمع بين التحليل اللحظي للإشارات الحيوية، وتقييم مخاطر السكتة الدماغية، والمتابعة الطبية عن بُعد."
+      "id": "brainguard",
+      "tag": {
+        "ar": "مشروع التخرج · تنبؤ بالسكتات بالذكاء الاصطناعي ومراقبة المرضى",
+        "en": "Graduation Project · AI Stroke Prediction & Patient Monitoring"
       },
+      "desc": {
+        "ar": "منظومة رعاية صحية متكاملة عبر المنصات للمرضى والأطباء، تجمع بين التحليل اللحظي للإشارات الحيوية، وتقييم مخاطر السكتة الدماغية، والمتابعة الطبية عن بُعد.",
+        "en": "A cross-platform healthcare ecosystem for patients and doctors, featuring real-time biometric analysis, stroke risk assessment, and remote tele-monitoring."
+      },
+      "name": {
+        "ar": "BrainGuard",
+        "en": "BrainGuard"
+      },
+      "links": [
+        {
+          "href": "https://github.com/Siddico",
+          "label": {
+            "ar": "الكود على GitHub",
+            "en": "GitHub Repository"
+          }
+        }
+      ],
+      "stack": [
+        "Flutter",
+        "Firebase",
+        "Node.js",
+        "Hugging Face",
+        "Gemini API",
+        "Cloudinary",
+        "Clean Architecture",
+        "PPG Signal"
+      ],
       "points": {
-        "en": [
-          "Integrated multiple AI services: PPG prediction from .mat files, EHR-based stroke risk modeling, and a Gemini clinical chatbot",
-          "Real-time patient-doctor connectivity with live chat, QR-based pairing, push notifications, and appointments",
-          "OCR-assisted prescription analysis and automated medication schedule reminders",
-          "Architected with Clean Architecture, responsive UI, role-based access, and Cloudinary + Firebase cloud storage"
-        ],
         "ar": [
           "دمج عدة خدمات ذكاء اصطناعي: تنبؤ بإشارات PPG من ملفات .mat، تقييم مخاطر السكتة ببيانات EHR، وشات طبي ذكي بـ Gemini API",
           "ربط لحظي بين المريض والطبيب مع شات، واقتران سريع بـ QR Code، وإشعارات فورية، وحجز مواعيد",
           "تحليل الروشتات الطبية بتقنية OCR ومتابعة التذكير بمواعيد الأدوية والتاريخ المرضي",
           "مبني بـ Clean Architecture مع واجهات متجاوبة، وصلاحيات مخصصة، وإدارة سحابية بـ Firebase وCloudinary"
+        ],
+        "en": [
+          "Integrated multiple AI services: PPG prediction from .mat files, EHR-based stroke risk modeling, and a Gemini clinical chatbot",
+          "Real-time patient-doctor connectivity with live chat, QR-based pairing, push notifications, and appointments",
+          "OCR-assisted prescription analysis and automated medication schedule reminders",
+          "Architected with Clean Architecture, responsive UI, role-based access, and Cloudinary + Firebase cloud storage"
         ]
       },
       "metrics": [
-        { "v": "4+", "l": { "en": "AI models", "ar": "نماذج AI" } },
-        { "v": "96.8%", "l": { "en": "accuracy", "ar": "دقة التنبؤ" } },
-        { "v": "< 1s", "l": { "en": "response", "ar": "استجابة فورية" } },
-        { "v": "Clean", "l": { "en": "architecture", "ar": "Clean Arch" } }
+        {
+          "l": {
+            "ar": "نماذج AI",
+            "en": "AI models"
+          },
+          "v": "4+"
+        },
+        {
+          "l": {
+            "ar": "دقة التنبؤ",
+            "en": "accuracy"
+          },
+          "v": "96.8%"
+        },
+        {
+          "l": {
+            "ar": "استجابة فورية",
+            "en": "response"
+          },
+          "v": "< 1s"
+        },
+        {
+          "l": {
+            "ar": "Clean Arch",
+            "en": "architecture"
+          },
+          "v": "Clean"
+        }
       ],
-      "stack": ["Flutter", "Firebase", "Node.js", "Hugging Face", "Gemini API", "Cloudinary", "Clean Architecture", "PPG Signal"],
-      "links": [
-        { "label": { "en": "GitHub Repository", "ar": "الكود على GitHub" }, "href": "https://github.com/Siddico" }
-      ]
+      "screens": [
+        "brainguard-ai",
+        "brainguard-home"
+      ],
+      "visible": true
     },
     {
-      "id": "biscofa",
-      "visible": true,
-      "name": { "en": "Biscofa", "ar": "Biscofa" },
-      "tag": { "en": "Commercial Product · Customer & Admin Apps", "ar": "منتج تجاري · تطبيقي العميل والآدمن" },
       "bg": "linear-gradient(160deg, #2D1B14 0%, #170E0A 100%)",
-      "screens": ["biscofa-home", "biscofa-admin"],
-      "desc": {
-        "en": "A comprehensive café management system featuring two dedicated Flutter applications: a client shopping & rewards app and a complete real-time admin portal.",
-        "ar": "نظام متكامل لإدارة الكافيهات يشمل تطبيقين مخصصين بـ Flutter: تطبيق للعملاء لطلب المشروبات وبرنامج الولاء، ولوحة تحكم لحظية للآدمن."
+      "id": "biscofa",
+      "tag": {
+        "ar": "منتج تجاري · تطبيقي العميل والآدمن",
+        "en": "Commercial Product · Customer & Admin Apps"
       },
+      "desc": {
+        "ar": "نظام متكامل لإدارة الكافيهات يشمل تطبيقين مخصصين بـ Flutter: تطبيق للعملاء لطلب المشروبات وبرنامج الولاء، ولوحة تحكم لحظية للآدمن.",
+        "en": "A comprehensive café management system featuring two dedicated Flutter applications: a client shopping & rewards app and a complete real-time admin portal."
+      },
+      "name": {
+        "ar": "Biscofa",
+        "en": "Biscofa"
+      },
+      "links": [
+        {
+          "href": "https://play.google.com",
+          "label": {
+            "ar": "Google Play",
+            "en": "Google Play"
+          }
+        },
+        {
+          "href": "https://github.com/Siddico",
+          "label": {
+            "ar": "GitHub",
+            "en": "GitHub"
+          }
+        }
+      ],
+      "stack": [
+        "Flutter",
+        "Firebase",
+        "Firestore",
+        "Cloud Messaging",
+        "Google Play",
+        "App Store",
+        "Clean Architecture"
+      ],
       "points": {
-        "en": [
-          "Customer app with real-time product browsing, dynamic menu, cart, live order tracking, and loyalty rewards system",
-          "Dedicated Admin app for catalog management, categories, promo codes, push campaigns, and sales reports",
-          "Real-time database sync via Firebase Firestore with high-performance state management",
-          "Optimized for scalability, smooth animations, low bundle size, and released on Google Play and App Store"
-        ],
         "ar": [
           "تطبيق عملاء يشمل تصفح المنتجات، سلة المشتريات، متابعة الطلب لحظياً، ونظام نقاط ولاء ومكافآت",
           "تطبيق كامل للآدمن للتحكم بالمنتجات، التصنيفات، أكواد الخصم، إرسال الإشعارات، والتقارير المالية",
           "مزامنة فورية للبيانات عبر Cloud Firestore مع معمارية قوية وإدارة حالة سلسة",
           "محسن لأعلى أداء وسرعة وتم نشره على Google Play وApp Store"
+        ],
+        "en": [
+          "Customer app with real-time product browsing, dynamic menu, cart, live order tracking, and loyalty rewards system",
+          "Dedicated Admin app for catalog management, categories, promo codes, push campaigns, and sales reports",
+          "Real-time database sync via Firebase Firestore with high-performance state management",
+          "Optimized for scalability, smooth animations, low bundle size, and released on Google Play and App Store"
         ]
       },
       "metrics": [
-        { "v": "2", "l": { "en": "Apps", "ar": "تطبيقين متجرين" } },
-        { "v": "100%", "l": { "en": "Live Sync", "ar": "مزامنة لحظية" } },
-        { "v": "24/7", "l": { "en": "Ordering", "ar": "طلب مستمر" } }
+        {
+          "l": {
+            "ar": "تطبيقين متجرين",
+            "en": "Apps"
+          },
+          "v": "2"
+        },
+        {
+          "l": {
+            "ar": "مزامنة لحظية",
+            "en": "Live Sync"
+          },
+          "v": "100%"
+        },
+        {
+          "l": {
+            "ar": "طلب مستمر",
+            "en": "Ordering"
+          },
+          "v": "24/7"
+        }
       ],
-      "stack": ["Flutter", "Firebase", "Firestore", "Cloud Messaging", "Google Play", "App Store", "Clean Architecture"],
-      "links": [
-        { "label": { "en": "Google Play", "ar": "Google Play" }, "href": "https://play.google.com" },
-        { "label": { "en": "GitHub", "ar": "GitHub" }, "href": "https://github.com/Siddico" }
-      ]
+      "screens": [
+        "biscofa-home",
+        "biscofa-admin"
+      ],
+      "visible": true
     },
     {
-      "id": "alhayah",
-      "visible": true,
-      "name": { "en": "Al Hayah", "ar": "مساهمي الحياة" },
-      "tag": { "en": "Enterprise App · Supabase Realtime", "ar": "تطبيق مؤسسي · Supabase Realtime" },
       "bg": "linear-gradient(160deg, #064E3B 0%, #022C22 100%)",
-      "screens": ["alhayah-home"],
-      "desc": {
-        "en": "A secure mobile portal for private hospital shareholders with exclusive access to hospital services, dividend tracking, and executive benefits.",
-        "ar": "تطبيق موبايل آمن لمساهمي مستشفى خاصة يتيح الوصول الحصري للخدمات الطبية، متابعة الأرباح، ومزايا كبار المساهمين."
+      "id": "alhayah",
+      "tag": {
+        "ar": "تطبيق مؤسسي · Supabase Realtime",
+        "en": "Enterprise App · Supabase Realtime"
       },
+      "desc": {
+        "ar": "تطبيق موبايل آمن لمساهمي مستشفى خاصة يتيح الوصول الحصري للخدمات الطبية، متابعة الأرباح، ومزايا كبار المساهمين.",
+        "en": "A secure mobile portal for private hospital shareholders with exclusive access to hospital services, dividend tracking, and executive benefits."
+      },
+      "name": {
+        "ar": "مساهمي الحياة",
+        "en": "Al Hayah"
+      },
+      "links": [
+        {
+          "href": "https://github.com/Siddico",
+          "label": {
+            "ar": "الكود على GitHub",
+            "en": "Showcase / GitHub"
+          }
+        }
+      ],
+      "stack": [
+        "Flutter",
+        "Supabase",
+        "PostgreSQL",
+        "RLS",
+        "Google Play",
+        "App Store",
+        "Clean Code"
+      ],
       "points": {
-        "en": [
-          "Role-based authentication with dedicated experiences for Admin and Hospital Shareholders",
-          "Complaints handling system, secure shareholder identity card, and VIP medical discount workflows",
-          "Integrated Supabase for modern authentication, Row-Level Security, and real-time database management",
-          "Strict data privacy, cryptographic token handling, and multi-platform deployment on Play Store & App Store"
-        ],
         "ar": [
           "تسجيل دخول مبني على الصلاحيات (Role-Based Auth) بتجربة مخصصة لكل من الآدمن والمساهمين",
           "نظام تقديم ومتابعة الشكاوى، بطاقة هوية رقمية للمساهم، وخصومات طبية حصرية",
           "ربط كامل مع Supabase للتوثيق وقواعد البيانات اللحظية وحماية البيانات بـ RLS",
           "أعلى معايير حماية البيانات والخصوصية ونشر كامل على المتاجر"
+        ],
+        "en": [
+          "Role-based authentication with dedicated experiences for Admin and Hospital Shareholders",
+          "Complaints handling system, secure shareholder identity card, and VIP medical discount workflows",
+          "Integrated Supabase for modern authentication, Row-Level Security, and real-time database management",
+          "Strict data privacy, cryptographic token handling, and multi-platform deployment on Play Store & App Store"
         ]
       },
       "metrics": [
-        { "v": "RBAC", "l": { "en": "Role Auth", "ar": "صلاحيات آمنة" } },
-        { "v": "100%", "l": { "en": "Supabase", "ar": "بيانات لحظية" } },
-        { "v": "VIP", "l": { "en": "Shareholders", "ar": "كبار المساهمين" } }
+        {
+          "l": {
+            "ar": "صلاحيات آمنة",
+            "en": "Role Auth"
+          },
+          "v": "RBAC"
+        },
+        {
+          "l": {
+            "ar": "بيانات لحظية",
+            "en": "Supabase"
+          },
+          "v": "100%"
+        },
+        {
+          "l": {
+            "ar": "كبار المساهمين",
+            "en": "Shareholders"
+          },
+          "v": "VIP"
+        }
       ],
-      "stack": ["Flutter", "Supabase", "PostgreSQL", "RLS", "Google Play", "App Store", "Clean Code"],
-      "links": [
-        { "label": { "en": "Showcase / GitHub", "ar": "الكود على GitHub" }, "href": "https://github.com/Siddico" }
-      ]
+      "screens": [
+        "alhayah-home"
+      ],
+      "visible": true
     },
     {
-      "id": "event-time",
-      "visible": true,
-      "name": { "en": "Event Time", "ar": "إدارة الفعاليات" },
-      "tag": { "en": "Event Tech · Realtime Sync & Check-In", "ar": "تنظيم الفعاليات · مزامنة لحظية ودخول بـ QR" },
       "bg": "linear-gradient(160deg, #312E81 0%, #1E1B4B 100%)",
-      "screens": ["event-home"],
-      "desc": {
-        "en": "A mobile application for conference registrations, attendee ticketing, and live event check-in management with real-time sync.",
-        "ar": "تطبيق موبايل متين لتسجيل حضور المؤتمرات والفعاليات، وإدارة التذاكر، وتسجيل الدخول السريع أثناء الفعاليات الحية."
+      "id": "event-time",
+      "tag": {
+        "ar": "تنظيم الفعاليات · مزامنة لحظية ودخول بـ QR",
+        "en": "Event Tech · Realtime Sync & Check-In"
       },
+      "desc": {
+        "ar": "تطبيق موبايل متين لتسجيل حضور المؤتمرات والفعاليات، وإدارة التذاكر، وتسجيل الدخول السريع أثناء الفعاليات الحية.",
+        "en": "A mobile application for conference registrations, attendee ticketing, and live event check-in management with real-time sync."
+      },
+      "name": {
+        "ar": "إدارة الفعاليات",
+        "en": "Event Time"
+      },
+      "links": [
+        {
+          "href": "https://github.com/Siddico",
+          "label": {
+            "ar": "GitHub",
+            "en": "GitHub"
+          }
+        }
+      ],
+      "stack": [
+        "Flutter",
+        "RESTful API",
+        "Firebase",
+        "QR Scanning",
+        "Responsive UI",
+        "Android"
+      ],
       "points": {
-        "en": [
-          "Event registration system connected to Firebase and REST APIs for instant attendee synchronization",
-          "Organizer tools for live event entry check-in, ticket validation, and attendance statistics",
-          "Responsive, adaptive layout designed for both high-traffic gate tablets and attendees' smartphones"
-        ],
         "ar": [
           "نظام تسجيل في الفعاليات متصل بـ Firebase و RESTful APIs لمزامنة الحضور فورياً",
           "أدوات للمنظمين لمسح تذاكر الحضور وإدارتهم لحظياً أثناء الفعالية مع إحصائيات مباشرة",
           "واجهة متجاوبة وسريعة مصممة للشاشات المختلفة وأجهزة التابلت عند بوابات الدخول"
+        ],
+        "en": [
+          "Event registration system connected to Firebase and REST APIs for instant attendee synchronization",
+          "Organizer tools for live event entry check-in, ticket validation, and attendance statistics",
+          "Responsive, adaptive layout designed for both high-traffic gate tablets and attendees' smartphones"
         ]
       },
       "metrics": [
-        { "v": "QR", "l": { "en": "Fast Scan", "ar": "مسح وتأكيد" } },
-        { "v": "Cloud", "l": { "en": "Realtime", "ar": "مزامنة سحابية" } }
+        {
+          "l": {
+            "ar": "مسح وتأكيد",
+            "en": "Fast Scan"
+          },
+          "v": "QR"
+        },
+        {
+          "l": {
+            "ar": "مزامنة سحابية",
+            "en": "Realtime"
+          },
+          "v": "Cloud"
+        }
       ],
-      "stack": ["Flutter", "RESTful API", "Firebase", "QR Scanning", "Responsive UI", "Android"],
-      "links": [
-        { "label": { "en": "GitHub", "ar": "GitHub" }, "href": "https://github.com/Siddico" }
-      ]
+      "screens": [
+        "event-home"
+      ],
+      "visible": true
     }
   ],
   "skills": [
     {
       "id": "mobile",
-      "visible": true,
-      "title": { "en": "Mobile Development", "ar": "تطوير تطبيقات الموبايل" },
-      "items": ["Flutter", "Dart", "Android SDK", "iOS", "Responsive UI", "Pixel-Perfect Layouts", "Custom Animations", "Platform Channels"]
+      "items": [
+        "Flutter",
+        "Dart",
+        "Android SDK",
+        "iOS",
+        "Responsive UI",
+        "Pixel-Perfect Layouts",
+        "Custom Animations",
+        "Platform Channels"
+      ],
+      "title": {
+        "ar": "تطوير تطبيقات الموبايل",
+        "en": "Mobile Development"
+      },
+      "visible": true
     },
     {
       "id": "architecture",
-      "visible": true,
-      "title": { "en": "State & Architecture", "ar": "إدارة الحالة والمعمارية البرمجية" },
-      "items": ["Clean Architecture", "BLoC (Cubit)", "Riverpod", "Provider", "SOLID Principles", "OOP", "Dependency Injection", "Repository Pattern"]
+      "items": [
+        "Clean Architecture",
+        "BLoC (Cubit)",
+        "Riverpod",
+        "Provider",
+        "SOLID Principles",
+        "OOP",
+        "Dependency Injection",
+        "Repository Pattern"
+      ],
+      "title": {
+        "ar": "إدارة الحالة والمعمارية البرمجية",
+        "en": "State & Architecture"
+      },
+      "visible": true
     },
     {
       "id": "backend",
-      "visible": true,
-      "title": { "en": "Backend & Cloud Services", "ar": "السحابة وقواعد البيانات وAPIs" },
-      "items": ["RESTful APIs", "Firebase Firestore", "Firebase Auth", "Cloud Messaging (FCM)", "Supabase", "PostgreSQL", "RLS", "Node.js (Express)"]
+      "items": [
+        "RESTful APIs",
+        "Firebase Firestore",
+        "Firebase Auth",
+        "Cloud Messaging (FCM)",
+        "Supabase",
+        "PostgreSQL",
+        "RLS",
+        "Node.js (Express)"
+      ],
+      "title": {
+        "ar": "السحابة وقواعد البيانات وAPIs",
+        "en": "Backend & Cloud Services"
+      },
+      "visible": true
     },
     {
       "id": "tools",
-      "visible": true,
-      "title": { "en": "AI, Storage & Tools", "ar": "الذكاء الاصطناعي والتخزين والأدوات" },
-      "items": ["Gemini API", "Hugging Face Models", "Cloudinary Storage", "Git & GitHub", "Postman", "CI/CD & Fastlane", "App Store & Play Store Publishing"]
+      "items": [
+        "Gemini API",
+        "Hugging Face Models",
+        "Cloudinary Storage",
+        "Git & GitHub",
+        "Postman",
+        "CI/CD & Fastlane",
+        "App Store & Play Store Publishing"
+      ],
+      "title": {
+        "ar": "الذكاء الاصطناعي والتخزين والأدوات",
+        "en": "AI, Storage & Tools"
+      },
+      "visible": true
     }
   ],
   "certs": [
     {
       "id": "cert-1",
-      "visible": true,
-      "name": { "en": "Flutter & Dart - The Complete Guide", "ar": "دليل فلاتر ودارت الشامل للمحترفين" },
-      "issuer": "Udemy / Maximillian Schwarzmüller",
-      "date": "2024",
-      "credentialId": "UC-FLUTTER-2024",
       "url": "https://www.udemy.com",
+      "date": "2024",
+      "name": {
+        "ar": "دليل فلاتر ودارت الشامل للمحترفين",
+        "en": "Flutter & Dart - The Complete Guide"
+      },
       "badge": "Flutter",
-      "color": "#2F5BEA"
+      "color": "#2F5BEA",
+      "issuer": "Udemy / Maximillian Schwarzmüller",
+      "visible": true,
+      "credentialId": "UC-FLUTTER-2024"
     },
     {
       "id": "cert-2",
-      "visible": true,
-      "name": { "en": "Clean Architecture & Design Patterns in Flutter", "ar": "Clean Architecture وأنماط التصميم في فلاتر" },
-      "issuer": "Advanced Architecture Mastery",
-      "date": "2024",
-      "credentialId": "ARCH-CLEAN-99",
       "url": "#",
+      "date": "2024",
+      "name": {
+        "ar": "Clean Architecture وأنماط التصميم في فلاتر",
+        "en": "Clean Architecture & Design Patterns in Flutter"
+      },
       "badge": "Clean Arch",
-      "color": "#10B981"
+      "color": "#10B981",
+      "issuer": "Advanced Architecture Mastery",
+      "visible": true,
+      "credentialId": "ARCH-CLEAN-99"
     },
     {
       "id": "cert-3",
-      "visible": true,
-      "name": { "en": "Business English Certified", "ar": "شهادة الإنجليزية للأعمال والتواصل المهني" },
-      "issuer": "Professional Business English",
-      "date": "2023",
-      "credentialId": "ENG-B2-PRO",
       "url": "#",
+      "date": "2023",
+      "name": {
+        "ar": "شهادة الإنجليزية للأعمال والتواصل المهني",
+        "en": "Business English Certified"
+      },
       "badge": "English",
-      "color": "#F59E0B"
+      "color": "#F59E0B",
+      "issuer": "Professional Business English",
+      "visible": true,
+      "credentialId": "ENG-B2-PRO"
     }
   ],
   "experience": [
     {
       "id": "exp-1",
-      "visible": true,
-      "role": { "en": "Software Engineer & Flutter Developer", "ar": "مهندس برمجيات ومطور تطبيقات فلاتر" },
-      "company": "Freelance & Enterprise Client Products",
-      "period": { "en": "2024 - Present", "ar": "2024 - الحالي" },
+      "role": {
+        "ar": "مهندس برمجيات ومطور تطبيقات فلاتر",
+        "en": "Software Engineer & Flutter Developer"
+      },
+      "period": {
+        "ar": "2024 - الحالي",
+        "en": "2024 - Present"
+      },
       "points": {
-        "en": [
-          "Developed high-traffic production Flutter apps with Clean Architecture and BLoC / Riverpod",
-          "Integrated Supabase & Firebase realtime backends, push notifications, and payment gateways",
-          "Published and maintained multiple apps on Google Play Store and Apple App Store"
-        ],
         "ar": [
           "تطوير تطبيقات فلاتر إنتاجية بمعمارية Clean Architecture وإدارة حالة احترافية بـ BLoC و Riverpod",
           "ربط قواعد بيانات سحابية لحظية بـ Supabase و Firebase مع إشعارات فورية وخدمات دفع",
           "نشر وإدارة تطبيقات حية على متجري Google Play و Apple App Store"
+        ],
+        "en": [
+          "Developed high-traffic production Flutter apps with Clean Architecture and BLoC / Riverpod",
+          "Integrated Supabase & Firebase realtime backends, push notifications, and payment gateways",
+          "Published and maintained multiple apps on Google Play Store and Apple App Store"
         ]
-      }
+      },
+      "company": "Freelance & Enterprise Client Products",
+      "visible": true
     },
     {
       "id": "exp-2",
-      "visible": true,
-      "role": { "en": "Graduation Project Lead Engineer", "ar": "مهندس أول لمشروع التخرج (BrainGuard)" },
-      "company": "Faculty of Computers & Artificial Intelligence",
-      "period": { "en": "2023 - 2024", "ar": "2023 - 2024" },
+      "role": {
+        "ar": "مهندس أول لمشروع التخرج (BrainGuard)",
+        "en": "Graduation Project Lead Engineer"
+      },
+      "period": {
+        "ar": "2023 - 2024",
+        "en": "2023 - 2024"
+      },
       "points": {
-        "en": [
-          "Engineered an AI healthcare mobile application combining PPG signals, EHR data, and Gemini clinical chatbot",
-          "Implemented QR pairing, live chat between doctors and patients, and medication OCR reminders",
-          "Achieved Excellent grade and recognition for architectural rigor"
-        ],
         "ar": [
           "هندسة تطبيق طبي ذكي يدمج بين إشارات PPG الحيوية، بيانات السجل الطبي EHR، وشات Gemini الاستشاري",
           "برمجة اقتران المريض بالطبيب بـ QR Code، محادثة فورية، وتحليل الروشتات بـ OCR",
           "الحصول على تقدير امتياز وإشادة بلجنة التحكيم لجودة المعمارية والواجهات"
+        ],
+        "en": [
+          "Engineered an AI healthcare mobile application combining PPG signals, EHR data, and Gemini clinical chatbot",
+          "Implemented QR pairing, live chat between doctors and patients, and medication OCR reminders",
+          "Achieved Excellent grade and recognition for architectural rigor"
         ]
-      }
+      },
+      "company": "Faculty of Computers & Artificial Intelligence",
+      "visible": true
     }
-  ]
+  ],
+  "facts": {
+    "yoe": "+2",
+    "apps": "+4",
+    "clean": "100%"
+  }
 }
