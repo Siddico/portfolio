@@ -12,7 +12,7 @@
 
 **A world-class, dynamic portfolio engineered with interactive 3D WebGL, Flutter Hot Reload simulation, real-time Supabase Cloud synchronization, and an enterprise Admin Dashboard.**
 
-[🌐 Live Portfolio](https://siddico.github.io/portfolio/) • [🔒 Admin Portal](https://siddico.github.io/portfolio/admin.html) • [💼 LinkedIn](https://www.linkedin.com/in/mohammedsiddico/) • [📱 GitHub](https://github.com/Siddico)
+[🌐 Live Portfolio](https://siddico.github.io/portfolio/) • [💼 LinkedIn](https://www.linkedin.com/in/mohammedsiddico/) • [📱 GitHub](https://github.com/Siddico)
 
 ---
 

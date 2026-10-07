@@ -86,32 +86,53 @@
       if (typeof o === "object") return o[lang] || o.en || o.ar || "";
       return String(o);
     };
-    const items = E.items.filter(x => x.visible !== false);
-    listEl.innerHTML = items.map(x => `
-      <li class="tl">
-        <div class="tl__meta">
-          <span class="tl__date">${esc(L(x.date))}</span>
-          <span class="tl__place">${esc(L(x.place || x.company))}</span>
-        </div>
-        <div class="tl__card">
-          <h3>${esc(L(x.t || x.title))}</h3>
-          <ul>
-            ${(x.points || []).map(p => `<li>${esc(L(p))}</li>`).join('')}
-          </ul>
-        </div>
-      </li>
-    `).join('');
+    const items = E.items.filter(x => x && x.visible !== false);
+    listEl.innerHTML = items.map(x => {
+      let pts = [];
+      if (Array.isArray(x.points)) pts = x.points;
+      else if (x.points && typeof x.points === "object") pts = x.points[lang] || x.points.en || x.points.ar || [];
+      const title = L(x.t || x.role || x.title);
+      const place = L(x.place || x.company);
+      const date = L(x.date || x.period);
+      return `
+        <li class="tl">
+          <div class="tl__meta">
+            <span class="tl__date">${esc(date)}</span>
+            <span class="tl__place">${esc(place)}</span>
+          </div>
+          <div class="tl__card">
+            <h3>${esc(title)}</h3>
+            <ul>
+              ${pts.map(p => `<li>${esc(L(p))}</li>`).join('')}
+            </ul>
+          </div>
+        </li>
+      `;
+    }).join('');
   }
 
   function renderCerts() {
-    const C = window.CONTENT.certs, L = (o) => (o && typeof o === "object") ? (o[lang] || o.en || "") : (o || "");
-    const items = (C && C.items ? C.items : []).filter(c => c.visible !== false);
+    const C = window.CONTENT && window.CONTENT.certs;
+    if (!C) return;
+    const L = (o) => (o && typeof o === "object") ? (o[lang] || o.en || o.ar || "") : (o || "");
+    const items = (C.items || []).filter(c => c && c.visible !== false);
     const listEl = $("#certList");
     if (!listEl) return;
-    listEl.innerHTML = items.map((c) => `<a class="cert" href="${esc(c.href || c.url || '#')}" target="_blank" rel="noopener">
-      <span class="cert__mark" style="background:${c.tone || c.color || '#2F5BEA'}" aria-hidden="true">${c.badgeImage ? `<img src="${esc(c.badgeImage)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" alt="">` : esc(c.mark || c.badge || '✓')}</span>
-      <span class="cert__body"><b>${esc(L(c.name))}</b><span>${esc(c.issuer)}</span><em>${esc(L(c.date))}${c.credentialId || c.id ? ` · ${L(C.idLabel)} ${esc(c.credentialId || c.id)}` : ""}</em></span>
-      <span class="cert__go">${L(C.show)} ↗</span></a>`).join("");
+    listEl.innerHTML = items.map((c) => {
+      const name = L(c.name);
+      const issuer = L(c.issuer);
+      const date = L(c.date);
+      const idVal = c.credentialId || c.id;
+      const href = c.href || c.url || "#";
+      const tone = c.tone || c.color || "#2F5BEA";
+      const badgeImg = c.badgeImage ? `<img src="${esc(c.badgeImage)}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" alt="">` : esc(c.mark || c.badge || "✓");
+      const idLabel = C.idLabel ? L(C.idLabel) : (lang === "ar" ? "رقم الاعتماد" : "ID");
+      const showLabel = C.show ? L(C.show) : (lang === "ar" ? "تحقق" : "Verify");
+      return `<a class="cert" href="${esc(href)}" target="_blank" rel="noopener">
+        <span class="cert__mark" style="background:${tone}" aria-hidden="true">${badgeImg}</span>
+        <span class="cert__body"><b>${esc(name)}</b><span>${esc(issuer)}</span><em>${esc(date)}${idVal ? ` · ${idLabel} ${esc(idVal)}` : ""}</em></span>
+        <span class="cert__go">${showLabel} ↗</span></a>`;
+    }).join("");
   }
 
   /* ----------------------------------------------------------- projects */
@@ -120,32 +141,57 @@
     follow: { en: "More on GitHub", ar: "المزيد على GitHub" }
   };
   function renderProjects() {
-    const activeProjects = (window.PROJECTS || []).filter(p => p.visible !== false);
-    $("#projectList").innerHTML = activeProjects.map((p) => {
-      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc(window.SCREENS[k] || k)}" alt="${esc(p.name.en)} screen" loading="lazy" width="540" height="1200">`;
+    const activeProjects = (window.PROJECTS || []).filter(p => p && p.visible !== false);
+    const listEl = $("#projectList");
+    if (!listEl) return;
+    listEl.innerHTML = activeProjects.map((p) => {
+      const pName = p.name ? (typeof p.name === "object" ? (p.name[lang] || p.name.en || p.name.ar || "") : String(p.name)) : "";
+      const pEnName = p.name ? (typeof p.name === "object" ? (p.name.en || p.name.ar || "") : String(p.name)) : "";
+      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc((window.SCREENS && window.SCREENS[k]) || k)}" alt="${esc(pEnName)} screen" loading="lazy" width="540" height="1200">`;
       const sc = p.screens && p.screens.length ? p.screens : ["brainguard-home"];
       const devices = sc.length === 1
         ? `<div class="device" data-depth="1"><div class="device__screens">${img(sc[0], true)}</div></div>`
         : `<div class="device" data-depth=".6"><div class="device__screens">${img(sc[0], true)}</div></div>`
           + `<div class="device device--live" data-depth="1.2"><div class="device__screens">${sc.map((k, i) => img(k, i === 1)).join("")}</div></div>`
           + `<div class="device" data-depth=".6"><div class="device__screens">${img(sc[sc.length - 1], true)}</div></div>`;
-      const metrics = p.metrics.length ? `<div class="metrics">${p.metrics.map((m) => `<div><b>${esc(m.v)}</b><span>${esc(m.l[lang])}</span></div>`).join("")}</div>` : "";
-      const name = p.name[lang];
+      
+      const metrics = (p.metrics && p.metrics.length) ? `<div class="metrics">${p.metrics.map((m) => {
+        const lbl = m.l ? (typeof m.l === "object" ? (m.l[lang] || m.l.en || "") : String(m.l)) : "";
+        return `<div><b>${esc(m.v || "")}</b><span>${esc(lbl)}</span></div>`;
+      }).join("")}</div>` : "";
+
       const split = lang === "ar"
-        ? name.split(" ").map((w) => `<span class="ch"><span>${esc(w)}</span></span>`).join(" ")
-        : [...name].map((c) => c === " " ? " " : `<span class="ch"><span>${esc(c)}</span></span>`).join("");
+        ? pName.split(" ").map((w) => `<span class="ch"><span>${esc(w)}</span></span>`).join(" ")
+        : [...pName].map((c) => c === " " ? " " : `<span class="ch"><span>${esc(c)}</span></span>`).join("");
+      
+      const pTag = p.tag ? (typeof p.tag === "object" ? (p.tag[lang] || p.tag.en || "") : String(p.tag)) : "";
+      const pDesc = p.desc ? (typeof p.desc === "object" ? (p.desc[lang] || p.desc.en || "") : String(p.desc)) : "";
+      
+      let pts = [];
+      if (Array.isArray(p.points)) pts = p.points;
+      else if (p.points && typeof p.points === "object") pts = p.points[lang] || p.points.en || p.points.ar || [];
+
+      const stack = Array.isArray(p.stack) ? p.stack : [];
+      const links = (p.links || []).map((l, i) => {
+        const lbl = l.label ? (typeof l.label === "object" ? (l.label[lang] || l.label.en || "") : String(l.label)) : "Link";
+        return `<a class="btn ${i ? "btn--ghost" : "btn--primary"} btn--sm" href="${esc(l.href || "#")}" target="_blank" rel="noopener">${esc(lbl)} ↗</a>`;
+      }).join("");
+
+      const socialLinks = (p.social || []).map((x) => `<a href="${esc(x.href || "#")}" target="_blank" rel="noopener">${esc(x.label || "Social")} ↗</a>`).join("");
+      const didText = L.did ? (L.did[lang] || L.did.en || "What I did") : "What I did";
+
       return `<article class="project" data-id="${esc(p.id)}">
-        <div class="project__visual" style="background:${p.bg}"><span class="project__word" aria-hidden="true">${esc(p.name.en)}</span><div class="project__phones">${devices}</div></div>
+        <div class="project__visual" style="background:${p.bg || '#1E293B'}"><span class="project__word" aria-hidden="true">${esc(pEnName)}</span><div class="project__phones">${devices}</div></div>
         <div class="project__body">
-          <span class="project__tag">${esc(p.tag[lang])}</span>
-          <h3 class="project__name" aria-label="${esc(name)}">${split}</h3>
-          <p class="project__desc">${esc(p.desc[lang])}</p>
-          <p class="project__label">${L.did[lang]}</p>
-          <ul class="project__points">${p.points[lang].map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+          <span class="project__tag">${esc(pTag)}</span>
+          <h3 class="project__name" aria-label="${esc(pName)}">${split}</h3>
+          <p class="project__desc">${esc(pDesc)}</p>
+          <p class="project__label">${didText}</p>
+          <ul class="project__points">${pts.map((t) => `<li>${esc(typeof t === "object" ? (t[lang] || t.en || "") : t)}</li>`).join("")}</ul>
           ${metrics}
-          <ul class="tags">${p.stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
-          <div class="project__links">${p.links.map((l, i) => `<a class="btn ${i ? "btn--ghost" : "btn--primary"} btn--sm" href="${esc(l.href)}" target="_blank" rel="noopener">${esc(l.label[lang])} ↗</a>`).join("")}</div>
-          ${p.social ? `<div class="socials"><span>${L.follow[lang]}</span>${p.social.map((x) => `<a href="${esc(x.href)}" target="_blank" rel="noopener">${esc(x.label)} ↗</a>`).join("")}</div>` : ""}
+          <ul class="tags">${stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+          <div class="project__links">${links}</div>
+          ${socialLinks ? `<div class="socials"><span>${(L.follow && (L.follow[lang] || L.follow.en)) || "Follow"}</span>${socialLinks}</div>` : ""}
         </div>
       </article>`;
     }).join("");
@@ -171,9 +217,15 @@
     const next = lang === "ar" ? "en" : "ar";
     if (scene3d) scene3d.relabel();
     if (!canAnimate) { applyLang(next); return; }
-    gsap.to("main", { opacity: 0, duration: .2, onComplete: () => {
-      applyLang(next); revealProjects(); ScrollTrigger.refresh();
-      gsap.to("main", { opacity: 1, duration: .35 });
+    gsap.to("main", { opacity: 0, duration: .18, onComplete: () => {
+      try {
+        applyLang(next);
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      } catch (err) {
+        console.error("Language toggle error:", err);
+      } finally {
+        gsap.to("main", { opacity: 1, duration: .28, clearProps: "opacity" });
+      }
     } });
   });
 
