@@ -123,40 +123,57 @@
     "tip.code": "AI & Machine Learning", "hero.hintTouch": "Tap the 3D objects"
   });
 
-  // Dynamic synchronization with Backend API (if active)
+  // Dynamic synchronization with Supabase Cloud & Local Backend API
   async function syncWithBackend() {
     try {
-      const [setRes, portRes] = await Promise.all([
-        fetch('/api/settings').catch(() => null),
-        fetch('/api/portfolio').catch(() => null)
-      ]);
-      if (setRes && setRes.ok) {
-        const settings = await setRes.json();
-        if (settings.primaryColor) {
-          root.style.setProperty('--primary', settings.primaryColor);
-        }
-        if (settings.accentColor) {
-          root.style.setProperty('--amber', settings.accentColor);
-        }
-        if (settings.heroStatus) {
-          EN["hero.status"] = settings.heroStatus.en || EN["hero.status"];
-          if (window.I18N_AR) window.I18N_AR["hero.status"] = settings.heroStatus.ar || window.I18N_AR["hero.status"];
-          const el = document.querySelector('[data-i18n="hero.status"]');
-          if (el) el.textContent = lang === 'ar' ? window.I18N_AR["hero.status"] : EN["hero.status"];
+      let portData = null;
+
+      // 1. Prioritize live Supabase cloud database
+      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+        try {
+          portData = await window.PORTFOLIO_DB.getData();
+        } catch (sErr) {
+          console.warn("Supabase fetch fallback:", sErr);
         }
       }
-      if (portRes && portRes.ok) {
-        const portData = await portRes.json();
+
+      // 2. Fall back to local server if Supabase didn't return data
+      if (!portData) {
+        const [setRes, portRes] = await Promise.all([
+          fetch('/api/settings').catch(() => null),
+          fetch('/api/portfolio').catch(() => null)
+        ]);
+        if (setRes && setRes.ok) {
+          const settings = await setRes.json();
+          if (settings.primaryColor) {
+            root.style.setProperty('--primary', settings.primaryColor);
+          }
+          if (settings.accentColor) {
+            root.style.setProperty('--amber', settings.accentColor);
+          }
+          if (settings.heroStatus) {
+            EN["hero.status"] = settings.heroStatus.en || EN["hero.status"];
+            if (window.I18N_AR) window.I18N_AR["hero.status"] = settings.heroStatus.ar || window.I18N_AR["hero.status"];
+            const el = document.querySelector('[data-i18n="hero.status"]');
+            if (el) el.textContent = lang === 'ar' ? window.I18N_AR["hero.status"] : EN["hero.status"];
+          }
+        }
+        if (portRes && portRes.ok) {
+          portData = await portRes.json();
+        }
+      }
+
+      if (portData) {
         window.__PORTFOLIO_DATA = portData;
         window.__SCRAPBOOK_SETTINGS = portData.scrapbookSettings || {};
 
-        if (portData.projects && Array.isArray(portData.projects)) {
+        if (portData.projects && Array.isArray(portData.projects) && portData.projects.length) {
           window.PROJECTS = portData.projects;
           window.SITE.projects = portData.projects;
           renderProjects();
         }
 
-        if (portData.certs && Array.isArray(portData.certs)) {
+        if (portData.certs && Array.isArray(portData.certs) && portData.certs.length) {
           if (window.CONTENT && window.CONTENT.certs) {
             window.CONTENT.certs.items = portData.certs;
           }

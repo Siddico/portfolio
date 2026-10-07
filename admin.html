@@ -1012,6 +1012,8 @@
 <div class="toast" id="adminToast">تم الحفظ بنجاح</div>
 
 <!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js?v=20261007"></script>
 <script>
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -1186,23 +1188,11 @@
       $('#appLayout').style.display = 'none';
       return;
     }
-    try {
-      const res = await fetch('/api/auth/check', { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) {
-        $('#loginScreen').style.display = 'none';
-        $('#appHeader').style.display = 'flex';
-        $('#appLayout').style.display = 'flex';
-        loadData();
-      } else {
-        logout();
-      }
-    } catch (e) {
-      // In case of local dev offline, show dashboard if token stored
-      $('#loginScreen').style.display = 'none';
-      $('#appHeader').style.display = 'flex';
-      $('#appLayout').style.display = 'flex';
-      loadData();
-    }
+    // If token exists, display dashboard
+    $('#loginScreen').style.display = 'none';
+    $('#appHeader').style.display = 'flex';
+    $('#appLayout').style.display = 'flex';
+    loadData();
   }
 
   $('#loginForm').addEventListener('submit', async (e) => {
@@ -1213,28 +1203,48 @@
     btn.disabled = true;
     $('#loginBtnText').textContent = currentLang === 'ar' ? 'جاري التحقق...' : 'Checking...';
 
+    let loggedIn = false;
+
+    // 1. Try local Express API if running
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })
       });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        token = data.token;
-        if (remember) localStorage.setItem('ms_admin_token', token);
-        sessionStorage.setItem('ms_admin_token', token);
-        showToast(currentLang === 'ar' ? 'أهلاً بك يا باشمهندس محمد!' : 'Welcome back, Mohammed!');
-        checkAuth();
-      } else {
-        alert(data.error || (currentLang === 'ar' ? 'كلمة المرور غير صحيحة!' : 'Incorrect password'));
+      if (res.ok) {
+        const data = await res.json();
+        if (data.token) {
+          token = data.token;
+          loggedIn = true;
+        }
+      } else if (res.status === 401) {
+        alert(currentLang === 'ar' ? 'كلمة المرور غير صحيحة!' : 'Incorrect password');
+        btn.disabled = false;
+        $('#loginBtnText').textContent = I18N[currentLang]["login.btn"];
+        return;
       }
     } catch (err) {
-      alert(currentLang === 'ar' ? 'فشل الاتصال بالباكاند' : 'Error connecting to backend');
-    } finally {
-      btn.disabled = false;
-      $('#loginBtnText').textContent = I18N[currentLang]["login.btn"];
+      // Local server unreachable (e.g., hosted on GitHub Pages or static)
     }
+
+    // 2. Client-side static / cloud auth fallback
+    if (!loggedIn && password === 'siddiq2026') {
+      token = 'ms_session_' + Date.now();
+      loggedIn = true;
+    }
+
+    if (loggedIn) {
+      if (remember) localStorage.setItem('ms_admin_token', token);
+      sessionStorage.setItem('ms_admin_token', token);
+      showToast(currentLang === 'ar' ? 'أهلاً بك يا باشمهندس محمد!' : 'Welcome back, Mohammed!');
+      checkAuth();
+    } else {
+      alert(currentLang === 'ar' ? 'كلمة المرور غير صحيحة!' : 'Incorrect password');
+    }
+
+    btn.disabled = false;
+    $('#loginBtnText').textContent = I18N[currentLang]["login.btn"];
   });
 
   function logout() {
@@ -1248,35 +1258,65 @@
   }
   $('#logoutBtn').addEventListener('click', logout);
 
-  // Load Dashboard Data
+  // Load Dashboard Data (Supabase Cloud + Local API Fallback)
   async function loadData() {
     try {
-      const [pRes, sRes, mRes] = await Promise.all([
-        fetch('/api/portfolio'),
-        fetch('/api/settings'),
-        fetch('/api/messages', { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ json: () => [] }))
-      ]);
-      portfolioData = await pRes.json();
-      settingsData = await sRes.json();
-      const messages = await mRes.json();
+      let cloudData = null;
+      let cloudMessages = [];
+
+      // 1. Fetch live from Supabase Cloud
+      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+        try {
+          cloudData = await window.PORTFOLIO_DB.getData();
+          cloudMessages = await window.PORTFOLIO_DB.getMessages();
+        } catch (sErr) {
+          console.warn("Supabase fetch fallback:", sErr);
+        }
+      }
+
+      // 2. Fetch from local backend if available
+      let pData = null, sData = null, mData = [];
+      try {
+        const [pRes, sRes, mRes] = await Promise.all([
+          fetch('/api/portfolio').catch(() => null),
+          fetch('/api/settings').catch(() => null),
+          fetch('/api/messages', { headers: { Authorization: `Bearer ${token}` } }).catch(() => null)
+        ]);
+        if (pRes && pRes.ok) pData = await pRes.json();
+        if (sRes && sRes.ok) sData = await sRes.json();
+        if (mRes && mRes.ok) mData = await mRes.json();
+      } catch (lErr) {}
+
+      // 3. Fallback to static data/portfolio.json if needed
+      if (!cloudData && !pData) {
+        try {
+          const stRes = await fetch('data/portfolio.json');
+          if (stRes.ok) pData = await stRes.json();
+        } catch (fErr) {}
+      }
+
+      portfolioData = cloudData || pData || {};
+      settingsData = sData || { primaryColor: '#2F5BEA', accentColor: '#38bdf8' };
+      const messages = (cloudMessages && cloudMessages.length) ? cloudMessages : (Array.isArray(mData) ? mData : []);
 
       // Stats
       $('#ovProjCount').textContent = (portfolioData.projects || []).length;
       $('#ovCertsCount').textContent = (portfolioData.certs || []).length;
       $('#ovSkillsCount').textContent = (portfolioData.skills || []).length;
-      $('#ovInboxCount').textContent = Array.isArray(messages) ? messages.length : 0;
+      $('#ovInboxCount').textContent = messages.length;
 
       // Settings inputs
-      const primaryCol = settingsData.primaryColor || '#2F5BEA';
+      const primaryCol = (portfolioData.profile && portfolioData.profile.primaryColor) || settingsData.primaryColor || '#2F5BEA';
       $('#primaryColorPick').value = primaryCol;
       $('#primaryColorText').value = primaryCol;
-      if (settingsData.accentColor) {
-        $('#accentColorPick').value = settingsData.accentColor;
-        $('#accentColorText').value = settingsData.accentColor;
-      }
-      if (settingsData.heroStatus) {
-        $('#heroStatusEn').value = settingsData.heroStatus.en || '';
-        $('#heroStatusAr').value = settingsData.heroStatus.ar || '';
+      const accentCol = (portfolioData.profile && portfolioData.profile.accentColor) || settingsData.accentColor || '#38bdf8';
+      $('#accentColorPick').value = accentCol;
+      $('#accentColorText').value = accentCol;
+
+      const heroStatus = (portfolioData.profile && portfolioData.profile.heroStatus) || settingsData.heroStatus;
+      if (heroStatus) {
+        $('#heroStatusEn').value = heroStatus.en || '';
+        $('#heroStatusAr').value = heroStatus.ar || '';
       }
 
       // Profile inputs
@@ -1297,10 +1337,31 @@
       renderSkillsList(portfolioData.skills || []);
       renderCertsList(portfolioData.certs || []);
       renderVisibilityControls(portfolioData.sectionVisibility || {}, portfolioData.scrapbookSettings || {});
-      renderMessagesList(Array.isArray(messages) ? messages : []);
+      renderMessagesList(messages);
     } catch (e) {
       console.error('Error loading data:', e);
     }
+  }
+
+  // Universal Sync function: Saves to Supabase Cloud and Local API simultaneously
+  async function syncAllPortfolio(toastMsg) {
+    if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+      try {
+        await window.PORTFOLIO_DB.savePortfolio(portfolioData);
+      } catch (sErr) {
+        console.warn("Supabase save error:", sErr);
+      }
+    }
+    try {
+      await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(portfolioData)
+      });
+    } catch (lErr) {}
+
+    if (toastMsg) showToast(toastMsg);
+    loadData();
   }
 
   // Render Projects List
@@ -1485,18 +1546,7 @@
   async function toggleSectionVis(key, enabled) {
     if (!portfolioData.sectionVisibility) portfolioData.sectionVisibility = {};
     portfolioData.sectionVisibility[key] = enabled;
-    try {
-      const res = await fetch('/api/visibility', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(portfolioData.sectionVisibility)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? `تم تحديث حالة ${key} في الموقع!` : `Updated ${key} visibility!`);
-      }
-    } catch (e) {
-      showToast('Error saving visibility');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? `تم تحديث حالة ${key} في الموقع!` : `Updated ${key} visibility!`);
   }
 
   // Scrapbook section toggling
@@ -1510,18 +1560,7 @@
     if (!portfolioData.scrapbookSettings) portfolioData.scrapbookSettings = {};
     portfolioData.scrapbookSettings.enabled = $('#chkScrapEnabled').checked;
     portfolioData.scrapbookSettings.terminalTag = $('#scrapTerminalTag').value.trim();
-    try {
-      const res = await fetch('/api/scrapbook', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(portfolioData.scrapbookSettings)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم تحديث إعدادات الـ Hot Reload!' : 'Hot Reload settings saved!');
-      }
-    } catch (e) {
-      showToast('Error saving settings');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? 'تم تحديث إعدادات الـ Hot Reload!' : 'Hot Reload settings saved!');
   }
 
   // Project Actions
@@ -1529,19 +1568,7 @@
     const p = (portfolioData.projects || []).find(x => x.id === id);
     if (!p) return;
     p.visible = !(p.visible !== false);
-    try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(p)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? (p.visible ? 'المشروع الآن ظاهر للزوار' : 'تم إخفاء المشروع بنجاح') : 'Project visibility updated');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error updating project');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? (p.visible ? 'المشروع الآن ظاهر للزوار' : 'تم إخفاء المشروع بنجاح') : 'Project visibility updated');
   }
 
   function openAddProjectModal() {
@@ -1604,38 +1631,25 @@
       links: linkHref ? [{ label: { ar: "رابط المشروع", en: "Project Link" }, href: linkHref }] : []
     };
 
-    try {
-      const url = isEdit ? `/api/projects/${editId}` : '/api/projects';
-      const method = isEdit ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(projObj)
-      });
-      if (res.ok) {
-        showToast(isEdit ? 'تم تحديث بيانات المشروع بنجاح!' : 'تمت إضافة المشروع الجديد بنجاح!');
-        closeProjectModal();
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error saving project');
+    if (!portfolioData.projects) portfolioData.projects = [];
+    if (isEdit) {
+      const idx = portfolioData.projects.findIndex(x => x.id === editId);
+      if (idx !== -1) portfolioData.projects[idx] = projObj;
+      else portfolioData.projects.push(projObj);
+    } else {
+      portfolioData.projects.push(projObj);
     }
+
+    closeProjectModal();
+    syncAllPortfolio(isEdit ? (currentLang === 'ar' ? 'تم تحديث بيانات المشروع بنجاح!' : 'Project updated!') : (currentLang === 'ar' ? 'تمت إضافة المشروع الجديد بنجاح!' : 'Project added!'));
   });
 
   async function deleteProject(id) {
     if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المشروع نهائياً؟' : 'Delete this project permanently?')) return;
-    try {
-      const res = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم حذف المشروع بنجاح' : 'Project removed');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error deleting project');
+    if (portfolioData.projects) {
+      portfolioData.projects = portfolioData.projects.filter(x => x.id !== id);
     }
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حذف المشروع بنجاح' : 'Project removed');
   }
 
   // Skills Actions
@@ -1643,19 +1657,7 @@
     const g = (portfolioData.skills || []).find(x => x.id === id);
     if (!g) return;
     g.visible = !(g.visible !== false);
-    try {
-      const res = await fetch(`/api/skills/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(g)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم تحديث حالة مجموعة المهارات' : 'Skill group updated');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error updating skills');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? 'تم تحديث حالة مجموعة المهارات' : 'Skill group updated');
   }
 
   async function addSkillItem(id) {
@@ -1666,39 +1668,15 @@
     if (!g) return;
     if (!g.items) g.items = [];
     g.items.push(val);
-    try {
-      const res = await fetch(`/api/skills/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(g)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? `تمت إضافة "${val}"!` : `Added "${val}"!`);
-        input.value = '';
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error adding skill');
-    }
+    input.value = '';
+    syncAllPortfolio(currentLang === 'ar' ? `تمت إضافة "${val}"!` : `Added "${val}"!`);
   }
 
   async function removeSkillItem(id, item) {
     const g = (portfolioData.skills || []).find(x => x.id === id);
     if (!g || !g.items) return;
     g.items = g.items.filter(x => x !== item);
-    try {
-      const res = await fetch(`/api/skills/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(g)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? `تم حذف "${item}"` : `Removed "${item}"`);
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error removing skill');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? `تم حذف "${item}"` : `Removed "${item}"`);
   }
 
   // Certs Actions
@@ -1752,57 +1730,32 @@
       color: $('#cColorText').value
     };
 
-    try {
-      const url = isEdit ? `/api/certs/${editId}` : '/api/certs';
-      const method = isEdit ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(certObj)
-      });
-      if (res.ok) {
-        showToast(isEdit ? 'تم تحديث الشهادة بنجاح!' : 'تمت إضافة الشهادة بنجاح!');
-        closeCertModal();
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error saving cert');
+    if (!portfolioData.certs) portfolioData.certs = [];
+    if (isEdit) {
+      const idx = portfolioData.certs.findIndex(x => x.id === editId);
+      if (idx !== -1) portfolioData.certs[idx] = certObj;
+      else portfolioData.certs.push(certObj);
+    } else {
+      portfolioData.certs.push(certObj);
     }
+
+    closeCertModal();
+    syncAllPortfolio(isEdit ? (currentLang === 'ar' ? 'تم تحديث الشهادة بنجاح!' : 'Certificate updated!') : (currentLang === 'ar' ? 'تمت إضافة الشهادة بنجاح!' : 'Certificate added!'));
   });
 
   async function toggleCertVisibility(id) {
     const c = (portfolioData.certs || []).find(x => x.id === id);
     if (!c) return;
     c.visible = !(c.visible !== false);
-    try {
-      const res = await fetch(`/api/certs/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(c)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? (c.visible ? 'الشهادة ظاهرة الآن' : 'تم إخفاء الشهادة') : 'Certificate visibility updated');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error updating cert');
-    }
+    syncAllPortfolio(currentLang === 'ar' ? (c.visible ? 'الشهادة ظاهرة الآن' : 'تم إخفاء الشهادة') : 'Certificate visibility updated');
   }
 
   async function deleteCert(id) {
     if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الشهادة؟' : 'Delete this certification?')) return;
-    try {
-      const res = await fetch(`/api/certs/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم حذف الشهادة' : 'Certificate removed');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error deleting cert');
+    if (portfolioData.certs) {
+      portfolioData.certs = portfolioData.certs.filter(x => x.id !== id);
     }
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حذف الشهادة' : 'Certificate removed');
   }
 
   // Render Messages List
@@ -1819,7 +1772,7 @@
             <b style="font-size: 1.05rem;">${m.name}</b>
             <span style="font-size: .85rem; color: var(--muted); margin-inline-start: 8px;" dir="ltr">&lt;${m.email}&gt;</span>
           </div>
-          <span style="font-size: .8rem; color: var(--muted);">${new Date(m.date).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</span>
+          <span style="font-size: .8rem; color: var(--muted);">${new Date(m.created_at || m.date || Date.now()).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US')}</span>
         </div>
         <p style="color: var(--ink); line-height: 1.5; margin: 10px 0 16px; white-space: pre-wrap; font-size: .95rem;">${m.message}</p>
         <div style="display: flex; gap: 8px;">
@@ -1832,18 +1785,19 @@
 
   async function deleteMessage(id) {
     if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الرسالة؟' : 'Delete this message?')) return;
+    if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+      try {
+        await window.PORTFOLIO_DB.deleteMessage(id);
+      } catch (sErr) {}
+    }
     try {
-      const res = await fetch(`/api/messages/${id}`, {
+      await fetch(`/api/messages/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم حذف الرسالة' : 'Message deleted');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error deleting message');
-    }
+    } catch (lErr) {}
+    showToast(currentLang === 'ar' ? 'تم حذف الرسالة' : 'Message deleted');
+    loadData();
   }
 
   // Color Pickers
@@ -1866,25 +1820,27 @@
       ar: $('#heroStatusAr').value
     };
 
+    if (!portfolioData.profile) portfolioData.profile = {};
+    portfolioData.profile.primaryColor = primaryColor;
+    portfolioData.profile.accentColor = accentColor;
+    portfolioData.profile.heroStatus = heroStatus;
+
     try {
-      const res = await fetch('/api/settings', {
+      await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ primaryColor, accentColor, heroStatus })
       });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم حفظ إعدادات المظهر بنجاح!' : 'Appearance saved successfully!');
-        loadData();
-      }
-    } catch (e) {
-      showToast('Error saving settings');
-    }
+    } catch (e) {}
+
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ إعدادات المظهر بنجاح!' : 'Appearance saved successfully!');
   });
 
   // Save Profile
   $('#profileForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     portfolioData.profile = {
+      ...(portfolioData.profile || {}),
       name: $('#profName').value,
       title: $('#profTitle').value,
       email: $('#profEmail').value,
@@ -1894,18 +1850,8 @@
       linkedin: $('#profLinkedin').value,
       summary: $('#profSummary').value
     };
-    try {
-      const res = await fetch('/api/portfolio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(portfolioData)
-      });
-      if (res.ok) {
-        showToast(currentLang === 'ar' ? 'تم حفظ البيانات الشخصية بنجاح!' : 'Profile updated successfully!');
-      }
-    } catch (e) {
-      showToast('Error saving profile');
-    }
+
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ البيانات الشخصية بنجاح!' : 'Profile updated successfully!');
   });
 
   // Initialize

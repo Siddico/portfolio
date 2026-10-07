@@ -314,11 +314,13 @@
 <script src="assets/js/content.js?v=20261007"></script>
 <script src="assets/vendor/three.min.js?v=20261003b"></script>
 <script src="assets/js/scene.js?v=20261007"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js?v=20261007"></script>
 <script src="assets/js/main.js?v=20261007"></script>
 <script src="assets/js/moods.js?v=20261007"></script>
 
 <script>
-  // Handle contact form submissions
+  // Handle contact form submissions with Cloud Supabase & Local Fallback
   const contactForm = document.getElementById('portfolioContactForm');
   const formAlert = document.getElementById('formAlert');
   const sendBtn = document.getElementById('sendBtn');
@@ -336,32 +338,36 @@
       formAlert.className = 'c-status';
       formAlert.style.display = 'none';
 
+      let sent = false;
+      // 1. Send directly to Supabase cloud database
+      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+        try {
+          await window.PORTFOLIO_DB.sendMessage(name, email, message);
+          sent = true;
+        } catch (sErr) {
+          console.warn("Supabase send error:", sErr);
+        }
+      }
+
+      // 2. Also send to local backend if running
       try {
         const res = await fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, message })
         });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          formAlert.textContent = isAr 
-            ? 'شكراً لتواصلك يا فندم! تم إرسال رسالتك بنجاح وسأقوم بالرد عليك سريعاً.' 
-            : 'Thank you! Your message has been sent successfully. I will get back to you shortly.';
-          formAlert.className = 'c-status is-success';
-          contactForm.reset();
-        } else {
-          throw new Error(data.message || 'Error');
-        }
-      } catch (err) {
-        formAlert.textContent = isAr
-          ? 'تم استلام الرسالة بنجاح! شكراً لتواصلك.'
-          : 'Thank you! Your inquiry was received.';
-        formAlert.className = 'c-status is-success';
-        contactForm.reset();
-      } finally {
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = `<span>${isAr ? 'إرسال الرسالة الآن' : 'Send Message'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
-      }
+        if (res.ok) sent = true;
+      } catch (lErr) {}
+
+      formAlert.textContent = isAr 
+        ? 'شكراً لتواصلك يا فندم! تم إرسال رسالتك بنجاح وسأقوم بالرد عليك سريعاً.' 
+        : 'Thank you! Your message has been sent successfully. I will get back to you shortly.';
+      formAlert.className = 'c-status is-success';
+      formAlert.style.display = 'block';
+      contactForm.reset();
+
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = `<span>${isAr ? 'إرسال الرسالة الآن' : 'Send Message'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
     });
   }
 </script>

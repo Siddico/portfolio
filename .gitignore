@@ -7,3 +7,12 @@ yarn-debug.log*
 yarn-error.log*
 .idea/
 .vscode/
+
+# Secrets and environment variables
+.env
+.env.*
+!.env.example
+*.secret
+*.pem
+*.key
+
