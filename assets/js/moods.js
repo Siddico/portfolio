@@ -59,13 +59,19 @@
     document.body.insertBefore(host, box);
     root.classList.add("in-mood", "mood-" + m.id);
     window.scrollTo(0, 0); if (window.__lenis) window.__lenis.scrollTo(0, { immediate: true });
-    const run = () => { site.render(host, S()); if (intro && site.intro && anim()) site.intro(host, S()); };
+    const run = () => {
+      try {
+        site.render(host, S());
+        if (intro && site.intro && anim()) site.intro(host, S());
+      } catch (err) {
+        console.error("Scrapbook render error:", err);
+      }
+    };
     if (window.gsap) ctx = gsap.context(run, host); else run();
     if (window.ScrollTrigger) ScrollTrigger.refresh();
   }
 
   async function go(i) {
-    if (window.__SCRAPBOOK_SETTINGS && window.__SCRAPBOOK_SETTINGS.enabled === false) return;
     if (busy) return; busy = true;
     const m = ORDER[i];
     box.classList.add("is-busy");

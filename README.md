@@ -1,43 +1,161 @@
-# Sherif Fahmy · Portfolio
+# 🚀 Mohammed Siddiq · Software Engineer & Flutter Developer
 
-Personal portfolio for Sherif Fahmy, Flutter developer and founder of Lamma.
+<div align="center">
 
-Static, readable portfolio (warm white, navy, cobalt, amber). The hero is a live, interactive 3D scene (Three.js): a sharp cut-out photo stands in real 3D space among glossy objects that each stand for a skill (the Flutter logo, a phone running Lamma, a map pin, a chat bubble, a store star, a tests badge, a code tag). The camera follows the pointer, objects dodge the cursor and spring back, hovering explains each one, and clicking spins it with a confetti pop (the phone switches screens, the Flutter logo breaks apart and snaps back). Projects stack like a deck on wide screens (each card sticks and the next slides over it), with letter-by-letter titles, phones that fly in and flip between screens, and a giant outlined name drifting behind them. The About photo is a simple rounded portrait by default; each mood restyles it (polaroid, framed, duotone, arch, offset block). Cards, tags and buttons react to the pointer too. Press `r` (or the Hot reload button) and the portfolio is swapped for a Scrapbook edition built from the same content in the same order: a torn-paper header, polaroids with tape, draggable sticky notes, projects as taped pages, experience as a shop receipt and contact as an envelope. Pressing `r` again replays it; `R` (Hot restart) brings back the original. It renders live, so it stays sharp at every screen size. Project screenshots fan out in 3D, float, tilt with the pointer and cycle through screens. Motion with GSAP + ScrollTrigger, smooth scrolling with Lenis, all vendored in `assets/vendor/`; no build step.
+[![Flutter](https://img.shields.io/badge/Flutter-3.24-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.5-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean%20Code%20%26%20BLoC-10B981)](#-architecture--engineering-principles)
+[![Supabase](https://img.shields.io/badge/Cloud%20Database-Supabase%20RLS-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com)
+[![Three.js](https://img.shields.io/badge/3D%20Hero-WebGL%20Three.js-black?logo=three.js&logoColor=white)](https://threejs.org)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub Pages](https://img.shields.io/badge/Deployment-GitHub%20Pages-success?logo=github)](https://siddico.github.io/portfolio/)
 
-## Run locally
+**A world-class, dynamic portfolio engineered with interactive 3D WebGL, Flutter Hot Reload simulation, real-time Supabase Cloud synchronization, and an enterprise Admin Dashboard.**
 
+[🌐 Live Portfolio](https://siddico.github.io/portfolio/) • [🔒 Admin Portal](https://siddico.github.io/portfolio/admin.html) • [💼 LinkedIn](https://www.linkedin.com/in/mohammedsiddico/) • [📱 GitHub](https://github.com/Siddico)
+
+---
+
+</div>
+
+## 📌 Overview
+
+**Mohammed Siddiq** is a passionate **Software Engineer & Flutter Developer** based in Cairo, Egypt. Specializing in high-performance cross-platform mobile apps with **Clean Architecture**, robust state management (**BLoC/Cubit**, **Riverpod**), and full-stack cloud integrations (**Supabase**, **Firebase**, **Node.js**).
+
+This repository contains the source code for Mohammed's flagship portfolio, designed to stand out through technical elegance, fluid micro-interactions, full bilingual localization, and real-time database management.
+
+---
+
+## ✨ Key Features & Technical Highlights
+
+### 1. 🌟 Interactive 3D Hero Scene (Three.js WebGL)
+- An authentic 3D environment rendering transparent portrait cuts, glowing depth spheres, and floating interactive tech badges (Flutter logo, running smartphone simulator, cloud backend cylinder, AI neural code tag).
+- True cursor parallax, raycasted click interactions, inertia springs, and confetti particles.
+
+### 2. ⚡ Flutter "Hot Reload" Experience (Scrapbook Edition)
+- Press <kbd>r</kbd> or click the **Hot reload** button to seamlessly swap the entire application live into a handmade **Scrapbook Edition**!
+- Features torn-paper headers, real-world polaroid photographs with tape, draggable physical sticky note skills, and an itemized shop receipt timeline.
+- Press <kbd>R</kbd> or click **Hot restart** to wipe and return to the primary engineering interface.
+
+### 3. 🛡️ Supabase Cloud & Zero-Downtime Offline-First Architecture
+- **Zero-Downtime Guarantee:** The portfolio fetches content live from **Supabase PostgreSQL** via Row-Level Security (RLS). If offline or network-limited, it automatically falls back seamlessly to `data/portfolio.json`.
+- **Dynamic Content Hydration:** Projects, career timeline, tech stack tags, hero facts (`+2` YOE, `+4` Apps, `100%` Clean Code), custom brand colors, and animations are rendered dynamically without touching code.
+
+### 4. 🔒 Enterprise Admin Management Dashboard (`admin.html`)
+- **Restricted Access Portal:** Dedicated, styled authentication gate with session management.
+- **Full CRUD Management:**
+  - Add, edit, reorder, or delete projects with automated client-side HTML5 canvas image compression.
+  - Granular section & component visibility switches (hide/show any project, job, or widget instantly).
+  - Dynamic Motion & Animation controls (toggle 3D Tilt, Lenis Smooth Scroll, Card Flips, Hero 3D scene, or adjust ticker speed).
+  - Inquiries inbox with instant email response action.
+- **🚀 One-Click Full Cloud Seed & Sync:** Automatically packages and syncs the entire portfolio state directly to Supabase Cloud.
+
+### 5. 🌐 Seamless Bilingual Engine (Arabic RTL & English LTR)
+- Instant fluid typography swap between Google Font Outfit/Plus Jakarta Sans (English) and Cairo/Alexandria (Arabic).
+- Correct semantic `dir="rtl"` alignment, grammar tuning, and localized timeline dates.
+
+### 6. 📱 Fluid Responsiveness & Modern Aesthetics
+- Pixel-perfect across smartphones (iOS / Android), tablets, laptops, and ultra-wide desktop monitors.
+- Butter-smooth scrolling powered by **Lenis** and **GSAP ScrollTrigger**.
+
+---
+
+## 🏗️ Project Architecture & Directory Structure
+
+```text
+├── admin.html               # Dedicated Admin Dashboard Portal
+├── index.html               # Main Portfolio Page (Semantic HTML5)
+├── server.js                # Local Express REST API Server
+├── supabase_setup.sql       # PostgreSQL Cloud Schema, RLS & Seed Script
+├── README.md                # Project Documentation
+├── assets/
+│   ├── css/
+│   │   └── main.css         # Custom Design Tokens & Responsive CSS System
+│   ├── js/
+│   │   ├── main.js          # Core Application, Dynamic DOM Hydration & GSAP
+│   │   ├── supabase.js      # Supabase Cloud Client & Offline-First Adapter
+│   │   ├── scene.js         # Interactive WebGL 3D Hero Scene (Three.js)
+│   │   ├── content.js       # Shared Content Model
+│   │   ├── projects.js      # Project Dataset & Metadata
+│   │   ├── i18n.js          # Arabic/English Translations Dictionary
+│   │   ├── moods.js         # Hot Reload Lifecycle & Transition Engine
+│   │   └── mockups.js       # High-Fidelity Vector Device Mockups
+│   ├── img/
+│   │   └── me/              # Profile Photography & Transparent Assets
+│   └── vendor/              # Bundled libraries (GSAP, Lenis, Three.js)
+├── cv/                      # Integrated CV Document Viewer & PDF
+├── data/
+│   └── portfolio.json       # Canonical Local & Offline Data Backup
+└── moods/
+    ├── scrap.js             # Scrapbook Mode Dynamic Component Engine
+    └── scrap.css            # Hand-crafted Scrapbook Aesthetic Styles
+```
+
+---
+
+## 💻 Local Setup & Development
+
+### Prerequisites
+- Node.js (v18+ recommended) or any static web server (e.g. Python).
+
+### 1. Clone the repository
 ```bash
+git clone https://github.com/Siddico/portfolio.git
+cd portfolio
+```
+
+### 2. Install dependencies (Optional for API server)
+```bash
+npm install
+```
+
+### 3. Run the development server
+```bash
+# Option A: Full-stack Node.js server (serves frontend + REST API)
+npm run dev
+
+# Option B: Any static server
+npx serve .
+# or
 python3 -m http.server 5173
-# open http://localhost:5173
 ```
 
-## Structure
+Open `http://localhost:5173` in your browser.
 
-```
-index.html              page markup (English text lives here)
-assets/css/main.css     design tokens + styles
-assets/js/i18n.js       Arabic strings
-assets/js/projects.js   project cards (text, panel colour, screens, links)
-assets/js/scene.js      the interactive 3D hero (WebGL)
-assets/js/main.js       hero motion, project cards, reveals, language toggle, CV viewer
-assets/js/content.js    the shared content model the hot-reload sites render from
-assets/js/moods.js      hot reload / hot restart: loads and swaps in the Scrapbook edition
-moods/scrap.js|.css     the Scrapbook edition
-assets/img/             app screenshots (webp, 540px wide)
-assets/vendor/          gsap, ScrollTrigger, lenis, three
-assets/Sherif-Fahmy-CV.pdf
-```
+---
 
-## Editing
+## 🗄️ Supabase Cloud Configuration
 
-- **Text:** English is in `index.html`; every element with `data-i18n="key"` has its Arabic in `assets/js/i18n.js` under the same key.
-- **Colors:** the tokens at the top of `assets/css/main.css` (`--primary`, `--amber`, `--ink`, …). All text pairs pass WCAG AA.
-- **Projects:** edit `assets/js/projects.js`.
-- **Photos:** the hero uses `assets/img/me/hero-suit.webp` (a transparent cut-out) and About uses `assets/img/me/work-16.webp`. Swap those images to change them. The 3D objects and their positions are listed in `scene.js`; their hover labels are the `tip.*` strings.
-- **CV:** edit `cv/cv.html`, run `node cv/build.mjs` to rebuild `assets/Sherif-Fahmy-CV.pdf`, then refresh the on-page preview image:
-  `pdftoppm -r 150 -png -singlefile assets/Sherif-Fahmy-CV.pdf /tmp/cv && convert /tmp/cv.png -quality 85 assets/img/cv-preview.webp`
+To connect your own Supabase instance:
 
-## Deploy
+1. Create a project on [Supabase.com](https://supabase.com).
+2. Go to the **SQL Editor** in your Supabase Dashboard.
+3. Paste and run the entire contents of [`supabase_setup.sql`](supabase_setup.sql).
+4. Update `SUPABASE_URL` and `SUPABASE_ANON_KEY` inside [`assets/js/supabase.js`](assets/js/supabase.js).
+5. Open `admin.html`, log in, and click **"🚀 مزامنة ورفع كافة محتويات البورتفوليو إلى الداتابيز السحابية الآن (Full Cloud Seed & Sync)"**.
 
-`.github/workflows/pages.yml` publishes the site to GitHub Pages on every push to `main`
-(enable it once under **Settings → Pages → Source: GitHub Actions**).
+---
+
+## 👨‍💻 About Mohammed Siddiq
+
+- **Role:** Software Engineer & Flutter Developer
+- **Location:** Cairo, Egypt
+- **Education:** B.Sc. in Computer Science (FCAI)
+- **Key Specializations:**
+  - Scalable Cross-Platform Mobile Applications (Flutter & Dart)
+  - Clean Architecture, BLoC (Cubit), Riverpod, SOLID Principles
+  - Real-time Backends (Supabase, Firebase, Node.js REST APIs)
+  - AI & Machine Learning Integration (Gemini API, Hugging Face, Scikit-learn)
+  - Native Store Publishing (Google Play Console & Apple App Store Connect)
+
+### 📬 Get In Touch
+- **Email:** [mohammedasiddiqdev@gmail.com](mailto:mohammedasiddiqdev@gmail.com)
+- **Phone / WhatsApp:** [+20 122 789 7361](https://wa.me/201227897361)
+- **LinkedIn:** [linkedin.com/in/mohammedsiddico](https://www.linkedin.com/in/mohammedsiddico/)
+- **GitHub:** [github.com/Siddico](https://github.com/Siddico)
+
+---
+
+<div align="center">
+  <sub>Crafted with passion, Clean Code & precision by <b>Mohammed Siddiq</b> © 2026</sub>
+</div>
