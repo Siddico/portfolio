@@ -688,7 +688,16 @@
           <button class="btn btn--primary btn--sm" onclick="openAddProjectModal()">+ إضافة مشروع جديد</button>
           <button class="btn btn--ghost btn--sm" onclick="openAddCertModal()">+ إضافة شهادة أو كورس</button>
           <button class="btn btn--ghost btn--sm" onclick="setTab('visibility')">👁️ ضبط أقسام العرض والـ Hot Reload</button>
-          <button class="btn btn--ghost btn--sm" onclick="setTab('design')">🎨 تغيير ألوان الموقع</button>
+          <button class="btn btn--ghost btn--sm" onclick="setTab('design')">🎨 تغيير ألوان الموقع والحركات</button>
+        </div>
+        <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <b style="font-size: .95rem; color: var(--ink);">مزامنة سحابية شاملة (100% Cloud Seed):</b>
+            <p style="font-size: .82rem; color: var(--muted); margin-top: 2px;">تخزين كافة محتويات البورتفوليو، الحركات، المهارات، والشهادات على Supabase فوراً بضغطة واحدة.</p>
+          </div>
+          <button class="btn btn--primary btn--sm" id="btnSeedCloud" onclick="seedAllToDatabase()" style="background: linear-gradient(135deg, #10B981, #059669); border: none; font-weight: 800;">
+            🚀 مزامنة ورفع كافة محتويات البورتفوليو إلى الداتابيز السحابية الآن (Full Cloud Seed & Sync)
+          </button>
         </div>
       </div>
     </section>
@@ -849,6 +858,95 @@
           <div class="field">
             <label data-k="des.statusEn">حالة العمل الحالية (باللغة الإنجليزية)</label>
             <input type="text" id="heroStatusEn" dir="ltr" value="Available for Flutter roles · Cairo / Remote">
+          </div>
+
+          <!-- Hero Facts & Numbers Control (الإحصائيات والأرقام) -->
+          <div style="margin: 22px 0 16px; padding: 16px; background: var(--tint); border-radius: 16px; border: 1.5px solid var(--line);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <span style="font-size: 1.3rem;">📊</span>
+              <div>
+                <h4 style="font-size: 1rem; font-weight: 800; color: var(--ink);">إحصائيات وأرقام الهيرو (Hero Facts & Stats)</h4>
+                <p style="font-size: .8rem; color: var(--muted);">تعديل الأرقام الحية التي تظهر في واجهة البورتفوليو بجانب صورتك وتخزينها في الداتابيز</p>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+              <div class="field" style="margin-bottom: 0;">
+                <label style="font-size: .82rem;">سنوات الخبرة (Years of Exp.)</label>
+                <input type="text" id="factInputYoe" placeholder="+2" value="+2">
+              </div>
+              <div class="field" style="margin-bottom: 0;">
+                <label style="font-size: .82rem;">عدد التطبيقات (Production Apps)</label>
+                <input type="text" id="factInputApps" placeholder="+4" value="+4">
+              </div>
+              <div class="field" style="margin-bottom: 0;">
+                <label style="font-size: .82rem;">جودة الكود (Clean Architecture %)</label>
+                <input type="text" id="factInputClean" placeholder="100%" value="100%">
+              </div>
+            </div>
+          </div>
+
+          <!-- Motion & Animation Controls (الحركات والتأثيرات التفاعلية) -->
+          <div style="margin: 16px 0 22px; padding: 16px; background: var(--tint); border-radius: 16px; border: 1.5px solid var(--line);">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+              <span style="font-size: 1.3rem;">✨</span>
+              <div>
+                <h4 style="font-size: 1rem; font-weight: 800; color: var(--ink);">التحكم في الحركات والتأثيرات (Motions & Animations)</h4>
+                <p style="font-size: .8rem; color: var(--muted);">تشغيل أو إيقاف تأثيرات الحركة والانسيابية والـ 3D التفاعلية وتخزينها في الداتابيز</p>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px;">
+              <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); cursor: pointer;">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">ميل الكروت ثلاثي الأبعاد (3D Card Tilt)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">تفاعل الماوس مع كروت المهارات والفاكتس</p>
+                </div>
+                <input type="checkbox" id="motionTilt" checked style="width: 20px; height: 20px;">
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); cursor: pointer;">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">تقليب شاشات الهواتف (Phone Flip)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">حركة تقليب صور المشاريع الدورية</p>
+                </div>
+                <input type="checkbox" id="motionCardFlip" checked style="width: 20px; height: 20px;">
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); cursor: pointer;">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">التمرير فائق الانسيابية (Lenis Scroll)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">سلاسة تامة وانسيابية أثناء التمرير</p>
+                </div>
+                <input type="checkbox" id="motionScroll" checked style="width: 20px; height: 20px;">
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); cursor: pointer;">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">المشهد ثلاثي الأبعاد في الهيرو (Hero 3D)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">الأشكال التفاعلية الطافية حول صورتك</p>
+                </div>
+                <input type="checkbox" id="motionHero3d" checked style="width: 20px; height: 20px;">
+              </label>
+
+              <label style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line); cursor: pointer;">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">إضاءة التوهج الخلفية (Ambient Glow)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">تأثير الهالة الضوئية حول الهيرو</p>
+                </div>
+                <input type="checkbox" id="motionGlow" checked style="width: 20px; height: 20px;">
+              </label>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--surface); border-radius: 12px; border: 1px solid var(--line);">
+                <div>
+                  <b style="font-size: .88rem; color: var(--ink);">سرعة شريط التقنيات (Ticker Speed)</b>
+                  <p style="font-size: .76rem; color: var(--muted); margin-top: 2px;">سرعة دوران شريط المهارات المتحرك</p>
+                </div>
+                <select id="motionTickerSpeed" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); font-weight: 700;">
+                  <option value="slow">هادئ (بطيء)</option>
+                  <option value="normal" selected>طبيعي</option>
+                  <option value="fast">سريع</option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <button type="submit" class="btn btn--primary" id="saveDesignBtn">
@@ -1553,6 +1651,21 @@
         $('#heroStatusAr').value = heroStatus.ar || '';
       }
 
+      // Facts inputs (الإحصائيات الحية)
+      const facts = portfolioData.facts || portfolioData.profile?.facts || { yoe: "+2", apps: "+4", clean: "100%" };
+      if ($('#factInputYoe')) $('#factInputYoe').value = facts.yoe || "+2";
+      if ($('#factInputApps')) $('#factInputApps').value = facts.apps || "+4";
+      if ($('#factInputClean')) $('#factInputClean').value = facts.clean || "100%";
+
+      // Motion inputs (الحركات والتأثيرات)
+      const motion = portfolioData.motionSettings || portfolioData.profile?.motion || portfolioData.scrapbookSettings?.motion || {};
+      if ($('#motionTilt')) $('#motionTilt').checked = motion.tilt3d !== false;
+      if ($('#motionCardFlip')) $('#motionCardFlip').checked = motion.cardFlip !== false;
+      if ($('#motionScroll')) $('#motionScroll').checked = motion.smoothScroll !== false;
+      if ($('#motionHero3d')) $('#motionHero3d').checked = motion.hero3d !== false;
+      if ($('#motionGlow')) $('#motionGlow').checked = motion.ambientGlow !== false;
+      if ($('#motionTickerSpeed')) $('#motionTickerSpeed').value = motion.tickerSpeed || "normal";
+
       // Profile inputs & photo
       if (portfolioData.profile) {
         const pr = portfolioData.profile;
@@ -2210,7 +2323,7 @@
   $('#accentColorPick').addEventListener('input', (e) => $('#accentColorText').value = e.target.value);
   $('#accentColorText').addEventListener('input', (e) => $('#accentColorPick').value = e.target.value);
 
-  // Save Design
+  // Save Design, Facts & Motions
   $('#designForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const primaryColor = $('#primaryColorText').value;
@@ -2220,21 +2333,105 @@
       ar: $('#heroStatusAr').value
     };
 
+    const facts = {
+      yoe: $('#factInputYoe') ? $('#factInputYoe').value.trim() : "+2",
+      apps: $('#factInputApps') ? $('#factInputApps').value.trim() : "+4",
+      clean: $('#factInputClean') ? $('#factInputClean').value.trim() : "100%"
+    };
+
+    const motionSettings = {
+      tilt3d: $('#motionTilt') ? $('#motionTilt').checked : true,
+      cardFlip: $('#motionCardFlip') ? $('#motionCardFlip').checked : true,
+      smoothScroll: $('#motionScroll') ? $('#motionScroll').checked : true,
+      hero3d: $('#motionHero3d') ? $('#motionHero3d').checked : true,
+      ambientGlow: $('#motionGlow') ? $('#motionGlow').checked : true,
+      tickerSpeed: $('#motionTickerSpeed') ? $('#motionTickerSpeed').value : "normal"
+    };
+
     if (!portfolioData.profile) portfolioData.profile = {};
     portfolioData.profile.primaryColor = primaryColor;
     portfolioData.profile.accentColor = accentColor;
     portfolioData.profile.heroStatus = heroStatus;
+    portfolioData.profile.facts = facts;
+    portfolioData.profile.motion = motionSettings;
+    portfolioData.facts = facts;
+    portfolioData.motionSettings = motionSettings;
 
     try {
       await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ primaryColor, accentColor, heroStatus })
+        body: JSON.stringify({ primaryColor, accentColor, heroStatus, facts, motionSettings })
       });
     } catch (e) {}
 
-    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ إعدادات المظهر بنجاح!' : 'Appearance saved successfully!');
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ وتخزين إعدادات المظهر، الإحصائيات، والحركات بالداتابيز!' : 'Appearance, stats and motion settings saved to database!');
   });
+
+  // One-Click Full Seed & Sync to Database (Cloud & Local)
+  async function seedAllToDatabase() {
+    const btn = $('#btnSeedCloud');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ جاري رفع ومزامنة كافة محتويات البورتفوليو إلى Supabase...</span>';
+    }
+
+    try {
+      // 1. Fetch pristine data from data/portfolio.json to ensure everything is comprehensive
+      let baseData = {};
+      try {
+        const res = await fetch('data/portfolio.json');
+        if (res.ok) baseData = await res.json();
+      } catch (e) {}
+
+      // 2. Merge with current live state
+      const merged = {
+        ...baseData,
+        ...portfolioData,
+        profile: {
+          ...(baseData.profile || {}),
+          ...(portfolioData.profile || {}),
+          facts: portfolioData.facts || portfolioData.profile?.facts || baseData.profile?.facts || { yoe: "+2", apps: "+4", clean: "100%" },
+          motion: portfolioData.motionSettings || portfolioData.profile?.motion || baseData.motionSettings || {}
+        },
+        facts: portfolioData.facts || portfolioData.profile?.facts || baseData.profile?.facts || { yoe: "+2", apps: "+4", clean: "100%" },
+        motionSettings: portfolioData.motionSettings || portfolioData.profile?.motion || baseData.motionSettings || {},
+        projects: (portfolioData.projects && portfolioData.projects.length) ? portfolioData.projects : (baseData.projects || []),
+        skills: (portfolioData.skills && portfolioData.skills.length) ? portfolioData.skills : (baseData.skills || []),
+        certs: (portfolioData.certs && portfolioData.certs.length) ? portfolioData.certs : (baseData.certs || []),
+        experience: (portfolioData.experience && portfolioData.experience.length) ? portfolioData.experience : (baseData.experience || []),
+        sectionVisibility: portfolioData.sectionVisibility || baseData.sectionVisibility || {},
+        scrapbookSettings: portfolioData.scrapbookSettings || baseData.scrapbookSettings || {}
+      };
+
+      portfolioData = merged;
+
+      // 3. Save to Supabase
+      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+        await window.PORTFOLIO_DB.savePortfolio(merged);
+      }
+
+      // 4. Save to local server if running
+      try {
+        await fetch('/api/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(merged)
+        });
+      } catch (lErr) {}
+
+      showToast(currentLang === 'ar' ? '🚀 تم بنجاح رفع وتخزين كافة محتويات البورتفوليو بالداتابيز السحابية!' : 'All portfolio content synced to Supabase Cloud!');
+      testDatabaseHealth();
+      loadData();
+    } catch (err) {
+      alert('خطأ أثناء المزامنة السحابية: ' + err.message);
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🚀 مزامنة ورفع كافة محتويات البورتفوليو إلى الداتابيز السحابية الآن (Full Cloud Seed & Sync)</span>';
+      }
+    }
+  }
 
   // Save Profile
   $('#profileForm').addEventListener('submit', async (e) => {

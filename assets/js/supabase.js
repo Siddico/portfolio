@@ -42,8 +42,21 @@
 
         if (error || !data) return null;
 
+        const profile = data.profile || {};
+        const facts = profile.facts || data.facts || { yoe: "+2", apps: "+4", clean: "100%" };
+        const motionSettings = data.motion_settings || profile.motion || data.scrapbook_settings?.motion || {
+          tilt3d: true,
+          cardFlip: true,
+          smoothScroll: true,
+          hero3d: true,
+          tickerSpeed: "normal",
+          ambientGlow: true
+        };
+
         return {
-          profile: data.profile || {},
+          profile: profile,
+          facts: facts,
+          motionSettings: motionSettings,
           sectionVisibility: data.section_visibility || {},
           scrapbookSettings: data.scrapbook_settings || {},
           projects: data.projects || [],
@@ -82,11 +95,21 @@
       const db = getClient();
       if (!db) throw new Error("Database client not available");
 
+      const motion = fullData.motionSettings || fullData.profile?.motion || {};
+      const facts = fullData.facts || fullData.profile?.facts || {};
+
       const payload = {
         id: "main",
-        profile: fullData.profile || {},
+        profile: {
+          ...(fullData.profile || {}),
+          facts: facts,
+          motion: motion
+        },
         section_visibility: fullData.sectionVisibility || {},
-        scrapbook_settings: fullData.scrapbookSettings || {},
+        scrapbook_settings: {
+          ...(fullData.scrapbookSettings || {}),
+          motion: motion
+        },
         projects: fullData.projects || [],
         skills: fullData.skills || [],
         certs: fullData.certs || [],

@@ -20,6 +20,9 @@ CREATE TABLE IF NOT EXISTS public.portfolio_data (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Ensure motion_settings column exists if queried directly
+ALTER TABLE public.portfolio_data ADD COLUMN IF NOT EXISTS motion_settings JSONB DEFAULT '{"tilt3d": true, "cardFlip": true, "smoothScroll": true, "hero3d": true, "tickerSpeed": "normal", "ambientGlow": true}'::jsonb;
+
 -- 2. Table for Contact Messages (Inquiries from visitors)
 CREATE TABLE IF NOT EXISTS public.portfolio_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -103,7 +106,20 @@ INSERT INTO public.portfolio_data (
     "github": "https://github.com/Siddico",
     "linkedin": "https://www.linkedin.com/in/mohammedsiddico/",
     "portfolio": "https://siddico.github.io/portfolio/",
-    "summary": "Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces."
+    "summary": "Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces.",
+    "facts": {
+      "yoe": "+2",
+      "apps": "+4",
+      "clean": "100%"
+    },
+    "motion": {
+      "tilt3d": true,
+      "cardFlip": true,
+      "smoothScroll": true,
+      "hero3d": true,
+      "tickerSpeed": "normal",
+      "ambientGlow": true
+    }
   }'::jsonb,
   '{
     "hero": true,

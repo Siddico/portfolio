@@ -39,7 +39,38 @@
     renderProjects();
     renderCerts();
     renderExperience();
+    renderSkills();
     store.set("lang", lang);
+  }
+
+  const SKILL_ICONS = {
+    mobile: `<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>`,
+    architecture: `<svg viewBox="0 0 24 24"><path d="M12 3 3 7.5l9 4.5 9-4.5z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg>`,
+    backend: `<svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6"/><path d="M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></svg>`,
+    tools: `<svg viewBox="0 0 24 24"><path d="m14.7 6.3 3 3-8.4 8.4H6.3v-3z"/><path d="m13.3 7.7 3 3"/></svg>`,
+    ai: `<svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M4 17v2.5h16V17"/></svg>`,
+    optimization: `<svg viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.4"/></svg>`,
+    default: `<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+  };
+
+  function renderSkills() {
+    const skills = window.__PORTFOLIO_SKILLS || (window.__PORTFOLIO_DATA && window.__PORTFOLIO_DATA.skills);
+    if (!skills || !Array.isArray(skills) || !skills.length) return;
+    const listEl = $("#skillsList");
+    if (!listEl) return;
+    const L = (o) => (o && typeof o === "object") ? (o[lang] || o.en || o.ar || "") : (o || "");
+    const active = skills.filter(g => g.visible !== false);
+    listEl.innerHTML = active.map(g => {
+      const icon = SKILL_ICONS[g.id] || SKILL_ICONS.default;
+      const title = esc(L(g.title || g.name));
+      const tags = (g.items || []).map(it => `<li>${esc(it)}</li>`).join('');
+      return `<div class="skill" data-id="${esc(g.id)}">
+        <span class="skill__icon" aria-hidden="true">${icon}</span>
+        <h3>${title}</h3>
+        <ul class="tags">${tags}</ul>
+      </div>`;
+    }).join('');
+    if (!reduced && matchMedia("(pointer: fine)").matches) wireTouches();
   }
 
   function renderExperience() {
@@ -242,7 +273,24 @@
           renderProjects();
         }
 
-        // 3. Certifications sync
+        // 3. Skills & Tech Stack sync
+        if (portData.skills && Array.isArray(portData.skills) && portData.skills.length) {
+          window.__PORTFOLIO_SKILLS = portData.skills;
+          renderSkills();
+          // Update ticker strip track with live skills
+          const track = $("#stripTrack");
+          if (track) {
+            const allItems = [];
+            portData.skills.filter(g => g.visible !== false).forEach(g => {
+              (g.items || []).forEach(it => { if (!allItems.includes(it)) allItems.push(it); });
+            });
+            if (allItems.length) {
+              track.innerHTML = allItems.map(it => `<span>${esc(it)}</span>`).join('');
+            }
+          }
+        }
+
+        // 4. Certifications sync
         if (portData.certs && Array.isArray(portData.certs) && portData.certs.length) {
           if (window.CONTENT && window.CONTENT.certs) {
             window.CONTENT.certs.items = portData.certs;
@@ -250,7 +298,7 @@
           renderCerts();
         }
 
-        // 4. Experience timeline sync
+        // 5. Experience timeline sync
         if (portData.experience && Array.isArray(portData.experience) && portData.experience.length) {
           if (window.CONTENT && window.CONTENT.experience) {
             window.CONTENT.experience.items = portData.experience;
@@ -258,7 +306,59 @@
           renderExperience();
         }
 
-        // 5. Section & Component Granular Visibility
+        // 6. Facts & Stats Numbers sync (سنين الخبرة، عدد التطبيقات، دقة الكود)
+        const facts = portData.facts || portData.profile?.facts;
+        if (facts) {
+          const yoeEl = $("#factYoe");
+          const appsEl = $("#factApps");
+          const cleanEl = $("#factClean");
+          if (yoeEl && facts.yoe) {
+            const rawYoe = String(facts.yoe).replace(/[^0-9]/g, '') || "2";
+            yoeEl.textContent = rawYoe;
+            yoeEl.setAttribute("data-count", rawYoe);
+          }
+          if (appsEl && facts.apps) {
+            const rawApps = String(facts.apps).replace(/[^0-9]/g, '') || "4";
+            appsEl.textContent = rawApps;
+            appsEl.setAttribute("data-count", rawApps);
+          }
+          if (cleanEl && facts.clean) {
+            cleanEl.textContent = String(facts.clean).replace('%', '');
+          }
+        }
+
+        // 7. Motion & Animation Settings (الحركات والتأثيرات)
+        const motion = portData.motionSettings || portData.profile?.motion;
+        if (motion) {
+          window.__MOTION_SETTINGS = motion;
+          if (motion.ambientGlow === false) {
+            const glow = $(".hero__glow");
+            if (glow) glow.style.display = "none";
+          }
+          if (motion.hero3d === false) {
+            const stage = $("#sceneStage");
+            if (stage) stage.style.display = "none";
+            const hint = $(".hero__hint");
+            if (hint) hint.style.display = "none";
+          }
+          if (motion.tickerSpeed) {
+            const track = $("#stripTrack");
+            if (track) {
+              const speeds = { slow: "48s", normal: "28s", fast: "14s" };
+              track.style.animationDuration = speeds[motion.tickerSpeed] || "28s";
+            }
+          }
+        }
+
+        // 8. Custom Theme Colors
+        if (portData.profile?.primaryColor) {
+          root.style.setProperty('--primary', portData.profile.primaryColor);
+        }
+        if (portData.profile?.accentColor) {
+          root.style.setProperty('--amber', portData.profile.accentColor);
+        }
+
+        // 9. Section & Component Granular Visibility
         if (portData.sectionVisibility) {
           const vis = portData.sectionVisibility;
           const secMap = {
@@ -317,6 +417,7 @@
   // live screen inside the middle phone of each project
   setInterval(() => {
     if (document.hidden) return;
+    if (window.__MOTION_SETTINGS && window.__MOTION_SETTINGS.cardFlip === false) return;
     $$(".device--live .device__screens").forEach((box) => {
       const imgs = $$("img", box);
       const i = imgs.findIndex((x) => x.classList.contains("is-on"));
@@ -335,7 +436,7 @@
   /* ================================================================ motion */
   gsap.registerPlugin(ScrollTrigger);
   let lenis = null;
-  if (typeof window.Lenis !== "undefined") {
+  if (typeof window.Lenis !== "undefined" && (!window.__MOTION_SETTINGS || window.__MOTION_SETTINGS.smoothScroll !== false)) {
     lenis = new window.Lenis({ duration: 1.05, smoothWheel: true });
     window.__lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
@@ -454,6 +555,7 @@
   /* ============================================== helpers (no motion needed) */
   /* small interactions: every card and button answers the pointer */
   function wireTouches() {
+    if (window.__MOTION_SETTINGS && window.__MOTION_SETTINGS.tilt3d === false) return;
     // skill cards and fact tiles: tilt + a spotlight that follows the cursor
     $$(".skill, .facts > div, .mailcard").forEach((el) => {
       el.addEventListener("pointermove", (e) => {
@@ -490,7 +592,7 @@
       if (!saver) return;
       e.preventDefault();
       fetch(dl.getAttribute("href")).then((r) => r.blob())
-        .then((blob) => saver.save({ filename: "Sherif-Fahmy-CV.pdf", data: blob }))
+        .then((blob) => saver.save({ filename: "Mohammed-Siddiq-CV.pdf", data: blob }))
         .catch(() => { /* declined or unavailable: the preview stays visible */ });
     });
   }

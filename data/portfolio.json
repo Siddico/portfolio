@@ -8,7 +8,20 @@
     "github": "https://github.com/Siddico",
     "linkedin": "https://www.linkedin.com/in/mohammedsiddico/",
     "portfolio": "https://mohammed-siddiq.lovable.app",
-    "summary": "Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces."
+    "summary": "Software Engineer and Flutter Developer with 2+ years of experience specializing in building scalable, high-performance cross-platform mobile applications. Combines clean architecture, efficient code, and thoughtfully crafted user interfaces.",
+    "facts": {
+      "yoe": "+2",
+      "apps": "+4",
+      "clean": "100%"
+    }
+  },
+  "motionSettings": {
+    "tilt3d": true,
+    "cardFlip": true,
+    "smoothScroll": true,
+    "hero3d": true,
+    "tickerSpeed": "normal",
+    "ambientGlow": true
   },
   "sectionVisibility": {
     "hero": true,
@@ -19,7 +32,11 @@
     "experience": true,
     "certs": true,
     "about": true,
-    "contact": true
+    "contact": true,
+    "cvBtn": true,
+    "whatsapp": true,
+    "mailcard": true,
+    "socials": true
   },
   "scrapbookSettings": {
     "enabled": true,

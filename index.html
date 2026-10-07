@@ -74,9 +74,9 @@
         <a class="btn btn--ghost" href="#contact" data-i18n="hero.cta2">Get in touch</a>
       </div>
       <dl class="facts">
-        <div><dt><span data-count="2">2</span><sup>+ yrs</sup></dt><dd data-i18n="facts.1">Flutter Experience</dd></div>
-        <div><dt><span data-count="4">4</span><sup>+ apps</sup></dt><dd data-i18n="facts.2">Shipped & Production Apps</dd></div>
-        <div><dt><span>100</span>%</dt><dd data-i18n="facts.3">Clean Architecture & Code</dd></div>
+        <div><dt><span data-count="2" id="factYoe">2</span><sup>+ yrs</sup></dt><dd data-i18n="facts.1">Flutter Experience</dd></div>
+        <div><dt><span data-count="4" id="factApps">4</span><sup>+ apps</sup></dt><dd data-i18n="facts.2">Shipped & Production Apps</dd></div>
+        <div><dt><span id="factClean">100</span>%</dt><dd data-i18n="facts.3">Clean Architecture & Code</dd></div>
       </dl>
     </div>
 
@@ -92,7 +92,7 @@
 
 <!-- ============ STACK STRIP ============ -->
 <div class="strip" aria-label="Tech stack">
-  <div class="strip__track">
+  <div class="strip__track" id="stripTrack">
     <span>Flutter</span><span>Dart</span><span>BLoC / Cubit</span><span>Riverpod</span><span>Clean Architecture</span><span>Firebase</span><span>Supabase</span><span>Node.js</span><span>REST · Dio</span><span>AI · Gemini API</span><span>Scikit-learn</span><span>Cloudinary</span><span>Google Play</span><span>App Store</span>
   </div>
 </div>
@@ -185,7 +185,7 @@
       <span class="eyebrow" data-i18n="sk.k">Skills</span>
       <h2 class="sec-title" data-i18n="sk.title">Technical Stack &amp; Expertise</h2>
     </header>
-    <div class="skills">
+    <div class="skills" id="skillsList">
       <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><h3 data-i18n="sk.1">Mobile</h3><ul class="tags"><li>Flutter</li><li>Dart</li><li>BLoC (Cubit)</li><li>Provider</li><li>Riverpod</li><li>Responsive UI</li><li>Adaptive Layouts</li><li>Animations</li></ul></div>
       <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 3 7.5l9 4.5 9-4.5z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></span><h3 data-i18n="sk.2">Architecture</h3><ul class="tags"><li>Clean Architecture</li><li>MVVM</li><li>SOLID Principles</li><li>Clean Code</li><li>Repository Pattern</li><li>Design Patterns</li></ul></div>
       <div class="skill"><span class="skill__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6"/><path d="M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></svg></span><h3 data-i18n="sk.3">Backend &amp; Cloud</h3><ul class="tags"><li>Firebase</li><li>Cloud Firestore</li><li>Supabase</li><li>Cloudinary</li><li>RESTful APIs</li><li>Node.js</li><li>Sqflite</li></ul></div>
