@@ -1806,6 +1806,23 @@
     });
   }
 
+  // Upload base64 image to backend uploads folder if running, or keep compressed base64 if static/offline
+  async function uploadOrKeepImage(base64Data, namePrefix = 'photo') {
+    if (!base64Data || !base64Data.startsWith('data:image/')) return base64Data;
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ image: base64Data, name: namePrefix })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) return data.url;
+      }
+    } catch (e) {}
+    return base64Data;
+  }
+
   // Live Cloud Database Health & Diagnostics
   async function testDatabaseHealth(silent = false) {
     const statStatus = $('#statDbStatus');
@@ -1889,114 +1906,167 @@
         } catch (fErr) {}
       }
 
-      portfolioData = cloudData || pData || {};
+      // Smart merge: preserve photos and fields so missing cloud fields don't erase local data
+      let merged = {};
+      if (pData && cloudData) {
+        const defaultMe = "assets/img/me/mohammed-siddiq.png";
+        const prCloud = cloudData.profile || {};
+        const prLocal = pData.profile || {};
+        const mergedProf = { ...prCloud, ...prLocal };
+        ['photo', 'aboutPhoto', 'botPhoto'].forEach(key => {
+          if (prCloud[key] && prCloud[key] !== defaultMe && (!prLocal[key] || prLocal[key] === defaultMe)) {
+            mergedProf[key] = prCloud[key];
+          } else if (prLocal[key] && prLocal[key] !== defaultMe) {
+            mergedProf[key] = prLocal[key];
+          }
+        });
+
+        merged = {
+          ...cloudData,
+          ...pData,
+          profile: mergedProf,
+          projects: (pData.projects && pData.projects.length) ? pData.projects : (cloudData.projects || []),
+          skills: (pData.skills && pData.skills.length) ? pData.skills : (cloudData.skills || []),
+          certs: (pData.certs && pData.certs.length) ? pData.certs : (cloudData.certs || [])
+        };
+      } else {
+        merged = pData || cloudData || {};
+      }
+
+      portfolioData = merged;
       settingsData = sData || { primaryColor: '#2F5BEA', accentColor: '#38bdf8' };
       const messages = (cloudMessages && cloudMessages.length) ? cloudMessages : (Array.isArray(mData) ? mData : []);
 
-      // Stats
-      $('#ovProjCount').textContent = (portfolioData.projects || []).length;
-      $('#ovCertsCount').textContent = (portfolioData.certs || []).length;
-      $('#ovSkillsCount').textContent = (portfolioData.skills || []).length;
-      $('#ovInboxCount').textContent = messages.length;
-
-      // Settings inputs
-      const primaryCol = (portfolioData.profile && portfolioData.profile.primaryColor) || settingsData.primaryColor || '#2F5BEA';
-      $('#primaryColorPick').value = primaryCol;
-      $('#primaryColorText').value = primaryCol;
-      const accentCol = (portfolioData.profile && portfolioData.profile.accentColor) || settingsData.accentColor || '#38bdf8';
-      $('#accentColorPick').value = accentCol;
-      $('#accentColorText').value = accentCol;
-
-      const heroStatus = (portfolioData.profile && portfolioData.profile.heroStatus) || settingsData.heroStatus;
-      if (heroStatus) {
-        $('#heroStatusEn').value = heroStatus.en || '';
-        $('#heroStatusAr').value = heroStatus.ar || '';
-      }
-
-      // Facts inputs (الإحصائيات الحية)
-      const facts = portfolioData.facts || portfolioData.profile?.facts || { yoe: "+2", apps: "+4", clean: "100%" };
-      if ($('#factInputYoe')) $('#factInputYoe').value = facts.yoe || "+2";
-      if ($('#factInputApps')) $('#factInputApps').value = facts.apps || "+4";
-      if ($('#factInputClean')) $('#factInputClean').value = facts.clean || "100%";
-
-      // Motion inputs (الحركات والتأثيرات)
-      const motion = portfolioData.motionSettings || portfolioData.profile?.motion || portfolioData.scrapbookSettings?.motion || {};
-      if ($('#motionTilt')) $('#motionTilt').checked = motion.tilt3d !== false;
-      if ($('#motionCardFlip')) $('#motionCardFlip').checked = motion.cardFlip !== false;
-      if ($('#motionScroll')) $('#motionScroll').checked = motion.smoothScroll !== false;
-      if ($('#motionHero3d')) $('#motionHero3d').checked = motion.hero3d !== false;
-      if ($('#motionGlow')) $('#motionGlow').checked = motion.ambientGlow !== false;
-      if ($('#motionTickerSpeed')) $('#motionTickerSpeed').value = motion.tickerSpeed || "normal";
-
-      // Profile inputs & photo
-      if (portfolioData.profile) {
-        const pr = portfolioData.profile;
-        if (pr.name) $('#profName').value = pr.name;
-        if (pr.title) $('#profTitle').value = pr.title;
-        if (pr.email) $('#profEmail').value = pr.email;
-        if (pr.phone) $('#profPhone').value = pr.phone;
-        if (pr.location) $('#profLoc').value = pr.location;
-        if (pr.github) $('#profGithub').value = pr.github;
-        if (pr.linkedin) $('#profLinkedin').value = pr.linkedin;
-        if (pr.summary) $('#profSummary').value = pr.summary;
-
-        const defaultMe = "assets/img/me/mohammed-siddiq.png";
-        // 1. Hero Photo (صورة البداية)
-        const heroPhoto = pr.photo || pr.heroPhoto || defaultMe;
-        if ($('#profPhotoPreview')) $('#profPhotoPreview').src = heroPhoto;
-        if ($('#profCustomPhoto')) $('#profCustomPhoto').value = heroPhoto;
-        if ($('#profPhotoUrl') && !heroPhoto.startsWith('data:')) $('#profPhotoUrl').value = heroPhoto;
-        $$('.login-avatar, .brand-group img').forEach(img => img.src = heroPhoto);
-
-        // 2. About Photo (صورة قسم من أنا)
-        const aboutPhoto = pr.aboutPhoto || heroPhoto;
-        if ($('#profAboutPhotoPreview')) $('#profAboutPhotoPreview').src = aboutPhoto;
-        if ($('#profCustomAboutPhoto')) $('#profCustomAboutPhoto').value = aboutPhoto;
-        if ($('#profAboutPhotoUrl') && !aboutPhoto.startsWith('data:')) $('#profAboutPhotoUrl').value = aboutPhoto;
-
-        // 3. Bot Photo (صورة المساعد الذكي)
-        const botPhoto = pr.botPhoto || heroPhoto;
-        if ($('#profBotPhotoPreview')) $('#profBotPhotoPreview').src = botPhoto;
-        if ($('#profCustomBotPhoto')) $('#profCustomBotPhoto').value = botPhoto;
-        if ($('#profBotPhotoUrl') && !botPhoto.startsWith('data:')) $('#profBotPhotoUrl').value = botPhoto;
-      }
-
-      // Render tab components
-      renderProjectsList(portfolioData.projects || []);
-      renderSkillsList(portfolioData.skills || []);
-      renderCertsList(portfolioData.certs || []);
-      renderActivitiesList(portfolioData.activities || []);
-      renderSectionOrder(portfolioData.sectionOrder || []);
-      renderVisibilityControls(portfolioData.sectionVisibility || {}, portfolioData.scrapbookSettings || {});
-      renderMessagesList(messages);
-      loadAIChatsData();
-
-      // Run silent database health diagnostic
+      populateDashboardFromData(portfolioData, messages);
       testDatabaseHealth(true);
     } catch (e) {
       console.error('Error loading data:', e);
     }
   }
 
+  function populateDashboardFromData(data, messages = []) {
+    if (!data) return;
+
+    // Stats
+    $('#ovProjCount').textContent = (data.projects || []).length;
+    $('#ovCertsCount').textContent = (data.certs || []).length;
+    $('#ovSkillsCount').textContent = (data.skills || []).length;
+    if ($('#ovInboxCount') && messages.length) $('#ovInboxCount').textContent = messages.length;
+
+    // Settings inputs
+    const primaryCol = (data.profile && data.profile.primaryColor) || settingsData?.primaryColor || '#2F5BEA';
+    $('#primaryColorPick').value = primaryCol;
+    $('#primaryColorText').value = primaryCol;
+    const accentCol = (data.profile && data.profile.accentColor) || settingsData?.accentColor || '#38bdf8';
+    $('#accentColorPick').value = accentCol;
+    $('#accentColorText').value = accentCol;
+
+    const heroStatus = (data.profile && data.profile.heroStatus) || settingsData?.heroStatus;
+    if (heroStatus) {
+      $('#heroStatusEn').value = heroStatus.en || '';
+      $('#heroStatusAr').value = heroStatus.ar || '';
+    }
+
+    // Facts inputs (الإحصائيات الحية)
+    const facts = data.facts || data.profile?.facts || { yoe: "+2", apps: "+4", clean: "100%" };
+    if ($('#factInputYoe')) $('#factInputYoe').value = facts.yoe || "+2";
+    if ($('#factInputApps')) $('#factInputApps').value = facts.apps || "+4";
+    if ($('#factInputClean')) $('#factInputClean').value = facts.clean || "100%";
+
+    // Motion inputs (الحركات والتأثيرات)
+    const motion = data.motionSettings || data.profile?.motion || data.scrapbookSettings?.motion || {};
+    if ($('#motionTilt')) $('#motionTilt').checked = motion.tilt3d !== false;
+    if ($('#motionCardFlip')) $('#motionCardFlip').checked = motion.cardFlip !== false;
+    if ($('#motionScroll')) $('#motionScroll').checked = motion.smoothScroll !== false;
+    if ($('#motionHero3d')) $('#motionHero3d').checked = motion.hero3d !== false;
+    if ($('#motionGlow')) $('#motionGlow').checked = motion.ambientGlow !== false;
+    if ($('#motionTickerSpeed')) $('#motionTickerSpeed').value = motion.tickerSpeed || "normal";
+
+    // Profile inputs & photo
+    if (data.profile) {
+      const pr = data.profile;
+      if (pr.name) $('#profName').value = pr.name;
+      if (pr.title) $('#profTitle').value = pr.title;
+      if (pr.email) $('#profEmail').value = pr.email;
+      if (pr.phone) $('#profPhone').value = pr.phone;
+      if (pr.location) $('#profLoc').value = pr.location;
+      if (pr.github) $('#profGithub').value = pr.github;
+      if (pr.linkedin) $('#profLinkedin').value = pr.linkedin;
+      if (pr.summary) $('#profSummary').value = pr.summary;
+
+      const defaultMe = "assets/img/me/mohammed-siddiq.png";
+      // 1. Hero Photo (صورة البداية)
+      const heroPhoto = pr.photo || pr.heroPhoto || defaultMe;
+      if ($('#profPhotoPreview')) $('#profPhotoPreview').src = heroPhoto;
+      if ($('#profCustomPhoto')) $('#profCustomPhoto').value = heroPhoto;
+      if ($('#profPhotoUrl') && !heroPhoto.startsWith('data:')) $('#profPhotoUrl').value = heroPhoto;
+      $$('.login-avatar, .brand-group img').forEach(img => img.src = heroPhoto);
+
+      // 2. About Photo (صورة قسم من أنا)
+      const aboutPhoto = pr.aboutPhoto || heroPhoto;
+      if ($('#profAboutPhotoPreview')) $('#profAboutPhotoPreview').src = aboutPhoto;
+      if ($('#profCustomAboutPhoto')) $('#profCustomAboutPhoto').value = aboutPhoto;
+      if ($('#profAboutPhotoUrl') && !aboutPhoto.startsWith('data:')) $('#profAboutPhotoUrl').value = aboutPhoto;
+
+      // 3. Bot Photo (صورة المساعد الذكي)
+      const botPhoto = pr.botPhoto || heroPhoto;
+      if ($('#profBotPhotoPreview')) $('#profBotPhotoPreview').src = botPhoto;
+      if ($('#profCustomBotPhoto')) $('#profCustomBotPhoto').value = botPhoto;
+      if ($('#profBotPhotoUrl') && !botPhoto.startsWith('data:')) $('#profBotPhotoUrl').value = botPhoto;
+    }
+
+    // Render tab components
+    renderProjectsList(data.projects || []);
+    renderSkillsList(data.skills || []);
+    renderCertsList(data.certs || []);
+    renderActivitiesList(data.activities || []);
+    renderSectionOrder(data.sectionOrder || []);
+    renderVisibilityControls(data.sectionVisibility || {}, data.scrapbookSettings || {});
+    if (messages && messages.length) renderMessagesList(messages);
+    loadAIChatsData();
+  }
+
   // Universal Sync function: Saves to Supabase Cloud and Local API simultaneously
   async function syncAllPortfolio(toastMsg) {
+    let savedLocal = false;
+    let savedCloud = false;
+    let localError = null;
+
     if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
       try {
         await window.PORTFOLIO_DB.savePortfolio(portfolioData);
+        savedCloud = true;
       } catch (sErr) {
         console.warn("Supabase save error:", sErr);
       }
     }
+
     try {
-      await fetch('/api/portfolio', {
+      const res = await fetch('/api/portfolio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(portfolioData)
       });
-    } catch (lErr) {}
+      if (res.ok) {
+        savedLocal = true;
+      } else {
+        const errJson = await res.json().catch(() => ({}));
+        localError = errJson.error || `HTTP ${res.status}`;
+      }
+    } catch (lErr) {
+      localError = lErr.message;
+    }
 
-    if (toastMsg) showToast(toastMsg);
-    loadData();
+    if (savedLocal || savedCloud) {
+      if (toastMsg) showToast(toastMsg);
+      // Immediately reflect across all admin preview avatars
+      if (portfolioData.profile?.photo) {
+        $$('.login-avatar, .brand-group img').forEach(img => img.src = portfolioData.profile.photo);
+      }
+      populateDashboardFromData(portfolioData);
+    } else {
+      alert(currentLang === 'ar' ? `فشل الحفظ: ${localError || 'خطأ غير معروف'}` : `Save failed: ${localError || 'Unknown error'}`);
+    }
   }
 
   // Render Projects List
@@ -2270,10 +2340,11 @@
       try {
         showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة الهيرو...' : 'Optimizing hero photo...');
         const compressed = await compressImage(file, 900, 0.88);
-        $('#profPhotoPreview').src = compressed;
-        $('#profCustomPhoto').value = compressed;
-        if ($('#profPhotoUrl')) $('#profPhotoUrl').value = '';
-        $$('.login-avatar, .brand-group img').forEach(img => img.src = compressed);
+        const finalUrl = await uploadOrKeepImage(compressed, 'hero_photo');
+        $('#profPhotoPreview').src = finalUrl;
+        $('#profCustomPhoto').value = finalUrl;
+        if ($('#profPhotoUrl')) $('#profPhotoUrl').value = finalUrl.startsWith('data:') ? '' : finalUrl;
+        $$('.login-avatar, .brand-group img').forEach(img => img.src = finalUrl);
         showToast(currentLang === 'ar' ? 'تم تجهيز صورة الهيرو! اضغط "حفظ وتحديث البيانات الشخصية"' : 'Hero photo ready! Click Save Changes');
       } catch (err) {
         alert('خطأ في معالجة صورة الهيرو: ' + err.message);
@@ -2310,9 +2381,10 @@
       try {
         showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة قسم من أنا...' : 'Optimizing about photo...');
         const compressed = await compressImage(file, 900, 0.88);
-        $('#profAboutPhotoPreview').src = compressed;
-        $('#profCustomAboutPhoto').value = compressed;
-        if ($('#profAboutPhotoUrl')) $('#profAboutPhotoUrl').value = '';
+        const finalUrl = await uploadOrKeepImage(compressed, 'about_photo');
+        $('#profAboutPhotoPreview').src = finalUrl;
+        $('#profCustomAboutPhoto').value = finalUrl;
+        if ($('#profAboutPhotoUrl')) $('#profAboutPhotoUrl').value = finalUrl.startsWith('data:') ? '' : finalUrl;
         showToast(currentLang === 'ar' ? 'تم تجهيز صورة قسم من أنا! اضغط "حفظ وتحديث البيانات الشخصية"' : 'About photo ready! Click Save Changes');
       } catch (err) {
         alert('خطأ في معالجة صورة قسم من أنا: ' + err.message);
@@ -2347,9 +2419,10 @@
       try {
         showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة المساعد الذكي...' : 'Optimizing bot photo...');
         const compressed = await compressImage(file, 600, 0.88);
-        $('#profBotPhotoPreview').src = compressed;
-        $('#profCustomBotPhoto').value = compressed;
-        if ($('#profBotPhotoUrl')) $('#profBotPhotoUrl').value = '';
+        const finalUrl = await uploadOrKeepImage(compressed, 'bot_avatar');
+        $('#profBotPhotoPreview').src = finalUrl;
+        $('#profCustomBotPhoto').value = finalUrl;
+        if ($('#profBotPhotoUrl')) $('#profBotPhotoUrl').value = finalUrl.startsWith('data:') ? '' : finalUrl;
         showToast(currentLang === 'ar' ? 'تم تجهيز صورة المساعد! اضغط "حفظ وتحديث البيانات الشخصية"' : 'Bot photo ready! Click Save Changes');
       } catch (err) {
         alert('خطأ في معالجة صورة المساعد: ' + err.message);
@@ -2499,7 +2572,8 @@
       for (const file of files) {
         try {
           const compressed = await compressImage(file, 900, 0.85);
-          activeProjectScreens.push(compressed);
+          const finalUrl = await uploadOrKeepImage(compressed, 'screen');
+          activeProjectScreens.push(finalUrl);
         } catch (err) {
           console.warn('Error compressing project screen:', err);
         }
@@ -2519,8 +2593,9 @@
       try {
         showToast(currentLang === 'ar' ? 'جاري ضغط شعار الشهادة...' : 'Processing badge image...');
         const compressed = await compressImage(file, 400, 0.9);
-        $('#fCertCustomImage').value = compressed;
-        $('#fCertImgPreview').src = compressed;
+        const finalUrl = await uploadOrKeepImage(compressed, 'cert_badge');
+        $('#fCertCustomImage').value = finalUrl;
+        $('#fCertImgPreview').src = finalUrl;
         $('#fCertImgPreviewBox').style.display = 'flex';
         showToast(currentLang === 'ar' ? 'تم تجهيز شعار الشهادة بنجاح ✓' : 'Badge image ready ✓');
       } catch (err) {
@@ -3177,8 +3252,9 @@
       try {
         showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة الفعالية...' : 'Processing activity banner...');
         const compressed = await compressImage(file, 1000, 0.88);
-        $('#fActCustomImage').value = compressed;
-        $('#fActImgPreview').src = compressed;
+        const finalUrl = await uploadOrKeepImage(compressed, 'activity');
+        $('#fActCustomImage').value = finalUrl;
+        $('#fActImgPreview').src = finalUrl;
         $('#fActImgPreviewBox').style.display = 'flex';
         if ($('#fActPresetSelect')) $('#fActPresetSelect').value = '';
         showToast(currentLang === 'ar' ? 'تم تجهيز صورة الفعالية بنجاح ✓' : 'Activity photo ready ✓');

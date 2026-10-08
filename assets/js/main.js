@@ -266,7 +266,7 @@
 
   function resolveScreenPath(src) {
     if (!src) return "assets/img/screens/brainguard-home.svg";
-    if (src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://") || src.startsWith("assets/")) {
+    if (src.startsWith("/") || src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://") || src.startsWith("assets/")) {
       return src;
     }
     const map = (window.SCREENS || {
@@ -521,31 +521,13 @@
   // Dynamic synchronization with Supabase Cloud & Local Backend API
   async function syncWithBackend() {
     try {
-      let portData = null;
-
-      // 1. Prioritize live Supabase cloud database
-      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
-        try {
-          portData = await window.PORTFOLIO_DB.getData();
-        } catch (sErr) {
-          console.warn("Supabase fetch fallback:", sErr);
-        }
-      }
-
-      // 2. Fall back to local server if Supabase didn't return data
-      if (!portData) {
-        const [setRes, portRes] = await Promise.all([
-          fetch('/api/settings').catch(() => null),
-          fetch('/api/portfolio').catch(() => null)
-        ]);
+      // 1. Always load settings (theme colors, hero status) if backend is running
+      try {
+        const setRes = await fetch('/api/settings').catch(() => null);
         if (setRes && setRes.ok) {
           const settings = await setRes.json();
-          if (settings.primaryColor) {
-            root.style.setProperty('--primary', settings.primaryColor);
-          }
-          if (settings.accentColor) {
-            root.style.setProperty('--amber', settings.accentColor);
-          }
+          if (settings.primaryColor) root.style.setProperty('--primary', settings.primaryColor);
+          if (settings.accentColor) root.style.setProperty('--amber', settings.accentColor);
           if (settings.heroStatus) {
             EN["hero.status"] = settings.heroStatus.en || EN["hero.status"];
             if (window.I18N_AR) window.I18N_AR["hero.status"] = settings.heroStatus.ar || window.I18N_AR["hero.status"];
@@ -553,9 +535,51 @@
             if (el) el.textContent = lang === 'ar' ? window.I18N_AR["hero.status"] : EN["hero.status"];
           }
         }
-        if (portRes && portRes.ok) {
-          portData = await portRes.json();
+      } catch (e) {}
+
+      let cloudData = null;
+      let localData = null;
+
+      // 2. Fetch local API if available
+      try {
+        const portRes = await fetch('/api/portfolio').catch(() => null);
+        if (portRes && portRes.ok) localData = await portRes.json();
+      } catch (e) {}
+
+      // 3. Fetch live Supabase Cloud database
+      if (window.PORTFOLIO_DB && window.PORTFOLIO_DB.isReady()) {
+        try {
+          cloudData = await window.PORTFOLIO_DB.getData();
+        } catch (sErr) {
+          console.warn("Supabase fetch fallback:", sErr);
         }
+      }
+
+      // 4. Fallback to static data/portfolio.json if neither returned data
+      if (!localData && !cloudData) {
+        try {
+          const stRes = await fetch('data/portfolio.json').catch(() => null);
+          if (stRes && stRes.ok) localData = await stRes.json();
+        } catch (e) {}
+      }
+
+      // 5. Intelligent Merge: local changes (photos, projects) are preserved seamlessly
+      let portData = null;
+      if (localData && cloudData) {
+        const cloudTime = new Date(cloudData.updated_at || 0).getTime();
+        const localTime = new Date(localData.updated_at || 0).getTime();
+        const primary = cloudTime > localTime ? cloudData : localData;
+        const secondary = cloudTime > localTime ? localData : cloudData;
+        portData = {
+          ...secondary,
+          ...primary,
+          profile: {
+            ...(secondary.profile || {}),
+            ...(primary.profile || {})
+          }
+        };
+      } else {
+        portData = localData || cloudData;
       }
 
       if (portData) {

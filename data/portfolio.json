@@ -48,14 +48,13 @@
   },
   "sectionOrder": [
     "hero",
-    "stats",
     "stackStrip",
     "projects",
-    "activities",
     "experience",
-    "skills",
     "certs",
+    "skills",
     "about",
+    "activities",
     "contact"
   ],
   "scrapbookSettings": {
@@ -561,17 +560,6 @@
     "apps": "+4",
     "clean": "100%"
   },
-  "sectionOrder": [
-    "hero",
-    "stackStrip",
-    "projects",
-    "experience",
-    "certs",
-    "skills",
-    "about",
-    "activities",
-    "contact"
-  ],
   "activities": [
     {
       "id": "act-ieee",

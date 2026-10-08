@@ -53,18 +53,19 @@
           ambientGlow: true
         };
 
+        const scr = data.scrapbook_settings || {};
         return {
           profile: profile,
           facts: facts,
           motionSettings: motionSettings,
           sectionVisibility: data.section_visibility || {},
-          sectionOrder: data.section_order || [],
-          scrapbookSettings: data.scrapbook_settings || {},
+          sectionOrder: scr.section_order || data.section_order || [],
+          scrapbookSettings: scr,
           projects: data.projects || [],
           skills: data.skills || [],
           certs: data.certs || [],
           experience: data.experience || [],
-          activities: data.activities || []
+          activities: scr.activities || data.activities || []
         };
       } catch (err) {
         console.warn("Supabase fetch failed, using local offline-first fallback:", err);
@@ -108,16 +109,16 @@
           motion: motion
         },
         section_visibility: fullData.sectionVisibility || {},
-        section_order: fullData.sectionOrder || [],
         scrapbook_settings: {
           ...(fullData.scrapbookSettings || {}),
+          section_order: fullData.sectionOrder || [],
+          activities: fullData.activities || [],
           motion: motion
         },
         projects: fullData.projects || [],
         skills: fullData.skills || [],
         certs: fullData.certs || [],
         experience: fullData.experience || [],
-        activities: fullData.activities || [],
         updated_at: new Date().toISOString()
       };
 
