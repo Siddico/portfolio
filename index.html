@@ -13,29 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20261007">
-<style>
-  .admin-badge-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.35rem 0.85rem;
-    border-radius: 999px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-decoration: none;
-    color: var(--primary);
-    background: var(--soft);
-    border: 1.5px solid color-mix(in srgb, var(--primary) 22%, transparent);
-    transition: all 0.2s ease;
-  }
-  .admin-badge-btn:hover {
-    background: var(--primary);
-    color: var(--on-primary);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(47, 91, 234, 0.25);
-  }
-</style>
+<link rel="stylesheet" href="assets/css/main.css?v=20261008">
 </head>
 <body>
 
@@ -50,6 +28,7 @@
       <a href="#experience" data-i18n="nav.experience">Experience</a>
       <a href="#skills" data-i18n="nav.skills">Skills</a>
       <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#activities" data-i18n="nav.activities">Activities</a>
       <a href="#contact" data-i18n="nav.contact">Contact</a>
     </nav>
     <div class="nav__actions">
@@ -200,7 +179,7 @@
 <section class="section" id="about">
   <div class="container about">
     <figure class="about__photo">
-      <div class="about__pic"><img class="about__img" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq" loading="lazy" width="433" height="577"></div>
+      <div class="about__pic"><img class="about__img" id="aboutPhoto" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq" loading="lazy" width="433" height="577"></div>
       <figcaption class="about__cap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.4"/></svg><span data-i18n="about.cap">Cairo, Egypt</span></figcaption>
     </figure>
     <div class="about__copy">
@@ -213,6 +192,18 @@
   </div>
 </section>
 
+<!-- ============ ACTIVITIES & EVENTS ============ -->
+<section class="section section-activities" id="activities">
+  <div class="container">
+    <header class="sec-head">
+      <span class="eyebrow" data-i18n="act.k">Activities & Community</span>
+      <h2 class="sec-title" data-i18n="act.title">Moments, Workshops & Community</h2>
+      <p class="sec-sub" data-i18n="act.sub">Workshops, hackathons, IEEE sessions, and community leadership in action.</p>
+    </header>
+  </div>
+  <div class="act-marquee-wrap" id="activitiesMarquee"></div>
+</section>
+
 <!-- ============ CONTACT ============ -->
 <section class="contact" id="contact">
   <div class="container contact__inner">
@@ -221,28 +212,41 @@
     <p class="sec-sub" data-i18n="contact.sub">Open to full-time Flutter roles, contract projects, and freelance inquiries. I usually reply within a few hours.</p>
     
     <div class="contact__grid">
-      <!-- Left: Direct Channels -->
-      <div class="contact__channels">
-        <div class="mailcard">
-          <a class="mailcard__mail" href="mailto:mohammedasiddiqdev@gmail.com" id="mailLink">mohammedasiddiqdev@gmail.com</a>
-          <button class="btn btn--primary" type="button" id="copyMail"><span data-i18n="contact.copy">Copy email</span></button>
+      <!-- Left: Direct Channels Card -->
+      <div class="contact__card contact__info-card">
+        <div class="contact__info-head">
+          <h3 data-i18n="contact.direct">Direct Channels</h3>
+          <p data-i18n="contact.directSub">Prefer direct communication? Reach out via email, instant WhatsApp chat, or explore my profiles.</p>
         </div>
 
-        <a class="whatsapp" href="https://wa.me/201227897361" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M8.6 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .5-.1.6l-.5.6c-.1.2-.1.4 0 .5a6.4 6.4 0 0 0 2.9 2.6c.2.1.4 0 .5-.1l.6-.7c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.2.4.4 0 .6-.3 1.4-1 1.8-.7.4-1.6.5-3.4-.3a9.2 9.2 0 0 1-4-3.7c-.8-1.3-.9-2.4-.2-3.6Z"/></svg>
-          <span><b>WhatsApp</b><span class="whatsapp__num">+20 122 789 7361</span></span>
-        </a>
+        <div class="contact__direct-group">
+          <div class="mailcard">
+            <a class="mailcard__mail" href="mailto:mohammedasiddiqdev@gmail.com" id="mailLink">mohammedasiddiqdev@gmail.com</a>
+            <button class="btn btn--primary" type="button" id="copyMail"><span data-i18n="contact.copy">Copy email</span></button>
+          </div>
 
-        <div class="contact__links">
-          <a class="btn btn--ghost" href="https://www.linkedin.com/in/mohammedsiddico/" target="_blank" rel="noopener">LinkedIn ↗</a>
-          <a class="btn btn--ghost" href="https://github.com/Siddico" target="_blank" rel="noopener">GitHub ↗</a>
-          <a class="btn btn--ghost" href="https://mohammed-siddiq.lovable.app" target="_blank" rel="noopener">Web Portfolio ↗</a>
-          <a class="btn btn--ghost" href="assets/Mohammed-Siddiq-CV.pdf" download="Mohammed-Siddiq-CV.pdf" data-cv data-i18n="contact.cv">Download CV</a>
+          <a class="whatsapp" href="https://wa.me/201227897361" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M8.6 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2 0 .5-.1.6l-.5.6c-.1.2-.1.4 0 .5a6.4 6.4 0 0 0 2.9 2.6c.2.1.4 0 .5-.1l.6-.7c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.2.4.4 0 .6-.3 1.4-1 1.8-.7.4-1.6.5-3.4-.3a9.2 9.2 0 0 1-4-3.7c-.8-1.3-.9-2.4-.2-3.6Z"/></svg>
+            <span><b>WhatsApp</b><span class="whatsapp__num">+20 122 789 7361</span></span>
+          </a>
+
+          <div class="contact__links-grid">
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/mohammedsiddico/" target="_blank" rel="noopener">LinkedIn ↗</a>
+            <a class="btn btn--ghost" href="https://github.com/Siddico" target="_blank" rel="noopener">GitHub ↗</a>
+            <a class="btn btn--ghost" href="https://siddico.github.io/portfolio/" target="_blank" rel="noopener">Web Portfolio ↗</a>
+            <a class="btn btn--ghost" href="assets/Mohammed-Siddiq-CV.pdf" download="Mohammed-Siddiq-CV.pdf" data-cv data-i18n="contact.cv">Download CV</a>
+          </div>
+        </div>
+
+        <div class="contact__badges">
+          <div class="contact__badge-item"><span style="color:#10B981; font-size:1.1rem; line-height:1;">●</span> <span data-i18n="contact.statusBadge">Available for new Flutter projects</span></div>
+          <div class="contact__badge-item"><span data-i18n="contact.responseBadge">⚡ Average response time: &lt; 2 hours</span></div>
+          <div class="contact__badge-item"><span data-i18n="contact.locBadge">📍 Cairo, Egypt · Remote Worldwide</span></div>
         </div>
       </div>
 
-      <!-- Right: Direct Message Form -->
-      <div class="contact__form-card">
+      <!-- Right: Direct Message Form Card -->
+      <div class="contact__card contact__form-card">
         <div class="contact__form-head">
           <h3 data-i18n="contact.form.title">Send a direct message</h3>
           <p data-i18n="contact.form.sub">Have a project, role, or idea in mind? Leave a message and it will be delivered directly to my inbox.</p>
@@ -271,13 +275,31 @@
 
   </div>
   <footer class="container foot">
-    <span>© 2026 Mohammed Siddiq</span>
+    <span id="footCopy" style="cursor: default;">© 2026 Mohammed Siddiq</span>
     <span data-i18n="foot.made">Software Engineer &amp; Flutter Developer. 3D interactive hero powered by WebGL.</span>
-    <a class="foot__admin" href="admin.html" title="Admin Portal" aria-label="Admin Portal">🔒 <span data-i18n="foot.admin">Portal</span></a>
   </footer>
 </section>
 
 </main>
+
+<!-- ============ ACTIVITY LIGHTBOX MODAL ============ -->
+<div class="act-modal" id="actModal" role="dialog" aria-modal="true" hidden>
+  <div class="act-modal__backdrop" data-close></div>
+  <div class="act-modal__panel">
+    <div class="act-modal__header">
+      <img id="actModalImg" src="" alt="Activity photo">
+      <button class="act-modal__close" type="button" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="act-modal__body">
+      <div class="act-modal__meta">
+        <span class="act-modal__badge" id="actModalTag">Event</span>
+        <span class="act-modal__date" id="actModalDate">2026</span>
+      </div>
+      <h3 class="act-modal__title" id="actModalTitle">Title</h3>
+      <p class="act-modal__desc" id="actModalDesc">Description</p>
+    </div>
+  </div>
+</div>
 
 <!-- ============ HOT RELOAD (press r) ============ -->
 <div class="hr" id="hotReload">
@@ -318,6 +340,7 @@
 <script src="assets/js/supabase.js?v=20261007"></script>
 <script src="assets/js/main.js?v=20261007"></script>
 <script src="assets/js/moods.js?v=20261007"></script>
+<script src="assets/js/siddiq-bot.js?v=20261008c"></script>
 
 <script>
   // Handle contact form submissions with Cloud Supabase & Local Fallback
@@ -370,6 +393,28 @@
       sendBtn.innerHTML = `<span>${isAr ? 'إرسال الرسالة الآن' : 'Send Message'}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>`;
     });
   }
+
+  // Secret admin access (No public buttons or dashboard links)
+  let copyClicks = 0;
+  let clickTimer = null;
+  const footCopy = document.getElementById('footCopy');
+  if (footCopy) {
+    footCopy.addEventListener('click', () => {
+      copyClicks++;
+      clearTimeout(clickTimer);
+      if (copyClicks >= 5) {
+        copyClicks = 0;
+        window.open('admin.html', '_blank');
+      } else {
+        clickTimer = setTimeout(() => { copyClicks = 0; }, 2000);
+      }
+    });
+  }
+  window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.altKey && (e.key === 'a' || e.key === 'A' || e.key === 'ش')) {
+      window.open('admin.html', '_blank');
+    }
+  });
 </script>
 </body>
 </html>

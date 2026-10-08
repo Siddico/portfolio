@@ -592,6 +592,10 @@
       <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
       <span data-k="tab.certs">الشهادات والكورسات</span>
     </button>
+    <button class="tab-btn" data-tab="activities">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span data-k="tab.activities">الفعاليات والأنشطة</span>
+    </button>
     <button class="tab-btn" data-tab="visibility">
       <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
       <span data-k="tab.visibility">طريقة العرض والتنسيق</span>
@@ -607,6 +611,10 @@
     <button class="tab-btn" data-tab="messages">
       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
       <span data-k="tab.messages">رسائل التواصل</span>
+    </button>
+    <button class="tab-btn" data-tab="aibot">
+      <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2v1h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4V4a2 2 0 0 1 2-2z"></path><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><path d="M9 16h6"></path></svg>
+      <span data-k="tab.aibot">محادثات الـ AI Bot</span>
     </button>
   </aside>
 
@@ -634,6 +642,10 @@
         <div class="stat-card">
           <span data-k="ov.stat4">رسائل التواصل الواردة</span>
           <b id="ovInboxCount">0</b>
+        </div>
+        <div class="stat-card">
+          <span>أسئلة الـ AI Bot</span>
+          <b id="ovAiChatsCount">0</b>
         </div>
       </div>
 
@@ -750,11 +762,48 @@
       </div>
     </section>
 
+    <!-- 4b. Activities Tab -->
+    <section class="tab-pane" id="pane-activities">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="act.head">الفعاليات والأنشطة (Activities & Events)</h2>
+          <p style="color: var(--muted); font-size: .95rem;" data-k="act.sub">إدارة معرض صور الفعاليات، ورش عمل IEEE، والهاكاثونات المعروضة في شريط العرض العكسي.</p>
+        </div>
+        <button class="btn btn--primary" onclick="openAddActivityModal()" type="button">
+          <span>+</span> <span data-k="act.addBtn">إضافة فعالية جديدة</span>
+        </button>
+      </div>
+
+      <div id="activitiesListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px;">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
     <!-- 5. Visibility Controls Tab (CRITICAL) -->
     <section class="tab-pane" id="pane-visibility">
       <div style="margin-bottom: 24px;">
-        <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="vis.head">التحكم في طريقة العرض والتنسيق</h2>
-        <p style="color: var(--muted); font-size: .95rem;" data-k="vis.sub">تحكم منفصل في ما يظهر في البورتفوليو الرئيسي وما يظهر عند تفعيل الـ Hot Reload.</p>
+        <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="vis.head">التحكم في طريقة العرض والترتيب</h2>
+        <p style="color: var(--muted); font-size: .95rem;" data-k="vis.sub">تحكم كامل في ترتيب أقسام البورتفوليو، وما يظهر في الصفحة الرئيسية ونمط الـ Hot Reload.</p>
+      </div>
+
+      <!-- Section Order Control (ترتيب سكاشن البورتفوليو بدقة) -->
+      <div class="card" style="margin-bottom: 24px; border: 1.5px solid color-mix(in srgb, var(--primary) 30%, var(--line));">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5rem;">↕️</span>
+            <div>
+              <h3 style="font-size: 1.25rem; font-weight: 800;">ترتيب سكاشن البورتفوليو (Section Order Manager)</h3>
+              <p style="color: var(--muted); font-size: .84rem;">استخدم أزرار الأسهم (↑ أو ↓) لترتيب سكاشن الموقع بسهولة واحترافية بدون أي أخطاء.</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn--ghost btn--sm" onclick="resetSectionOrder()">إعادة الترتيب للافتراضي</button>
+            <button type="button" class="btn btn--primary btn--sm" onclick="saveSectionOrder()">حفظ ترتيب السكاشن ✓</button>
+          </div>
+        </div>
+        <div id="sectionOrderList" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Rendered dynamically -->
+        </div>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px;">
@@ -961,26 +1010,89 @@
       <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 16px;" data-k="prof.head">البيانات الشخصية وروابط التواصل</h2>
       <div class="card" style="max-width: 720px;">
         <form id="profileForm">
-          <!-- Profile Photo Uploader -->
-          <div class="field" style="margin-bottom: 24px;">
-            <label>الصورة الشخصية للبورتفوليو (Profile Photo)</label>
-            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 18px; background: var(--tint); border-radius: 18px; border: 1.5px solid var(--line);">
-              <img id="profPhotoPreview" src="assets/img/me/mohammed-siddiq.png" alt="Profile" style="width: 84px; height: 84px; border-radius: 20px; object-fit: cover; object-position: top; border: 2.5px solid var(--primary); box-shadow: 0 6px 18px rgba(47,91,234,.25); background: #fff;">
-              <div style="flex: 1; min-width: 200px;">
-                <h4 style="font-size: 1rem; font-weight: 800; color: var(--ink); margin-bottom: 4px;">تحديث صورتك الشخصية</h4>
-                <p style="font-size: .83rem; color: var(--muted); margin-bottom: 12px;">اختر صورة من هاتفك أو جهازك، وسيتم ضغطها وتحديثها فوراً عبر الموقع بأكمله وقاعدة البيانات.</p>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                  <input type="file" id="profPhotoUpload" accept="image/*" style="display: none;">
-                  <button type="button" class="btn btn--primary btn--sm" onclick="$('#profPhotoUpload').click()">
-                    📁 رفع صورة جديدة من جهازك
-                  </button>
-                  <button type="button" class="btn btn--ghost btn--sm" onclick="resetProfilePhoto()">
-                    إعادة تعيين للأصلية ✕
-                  </button>
-                </div>
+          <!-- Multiple Photos Management Section (التحكم في صور البورتفوليو المستقلة) -->
+          <div style="margin-bottom: 28px; background: var(--tint); border-radius: 20px; border: 1.5px solid var(--line); padding: 20px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--ink);">📸 إدارة وتخصيص صور البورتفوليو المستقلة</h3>
+                <p style="font-size: .83rem; color: var(--muted); margin-top: 2px;">تحكّم بشكل مستقل تماماً في صورة البداية (Hero) وصورة قسم من أنا (About) وصورة المساعد الذكي (AI Bot).</p>
               </div>
             </div>
-            <input type="hidden" id="profCustomPhoto">
+
+            <!-- 1. Hero Photo (صورة البداية) -->
+            <div style="background: #fff; border-radius: 16px; padding: 16px; border: 1px solid var(--line); margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                <img id="profPhotoPreview" src="assets/img/me/mohammed-siddiq.png" alt="Hero Photo" style="width: 76px; height: 76px; border-radius: 16px; object-fit: cover; object-position: top; border: 2.5px solid var(--primary); box-shadow: 0 6px 16px rgba(47,91,234,.2); background: #f8fafc;">
+                <div style="flex: 1; min-width: 220px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: .98rem; font-weight: 800; color: var(--ink);">🚀 صورة البداية (Hero Section Photo)</h4>
+                    <span style="font-size: .7rem; font-weight: 800; background: rgba(47,91,234,0.12); color: var(--primary); padding: 2px 8px; border-radius: 99px;">قسم الهيرو الرئيسي</span>
+                  </div>
+                  <p style="font-size: .8rem; color: var(--muted); margin-bottom: 8px;">تظهر في أعلى الموقع مع المجسم التفاعلي 3D.</p>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    <input type="file" id="profPhotoUpload" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn--primary btn--sm" onclick="$('#profPhotoUpload').click()">
+                      📁 رفع صورة الهيرو
+                    </button>
+                    <button type="button" class="btn btn--ghost btn--sm" onclick="resetProfilePhoto()">
+                      استعادة الأصلية ✕
+                    </button>
+                    <input type="text" id="profPhotoUrl" placeholder="أو رابط صورة مباشر (URL)..." style="flex: 1; min-width: 170px; padding: 6px 10px; font-size: .8rem; border-radius: 8px; border: 1px solid var(--line); direction: ltr;">
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="profCustomPhoto">
+            </div>
+
+            <!-- 2. About Photo (صورة قسم من أنا) -->
+            <div style="background: #fff; border-radius: 16px; padding: 16px; border: 1px solid var(--line); margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                <img id="profAboutPhotoPreview" src="assets/img/me/mohammed-siddiq.png" alt="About Photo" style="width: 76px; height: 76px; border-radius: 16px; object-fit: cover; object-position: top; border: 2.5px solid #10B981; box-shadow: 0 6px 16px rgba(16,185,129,.2); background: #f8fafc;">
+                <div style="flex: 1; min-width: 220px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: .98rem; font-weight: 800; color: var(--ink);">👤 صورة قسم "من أنا" (About Me Photo)</h4>
+                    <span style="font-size: .7rem; font-weight: 800; background: rgba(16,185,129,0.12); color: #059669; padding: 2px 8px; border-radius: 99px;">قسم About المستقل</span>
+                  </div>
+                  <p style="font-size: .8rem; color: var(--muted); margin-bottom: 8px;">تظهر بشكل منفصل ومستقل داخل قسم (About / عني) في وسط البورتفوليو.</p>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    <input type="file" id="profAboutPhotoUpload" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn--primary btn--sm" style="background:#10B981; border-color:#10B981;" onclick="$('#profAboutPhotoUpload').click()">
+                      📁 رفع صورة قسم من أنا
+                    </button>
+                    <button type="button" class="btn btn--ghost btn--sm" onclick="resetAboutPhoto()">
+                      استعادة الأصلية ✕
+                    </button>
+                    <input type="text" id="profAboutPhotoUrl" placeholder="أو رابط صورة مباشر (URL)..." style="flex: 1; min-width: 170px; padding: 6px 10px; font-size: .8rem; border-radius: 8px; border: 1px solid var(--line); direction: ltr;">
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="profCustomAboutPhoto">
+            </div>
+
+            <!-- 3. Bot Photo (صورة المساعد الذكي) -->
+            <div style="background: #fff; border-radius: 16px; padding: 16px; border: 1px solid var(--line); box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
+              <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                <img id="profBotPhotoPreview" src="assets/img/me/mohammed-siddiq.png" alt="Bot Photo" style="width: 76px; height: 76px; border-radius: 16px; object-fit: cover; object-position: top; border: 2.5px solid #8B5CF6; box-shadow: 0 6px 16px rgba(139,92,246,.2); background: #f8fafc;">
+                <div style="flex: 1; min-width: 220px;">
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <h4 style="font-size: .98rem; font-weight: 800; color: var(--ink);">🤖 صورة المساعد الذكي (AI Chatbot Avatar)</h4>
+                    <span style="font-size: .7rem; font-weight: 800; background: rgba(139,92,246,0.12); color: #7C3AED; padding: 2px 8px; border-radius: 99px;">أيقونة الشات بوت</span>
+                  </div>
+                  <p style="font-size: .8rem; color: var(--muted); margin-bottom: 8px;">تظهر كأيقونة لشخصية المساعد في الزر العائم وداخل نافذة المحادثة الذكية.</p>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                    <input type="file" id="profBotPhotoUpload" accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn--primary btn--sm" style="background:#8B5CF6; border-color:#8B5CF6;" onclick="$('#profBotPhotoUpload').click()">
+                      📁 رفع صورة المساعد
+                    </button>
+                    <button type="button" class="btn btn--ghost btn--sm" onclick="resetBotPhoto()">
+                      استعادة الأصلية ✕
+                    </button>
+                    <input type="text" id="profBotPhotoUrl" placeholder="أو رابط صورة مباشر (URL)..." style="flex: 1; min-width: 170px; padding: 6px 10px; font-size: .8rem; border-radius: 8px; border: 1px solid var(--line); direction: ltr;">
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" id="profCustomBotPhoto">
+            </div>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
@@ -1042,6 +1154,23 @@
         </div>
       </div>
       <div id="messagesListContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- 9. AI Bot Conversations & History Tab -->
+    <section class="tab-pane" id="pane-aibot">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h2 style="font-size: 1.6rem; font-weight: 800;" data-k="ai.head">سجل محادثات وأسئلة المساعد الذكي (AI Bot History)</h2>
+          <p style="color: var(--muted); font-size: .9rem;" data-k="ai.sub">استعراض وتحليل كافة الأسئلة التي طرحها الزوار والردود المولدّة لحظياً والمخزنة بالداتابيز.</p>
+        </div>
+        <button class="btn btn--ghost btn--sm" onclick="loadAIChatsData()" type="button">
+          🔄 تحديث السجل الآن
+        </button>
+      </div>
+
+      <div id="aiChatsListContainer">
         <!-- Rendered dynamically -->
       </div>
     </section>
@@ -1119,33 +1248,43 @@
         <textarea id="fPointsEn" dir="ltr" placeholder="Integrated multiple AI services...\nReal-time patient-doctor connectivity..."></textarea>
       </div>
 
-      <!-- Mockup & Screenshot Upload Section -->
+      <!-- Mockup & Multiple Screenshots Section -->
       <div class="field" style="margin-bottom: 20px;">
-        <label>لقطة شاشة التطبيق / موكاب الموبايل (Screen Mockup)</label>
+        <label>📱 صور ولقطات شاشة التطبيق المتعددة (Project Screenshots Carousel)</label>
+        <p style="font-size: .82rem; color: var(--muted); margin-bottom: 10px;">
+          أضف صورة أو عدة صور للمشروع ليتم تقليبها تلقائياً وبالأزرار في سلايدر جذاب داخل البورتفوليو.
+        </p>
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
-          <input type="file" id="fProjUpload" accept="image/*" style="display: none;">
-          <button type="button" class="btn btn--primary btn--sm" onclick="$('#fProjUpload').click()">
-            📱 رفع لقطة شاشة من جهازك
+          <input type="file" id="fProjUploadMulti" accept="image/*" multiple style="display: none;">
+          <button type="button" class="btn btn--primary btn--sm" onclick="$('#fProjUploadMulti').click()">
+            📁 رفع صور من جهازك (يدعم تحديد عدة صور معاً)
           </button>
-          <span style="font-size: .8rem; color: var(--muted);">أو اختر شاشة جاهزة:</span>
-          <select id="fProjPresetSelect" style="max-width: 200px; padding: 7px 10px; border-radius: 8px;" onchange="applyProjPreset(this.value)">
-            <option value="">-- شاشة مخصصة --</option>
-            <option value="brainguard-home">BrainGuard (AI Stroke)</option>
+          <span style="font-size: .8rem; color: var(--muted);">أو شاشة جاهزة:</span>
+          <select id="fProjPresetSelectMulti" style="max-width: 220px; padding: 7px 10px; border-radius: 8px;">
+            <option value="">-- اختر شاشة لإضافتها --</option>
+            <option value="brainguard-home">BrainGuard (Home Screen)</option>
+            <option value="brainguard-ai">BrainGuard (AI Analysis)</option>
             <option value="biscofa-home">Biscofa (Coffee & Bakery)</option>
+            <option value="biscofa-admin">Biscofa (Admin Dashboard)</option>
             <option value="alhayah-home">Al Hayah Hospital</option>
-            <option value="eventtime-home">Event Time (Tickets)</option>
+            <option value="event-home">Event Time</option>
           </select>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="addSelectedPresetScreen()">+ إضافة للقائمة</button>
         </div>
 
-        <div id="fProjImgPreviewBox" style="display: none; align-items: center; gap: 14px; padding: 12px; background: var(--tint); border-radius: 14px; border: 1px solid var(--line);">
-          <img id="fProjImgPreview" src="" style="width: 52px; height: 95px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background:#000;" alt="Mockup Preview">
-          <div style="flex: 1;">
-            <div style="font-size: .88rem; font-weight: 700; color: var(--ink);" id="fProjImgName">صورة الشاشة محددة</div>
-            <div style="font-size: .78rem; color: #10B981; margin-top: 2px;">سيتم عرضها مباشرة داخل فريم الموبايل ثلاثي الأبعاد ✓</div>
-          </div>
-          <button type="button" class="btn btn--ghost btn--sm" onclick="removeProjCustomImage()">إزالة ✕</button>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+          <input type="text" id="fProjCustomUrlInput" placeholder="أو أدخل رابط صورة مباشر (https://... أو assets/img/...)" dir="ltr" style="flex:1; padding:7px 12px; font-size:.85rem; border-radius:8px; border:1px solid var(--line);">
+          <button type="button" class="btn btn--ghost btn--sm" onclick="addCustomUrlProjectScreen()">+ إضافة الرابط</button>
         </div>
-        <input type="hidden" id="fProjCustomImage">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: .82rem; font-weight: 700; color: var(--ink);" id="fProjScreensCountBadge">معاينة صور السلايدر (0 صور):</span>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="clearAllProjectScreens()" style="color: #EF4444; font-size: .75rem; padding: 2px 8px;">مسح جميع الصور</button>
+        </div>
+
+        <div id="fProjScreensContainer" style="display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; background: var(--tint); border-radius: 14px; border: 1.5px solid var(--line); min-height: 80px;">
+          <!-- Thumbnails of all project screens -->
+        </div>
       </div>
 
       <div class="field">
@@ -1251,11 +1390,109 @@
   </div>
 </div>
 
+<!-- Activity Modal -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 style="font-size: 1.3rem; font-weight: 800;" id="actModalHeaderTitle">إضافة فعالية جديدة</h3>
+      <button class="btn btn--ghost btn--sm" onclick="closeActivityModal()" type="button">✕</button>
+    </div>
+    <form id="activityForm">
+      <input type="hidden" id="editActId">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>عنوان الفعالية (بالعربية)</label>
+          <input type="text" id="actTitleAr" dir="rtl" placeholder="ورشة عمل IEEE Flutter المتخصصة" required>
+        </div>
+        <div class="field">
+          <label>عنوان الفعالية (بالإنجليزية)</label>
+          <input type="text" id="actTitleEn" dir="ltr" placeholder="IEEE Flutter Workshop & Mentorship" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>الشارة / التصنيف (Tag)</label>
+          <input type="text" id="actTag" placeholder="IEEE Student Branch / Workshop" required>
+        </div>
+        <div class="field">
+          <label>التاريخ / السنة (Date)</label>
+          <input type="text" id="actDate" placeholder="2025 – 2026" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="field">
+          <label>وصف فرعي (بالعربية)</label>
+          <input type="text" id="actSubAr" dir="rtl" placeholder="معمارية Clean Architecture وإدارة الحالة بـ BLoC">
+        </div>
+        <div class="field">
+          <label>وصف فرعي (بالإنجليزية)</label>
+          <input type="text" id="actSubEn" dir="ltr" placeholder="Clean Architecture & BLoC Deep Dive">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>الوصف والتفاصيل الكاملة (بالعربية)</label>
+        <textarea id="actDescAr" dir="rtl" placeholder="قيادة ورش عمل وتدريب الطلاب على بناء تطبيقات فلاتر إنتاجية..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>الوصف والتفاصيل الكاملة (بالإنجليزية)</label>
+        <textarea id="actDescEn" dir="ltr" placeholder="Led hands-on workshops mentoring developers in clean architecture..."></textarea>
+      </div>
+
+      <!-- Activity Photo Upload Section -->
+      <div class="field" style="margin-bottom: 18px;">
+        <label>صورة أو بوستر الفعالية (Activity Photo / Banner)</label>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <input type="file" id="fActUpload" accept="image/*" style="display: none;">
+          <button type="button" class="btn btn--primary btn--sm" onclick="$('#fActUpload').click()">
+            📸 رفع صورة الفعالية من جهازك
+          </button>
+          <span style="font-size: .8rem; color: var(--muted);">أو بوستر جاهز:</span>
+          <select id="fActPresetSelect" style="max-width: 220px; padding: 7px 10px; border-radius: 8px;" onchange="applyActPreset(this.value)">
+            <option value="">-- اختر صورة جاهزة --</option>
+            <option value="assets/img/activities/activity-ieee.svg">IEEE Workshop</option>
+            <option value="assets/img/activities/activity-codeavour.svg">Codeavour AI 2026</option>
+            <option value="assets/img/activities/activity-depi.svg">DEPI IBM Summit</option>
+            <option value="assets/img/activities/activity-nti.svg">NTI Bootcamp</option>
+            <option value="assets/img/activities/activity-brainguard.svg">BrainGuard Expo</option>
+            <option value="assets/img/activities/activity-cleanarch.svg">Architecture Masterclass</option>
+            <option value="assets/img/activities/activity-gdsc.svg">GDSC Tech Talk</option>
+            <option value="assets/img/activities/activity-hackathon.svg">Innovation Hackathon</option>
+          </select>
+        </div>
+        <div id="fActImgPreviewBox" style="display: none; align-items: center; gap: 14px; padding: 10px 14px; background: var(--tint); border-radius: 12px; border: 1px solid var(--line); margin-top: 10px;">
+          <img id="fActImgPreview" src="" style="width: 70px; height: 42px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background:#0E1B2C;" alt="Preview">
+          <div style="flex: 1;">
+            <div style="font-size: .85rem; font-weight: 700; color: var(--ink);">تم تحديد صورة الفعالية</div>
+            <div style="font-size: .76rem; color: #10B981;">ستظهر مباشرة في شريط الفعاليات العكسي بالبورتفوليو ✓</div>
+          </div>
+          <button type="button" class="btn btn--ghost btn--sm" onclick="removeActCustomImage()">إزالة ✕</button>
+        </div>
+        <input type="hidden" id="fActCustomImage">
+      </div>
+
+      <div class="field" style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" id="actVisible" checked style="width: 20px; height: 20px;">
+        <label for="actVisible" style="margin: 0; cursor: pointer;">إظهار هذه الفعالية في شريط العرض بالبورتفوليو</label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button type="button" class="btn btn--ghost" onclick="closeActivityModal()">إلغاء</button>
+        <button type="submit" class="btn btn--primary" id="saveActModalBtn">حفظ الفعالية ✓</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="toast" id="adminToast">تم الحفظ بنجاح</div>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/mockups.js"></script>
+<script src="assets/js/projects.js?v=20261008"></script>
 <script src="assets/js/supabase.js?v=20261007"></script>
 <script>
   const $ = (s, el = document) => el.querySelector(s);
@@ -1279,10 +1516,12 @@
       "tab.projects": "المشاريع والتطبيقات",
       "tab.skills": "المهارات والتقنيات",
       "tab.certs": "الشهادات والكورسات",
-      "tab.visibility": "طريقة العرض والتنسيق",
+      "tab.activities": "الفعاليات والأنشطة",
+      "tab.visibility": "طريقة العرض والترتيب",
       "tab.design": "الألوان والثيم",
       "tab.profile": "البيانات الشخصية",
       "tab.messages": "رسائل التواصل",
+      "tab.aibot": "محادثات الـ AI Bot",
       "ov.head": "لوحة التحكم وإدارة المحتوى",
       "ov.sub": "تحكم كامل بكل ما يظهر في البورتفوليو ونمط الـ Hot Reload والرسائل.",
       "ov.stat1": "إجمالي المشاريع",
@@ -1294,6 +1533,9 @@
       "proj.head": "إدارة المشاريع والتطبيقات",
       "proj.sub": "إضافة وتعديل المشاريع والتحكم في ظهورها في الموقع الرئيسي والـ Hot Reload.",
       "proj.addBtn": "إضافة مشروع جديد",
+      "act.head": "الفعاليات والأنشطة (Activities & Events)",
+      "act.sub": "إدارة معرض صور الفعاليات، ورش عمل IEEE، والهاكاثونات المعروضة في شريط العرض العكسي.",
+      "act.addBtn": "إضافة فعالية جديدة",
       "skills.head": "المهارات والتقنيات (Tech Stack)",
       "skills.sub": "التحكم في مجموعات المهارات التي تظهر في شريط التقنيات وقسم المهارات وكروت الـ Sticky Notes.",
       "certs.head": "الشهادات والكورسات (Certifications)",
@@ -1319,6 +1561,8 @@
       "prof.saveBtn": "حفظ وتحديث البيانات الشخصية ✓",
       "msg.head": "صندوق رسائل التواصل",
       "msg.sub": "الرسائل الواردة مباشرة من نموذج الاتصال في البورتفوليو.",
+      "ai.head": "سجل محادثات وأسئلة المساعد الذكي (AI Bot History)",
+      "ai.sub": "استعراض وتحليل كافة الأسئلة التي طرحها الزوار والردود المولدّة لحظياً والمخزنة بالداتابيز.",
       "viewSite": "معاينة الموقع الحقيقي",
       "logout": "تسجيل الخروج"
     },
@@ -1333,10 +1577,12 @@
       "tab.projects": "Projects & Apps",
       "tab.skills": "Skills & Stack",
       "tab.certs": "Certificates & Courses",
-      "tab.visibility": "Display & Visibility",
+      "tab.activities": "Activities & Events",
+      "tab.visibility": "Display & Order",
       "tab.design": "Theme & Colors",
       "tab.profile": "Profile & Bio",
       "tab.messages": "Inquiries Inbox",
+      "tab.aibot": "AI Bot Inquiries",
       "ov.head": "Dashboard & Content Manager",
       "ov.sub": "Complete control over your live portfolio, Hot Reload Scrapbook, and inquiries.",
       "ov.stat1": "Total Projects",
@@ -1348,6 +1594,9 @@
       "proj.head": "Projects & Mobile Applications",
       "proj.sub": "Add, edit, or toggle visibility of your showcase projects.",
       "proj.addBtn": "Add New Project",
+      "act.head": "Activities & Events Showcase",
+      "act.sub": "Manage event banners, IEEE workshops, and hackathons in the dual marquee.",
+      "act.addBtn": "Add New Activity",
       "skills.head": "Skills & Tech Stack",
       "skills.sub": "Manage technical competencies for ticker, skills grid, and scrapbook sticky notes.",
       "certs.head": "Certifications & Courses",
@@ -1373,6 +1622,8 @@
       "prof.saveBtn": "Save Profile Details ✓",
       "msg.head": "Inquiries Inbox",
       "msg.sub": "Messages received directly from your portfolio contact form.",
+      "ai.head": "AI Bot Conversations & Inquiries History",
+      "ai.sub": "Real-time records of questions asked by visitors and AI responses stored in database.",
       "viewSite": "Preview Live Site",
       "logout": "Log Out"
     }
@@ -1471,10 +1722,21 @@
       // Local server unreachable (e.g., hosted on GitHub Pages or static)
     }
 
-    // 2. Client-side static / cloud auth fallback
-    if (!loggedIn && password === 'siddiq2026') {
-      token = 'ms_session_' + Date.now();
-      loggedIn = true;
+    // 2. Client-side static / cloud auth fallback (Crypto SHA-256 Hash Verification)
+    if (!loggedIn) {
+      try {
+        const msgUint8 = new TextEncoder().encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // SHA-256 hash: no plaintext password leaked in Inspect / DevTools
+        if (hashHex === '3f8f232e800e9da8d5af10b92de4e019d338941ac80ba64e57d3de1d7d49e4b6') {
+          token = 'ms_session_' + Date.now();
+          loggedIn = true;
+        }
+      } catch (cErr) {
+        console.error("Crypto auth error:", cErr);
+      }
     }
 
     if (loggedIn) {
@@ -1678,19 +1940,36 @@
         if (pr.linkedin) $('#profLinkedin').value = pr.linkedin;
         if (pr.summary) $('#profSummary').value = pr.summary;
 
-        if (pr.photo) {
-          if ($('#profPhotoPreview')) $('#profPhotoPreview').src = pr.photo;
-          if ($('#profCustomPhoto')) $('#profCustomPhoto').value = pr.photo;
-          $$('.login-avatar, .brand-group img').forEach(img => img.src = pr.photo);
-        }
+        const defaultMe = "assets/img/me/mohammed-siddiq.png";
+        // 1. Hero Photo (صورة البداية)
+        const heroPhoto = pr.photo || pr.heroPhoto || defaultMe;
+        if ($('#profPhotoPreview')) $('#profPhotoPreview').src = heroPhoto;
+        if ($('#profCustomPhoto')) $('#profCustomPhoto').value = heroPhoto;
+        if ($('#profPhotoUrl') && !heroPhoto.startsWith('data:')) $('#profPhotoUrl').value = heroPhoto;
+        $$('.login-avatar, .brand-group img').forEach(img => img.src = heroPhoto);
+
+        // 2. About Photo (صورة قسم من أنا)
+        const aboutPhoto = pr.aboutPhoto || heroPhoto;
+        if ($('#profAboutPhotoPreview')) $('#profAboutPhotoPreview').src = aboutPhoto;
+        if ($('#profCustomAboutPhoto')) $('#profCustomAboutPhoto').value = aboutPhoto;
+        if ($('#profAboutPhotoUrl') && !aboutPhoto.startsWith('data:')) $('#profAboutPhotoUrl').value = aboutPhoto;
+
+        // 3. Bot Photo (صورة المساعد الذكي)
+        const botPhoto = pr.botPhoto || heroPhoto;
+        if ($('#profBotPhotoPreview')) $('#profBotPhotoPreview').src = botPhoto;
+        if ($('#profCustomBotPhoto')) $('#profCustomBotPhoto').value = botPhoto;
+        if ($('#profBotPhotoUrl') && !botPhoto.startsWith('data:')) $('#profBotPhotoUrl').value = botPhoto;
       }
 
       // Render tab components
       renderProjectsList(portfolioData.projects || []);
       renderSkillsList(portfolioData.skills || []);
       renderCertsList(portfolioData.certs || []);
+      renderActivitiesList(portfolioData.activities || []);
+      renderSectionOrder(portfolioData.sectionOrder || []);
       renderVisibilityControls(portfolioData.sectionVisibility || {}, portfolioData.scrapbookSettings || {});
       renderMessagesList(messages);
+      loadAIChatsData();
 
       // Run silent database health diagnostic
       testDatabaseHealth(true);
@@ -1732,12 +2011,19 @@
       const name = p.name?.ar || p.name?.en || p.name;
       const tag = p.tag?.ar || p.tag?.en || p.tag || 'تطبيق فلاتر';
       const desc = p.desc?.ar || p.desc?.en || '';
+      const screensCount = (p.screens && Array.isArray(p.screens)) ? p.screens.length : 1;
+      const firstSrc = resolveAdminScreen((p.screens && p.screens[0]) || p.id + '-home');
       return `
-        <div class="item-row ${isVis ? '' : 'is-hidden'}">
+        <div class="item-row ${isVis ? '' : 'is-hidden'}" style="display: flex; gap: 16px; align-items: center;">
+          <div style="width: 48px; height: 82px; border-radius: 10px; overflow: hidden; background: #0E1B2C; border: 1.5px solid var(--line); flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.14); position: relative;">
+            <img src="${firstSrc}" style="width: 100%; height: 100%; object-fit: cover;" alt="${name}" onerror="this.onerror=null;this.src='assets/img/screens/brainguard-home.svg';">
+            <span style="position: absolute; bottom: 2px; left: 2px; right: 2px; background: rgba(14,27,44,0.85); color: #fff; font-size: .62rem; text-align: center; border-radius: 4px; font-weight: 800;">${screensCount} 📷</span>
+          </div>
           <div style="flex: 1; min-width: 0;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
               <h3 style="font-size: 1.15rem; font-weight: 800;">${name}</h3>
               <span class="item-badge">${tag}</span>
+              <span class="item-badge" style="background:var(--soft); color:var(--primary); font-size:.75rem;">${screensCount} لقطات شاشة 📱</span>
               <span class="status-pill ${isVis ? 'is-active' : 'is-off'}">${isVis ? 'ظاهر في الموقع' : 'مخفي'}</span>
             </div>
             <p style="font-size: .88rem; color: var(--muted); margin-top: 4px; max-width: 700px;">
@@ -1823,9 +2109,19 @@
               <p style="font-size: .85rem; color: var(--muted); margin-top: 2px;">
                 ${c.issuer} · ${c.date} ${c.credentialId ? `· ID: ${c.credentialId}` : ''}
               </p>
+              ${c.url && c.url !== '#' ? `
+                <a href="${c.url}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:4px; font-size:.78rem; color:var(--primary); font-weight:700; text-decoration:none; margin-top:3px;">
+                  🔗 رابط الاعتماد: <span style="direction:ltr; unicode-bidi:embed; max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${c.url}</span> ↗
+                </a>
+              ` : ''}
             </div>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap;">
+            ${c.url && c.url !== '#' ? `
+              <a href="${c.url}" target="_blank" rel="noopener" class="btn btn--ghost btn--sm" style="color:var(--primary);">
+                اختبار الرابط ↗
+              </a>
+            ` : ''}
             <button class="btn btn--ghost btn--sm" onclick="toggleCertVisibility('${c.id}')">
               ${isVis ? 'إخفاء 👁️' : 'إظهار 👁️'}
             </button>
@@ -1849,6 +2145,7 @@
       { key: "stats", label: "شريط الإحصائيات السريعة", desc: "+2 سنوات خبرة، +4 تطبيقات، 100% كود نظيف" },
       { key: "stackStrip", label: "شريط التقنيات المتحرك (Ticker)", desc: "الشريط المتحرك أسفل قسم البطل" },
       { key: "projects", label: "قسم المشاريع وتطبيقات الموبايل", desc: "كروت الموبايل التفاعلية (BrainGuard, Biscofa, Al Hayah, Event Time)" },
+      { key: "activities", label: "قسم الفعاليات والأنشطة (Events & Activities)", desc: "شريط الفعاليات والهاكاثونات المزدوج المتحرك بالاتجاهين العكسيين" },
       { key: "experience", label: "قسم الخبرة والمسار والتعليم", desc: "الجدول الزمني للخبرات العملية ومشاريع التخرج" },
       { key: "skills", label: "قسم المهارات والمكتبات", desc: "بطاقات المهارات الأربعة ومكتبات فلاتر" },
       { key: "certs", label: "قسم الشهادات والكورسات", desc: "بطاقات الشهادات المعتمدة وأرقام التوثيق" },
@@ -1959,68 +2256,258 @@
     syncAllPortfolio(currentLang === 'ar' ? 'تم تحديث إعدادات الـ Hot Reload!' : 'Hot Reload settings saved!');
   }
 
-  // Profile Photo Uploader Handlers
+  // ==========================================
+  // Multi-Photos Handlers (صور الهيرو، وقسم من أنا، والمساعد الذكي)
+  // ==========================================
+  const defaultMePhoto = "assets/img/me/mohammed-siddiq.png";
+
+  // 1. Hero Photo Handlers
   const profPhotoInput = $('#profPhotoUpload');
   if (profPhotoInput) {
     profPhotoInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
       try {
-        showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورتك الشخصية...' : 'Optimizing profile photo...');
+        showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة الهيرو...' : 'Optimizing hero photo...');
         const compressed = await compressImage(file, 900, 0.88);
         $('#profPhotoPreview').src = compressed;
         $('#profCustomPhoto').value = compressed;
+        if ($('#profPhotoUrl')) $('#profPhotoUrl').value = '';
         $$('.login-avatar, .brand-group img').forEach(img => img.src = compressed);
-        showToast(currentLang === 'ar' ? 'تم تجهيز الصورة بنجاح! اضغط "حفظ وتحديث البيانات الشخصية"' : 'Photo ready! Click Save Changes');
+        showToast(currentLang === 'ar' ? 'تم تجهيز صورة الهيرو! اضغط "حفظ وتحديث البيانات الشخصية"' : 'Hero photo ready! Click Save Changes');
       } catch (err) {
-        alert('خطأ في معالجة الصورة: ' + err.message);
+        alert('خطأ في معالجة صورة الهيرو: ' + err.message);
+      }
+    });
+  }
+
+  const profPhotoUrlInput = $('#profPhotoUrl');
+  if (profPhotoUrlInput) {
+    profPhotoUrlInput.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      if (url) {
+        $('#profPhotoPreview').src = url;
+        $('#profCustomPhoto').value = url;
+        $$('.login-avatar, .brand-group img').forEach(img => img.src = url);
       }
     });
   }
 
   function resetProfilePhoto() {
-    const defaultPhoto = "assets/img/me/mohammed-siddiq.png";
-    $('#profPhotoPreview').src = defaultPhoto;
-    $('#profCustomPhoto').value = defaultPhoto;
-    $$('.login-avatar, .brand-group img').forEach(img => img.src = defaultPhoto);
-    showToast(currentLang === 'ar' ? 'تمت استعادة الصورة الافتراضية' : 'Restored default photo');
+    $('#profPhotoPreview').src = defaultMePhoto;
+    $('#profCustomPhoto').value = defaultMePhoto;
+    if ($('#profPhotoUrl')) $('#profPhotoUrl').value = '';
+    $$('.login-avatar, .brand-group img').forEach(img => img.src = defaultMePhoto);
+    showToast(currentLang === 'ar' ? 'تمت استعادة صورة الهيرو الافتراضية' : 'Restored default hero photo');
   }
 
-  // Project Mockup Image Handlers
-  const fProjUploadInput = $('#fProjUpload');
-  if (fProjUploadInput) {
-    fProjUploadInput.addEventListener('change', async (e) => {
+  // 2. About Photo Handlers
+  const profAboutPhotoInput = $('#profAboutPhotoUpload');
+  if (profAboutPhotoInput) {
+    profAboutPhotoInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
       try {
-        showToast(currentLang === 'ar' ? 'جاري ضغط شاشة التطبيق...' : 'Optimizing screen mock...');
-        const compressed = await compressImage(file, 900, 0.85);
-        $('#fProjCustomImage').value = compressed;
-        $('#fProjImgPreview').src = compressed;
-        $('#fProjImgPreviewBox').style.display = 'flex';
-        if ($('#fProjPresetSelect')) $('#fProjPresetSelect').value = '';
-        showToast(currentLang === 'ar' ? 'تم تجهيز لقطة الشاشة للموبايل بنجاح ✓' : 'Screenshot ready ✓');
+        showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة قسم من أنا...' : 'Optimizing about photo...');
+        const compressed = await compressImage(file, 900, 0.88);
+        $('#profAboutPhotoPreview').src = compressed;
+        $('#profCustomAboutPhoto').value = compressed;
+        if ($('#profAboutPhotoUrl')) $('#profAboutPhotoUrl').value = '';
+        showToast(currentLang === 'ar' ? 'تم تجهيز صورة قسم من أنا! اضغط "حفظ وتحديث البيانات الشخصية"' : 'About photo ready! Click Save Changes');
       } catch (err) {
-        alert('خطأ في معالجة لقطة الشاشة: ' + err.message);
+        alert('خطأ في معالجة صورة قسم من أنا: ' + err.message);
       }
     });
   }
 
-  function applyProjPreset(key) {
-    if (!key) return;
-    $('#fProjCustomImage').value = key;
-    const resolved = (window.SCREENS && window.SCREENS[key]) || '';
-    if (resolved) {
-      $('#fProjImgPreview').src = resolved;
-      $('#fProjImgPreviewBox').style.display = 'flex';
+  const profAboutPhotoUrlInput = $('#profAboutPhotoUrl');
+  if (profAboutPhotoUrlInput) {
+    profAboutPhotoUrlInput.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      if (url) {
+        $('#profAboutPhotoPreview').src = url;
+        $('#profCustomAboutPhoto').value = url;
+      }
+    });
+  }
+
+  function resetAboutPhoto() {
+    $('#profAboutPhotoPreview').src = defaultMePhoto;
+    $('#profCustomAboutPhoto').value = defaultMePhoto;
+    if ($('#profAboutPhotoUrl')) $('#profAboutPhotoUrl').value = '';
+    showToast(currentLang === 'ar' ? 'تمت استعادة صورة قسم من أنا الافتراضية' : 'Restored default about photo');
+  }
+
+  // 3. Bot Photo Handlers
+  const profBotPhotoInput = $('#profBotPhotoUpload');
+  if (profBotPhotoInput) {
+    profBotPhotoInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة المساعد الذكي...' : 'Optimizing bot photo...');
+        const compressed = await compressImage(file, 600, 0.88);
+        $('#profBotPhotoPreview').src = compressed;
+        $('#profCustomBotPhoto').value = compressed;
+        if ($('#profBotPhotoUrl')) $('#profBotPhotoUrl').value = '';
+        showToast(currentLang === 'ar' ? 'تم تجهيز صورة المساعد! اضغط "حفظ وتحديث البيانات الشخصية"' : 'Bot photo ready! Click Save Changes');
+      } catch (err) {
+        alert('خطأ في معالجة صورة المساعد: ' + err.message);
+      }
+    });
+  }
+
+  const profBotPhotoUrlInput = $('#profBotPhotoUrl');
+  if (profBotPhotoUrlInput) {
+    profBotPhotoUrlInput.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      if (url) {
+        $('#profBotPhotoPreview').src = url;
+        $('#profCustomBotPhoto').value = url;
+      }
+    });
+  }
+
+  function resetBotPhoto() {
+    $('#profBotPhotoPreview').src = defaultMePhoto;
+    $('#profCustomBotPhoto').value = defaultMePhoto;
+    if ($('#profBotPhotoUrl')) $('#profBotPhotoUrl').value = '';
+    showToast(currentLang === 'ar' ? 'تمت استعادة صورة المساعد الافتراضية' : 'Restored default bot photo');
+  }
+
+  // Project Multi-Screens Management (السلايدر والتقليب المتعدد للصور)
+  let activeProjectScreens = [];
+
+  const DEFAULT_ADMIN_SCREENS = {
+    "brainguard-home": "assets/img/screens/brainguard-home.svg",
+    "brainguard-ai": "assets/img/screens/brainguard-ai.svg",
+    "biscofa-home": "assets/img/screens/biscofa-home.svg",
+    "biscofa-admin": "assets/img/screens/biscofa-admin.svg",
+    "alhayah-home": "assets/img/screens/alhayah-home.svg",
+    "event-home": "assets/img/screens/event-home.svg"
+  };
+
+  function resolveAdminScreen(src) {
+    if (!src) return "assets/img/screens/brainguard-home.svg";
+    if (src.startsWith('data:') || src.startsWith('http://') || src.startsWith('https://') || src.startsWith('assets/')) {
+      return src;
+    }
+    const map = window.SCREENS || DEFAULT_ADMIN_SCREENS;
+    return map[src] || `assets/img/screens/${src}.svg`;
+  }
+
+  function renderProjectScreensList() {
+    const container = $('#fProjScreensContainer');
+    const badge = $('#fProjScreensCountBadge');
+    if (badge) {
+      badge.textContent = currentLang === 'ar' 
+        ? `معاينة صور السلايدر (${activeProjectScreens.length} صور مضافة):` 
+        : `Screens Carousel Preview (${activeProjectScreens.length} screens added):`;
+    }
+    if (!container) return;
+    if (!activeProjectScreens.length) {
+      container.innerHTML = '<div style="color:var(--muted); font-size:.85rem; padding:15px; width:100%; text-align:center;">لم يتم تحديد صور بعد. ارفع صوراً من جهازك، أو الصق رابط صورة، أو اختر من القائمة الجاهزة أعلاه.</div>';
+      return;
+    }
+    container.innerHTML = activeProjectScreens.map((src, idx) => {
+      const resolvedSrc = resolveAdminScreen(src);
+      const isFirst = idx === 0;
+      const isLast = idx === activeProjectScreens.length - 1;
+      return `
+        <div style="position:relative; width:100px; height:160px; border-radius:12px; overflow:hidden; border:2.5px solid ${isFirst ? 'var(--primary)' : 'var(--line)'}; background:#0E1B2C; flex-shrink:0; box-shadow:0 6px 14px rgba(0,0,0,0.18); display:flex; flex-direction:column; justify-content:space-between;">
+          <img src="${resolvedSrc}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; cursor:pointer;" alt="Screen ${idx+1}" onclick="window.open('${resolvedSrc}', '_blank')" title="انقر لفتح الصورة بحجم كامل" onerror="this.onerror=null;this.src='assets/img/screens/brainguard-home.svg';">
+          
+          <!-- Top bar: Badge & Delete -->
+          <div style="position:relative; z-index:2; background:linear-gradient(to bottom, rgba(0,0,0,0.75), transparent); padding:5px 6px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:.65rem; background:${isFirst ? 'var(--primary)' : 'rgba(0,0,0,0.6)'}; color:#fff; padding:1px 5px; border-radius:4px; font-weight:800;">
+              ${isFirst ? 'الرئيسية ⭐' : '#' + (idx+1)}
+            </span>
+            <button type="button" onclick="removeProjectScreen(${idx})" style="background:rgba(239,68,68,0.85); border:none; color:#fff; font-size:.7rem; cursor:pointer; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; padding:0;" title="حذف هذه الصورة">✕</button>
+          </div>
+
+          <!-- Bottom bar: Move Left / Primary / Move Right -->
+          <div style="position:relative; z-index:2; background:rgba(0,0,0,0.78); backdrop-filter:blur(4px); padding:4px 6px; display:flex; justify-content:space-between; align-items:center;">
+            <button type="button" onclick="moveProjectScreen(${idx}, -1)" ${isFirst ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} style="background:none; border:none; color:#fff; font-size:.75rem; cursor:pointer; padding:2px;" title="تقديم (للأمام)">◀</button>
+            ${!isFirst ? `<button type="button" onclick="setProjectPrimaryScreen(${idx})" style="background:none; border:none; color:#F5A524; font-size:.75rem; cursor:pointer; padding:2px; font-weight:800;" title="تعيين كصورة رئيسية">⭐</button>` : '<span style="font-size:.6rem; color:#10B981; font-weight:800;">غلاف</span>'}
+            <button type="button" onclick="moveProjectScreen(${idx}, 1)" ${isLast ? 'disabled style="opacity:0.3; cursor:not-allowed;"' : ''} style="background:none; border:none; color:#fff; font-size:.75rem; cursor:pointer; padding:2px;" title="تأخير (للخلف)">▶</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function addSelectedPresetScreen() {
+    const sel = $('#fProjPresetSelectMulti');
+    if (!sel || !sel.value) return;
+    activeProjectScreens.push(sel.value);
+    sel.value = '';
+    renderProjectScreensList();
+    showToast(currentLang === 'ar' ? 'تمت إضافة الشاشة الجاهزة لقائمة صور المشروع ✓' : 'Screen added ✓');
+  }
+
+  function addCustomUrlProjectScreen() {
+    const input = $('#fProjCustomUrlInput');
+    if (!input) return;
+    const url = input.value.trim();
+    if (!url) {
+      alert(currentLang === 'ar' ? 'يرجى إدخال رابط صورة صحيح' : 'Please enter an image URL');
+      return;
+    }
+    activeProjectScreens.push(url);
+    input.value = '';
+    renderProjectScreensList();
+    showToast(currentLang === 'ar' ? 'تمت إضافة رابط الصورة بنجاح ✓' : 'Image URL added ✓');
+  }
+
+  function removeProjectScreen(idx) {
+    activeProjectScreens.splice(idx, 1);
+    renderProjectScreensList();
+  }
+
+  function clearAllProjectScreens() {
+    if (!activeProjectScreens.length) return;
+    if (confirm(currentLang === 'ar' ? 'هل تريد مسح جميع صور هذا المشروع؟' : 'Clear all screens for this project?')) {
+      activeProjectScreens = [];
+      renderProjectScreensList();
+      showToast(currentLang === 'ar' ? 'تم مسح الصور' : 'Screens cleared');
     }
   }
 
-  function removeProjCustomImage() {
-    $('#fProjCustomImage').value = '';
-    $('#fProjImgPreviewBox').style.display = 'none';
-    if ($('#fProjPresetSelect')) $('#fProjPresetSelect').value = '';
-    if ($('#fProjUpload')) $('#fProjUpload').value = '';
+  function moveProjectScreen(idx, dir) {
+    const targetIdx = idx + dir;
+    if (targetIdx < 0 || targetIdx >= activeProjectScreens.length) return;
+    const temp = activeProjectScreens[idx];
+    activeProjectScreens[idx] = activeProjectScreens[targetIdx];
+    activeProjectScreens[targetIdx] = temp;
+    renderProjectScreensList();
+  }
+
+  function setProjectPrimaryScreen(idx) {
+    if (idx <= 0 || idx >= activeProjectScreens.length) return;
+    const [item] = activeProjectScreens.splice(idx, 1);
+    activeProjectScreens.unshift(item);
+    renderProjectScreensList();
+    showToast(currentLang === 'ar' ? 'تم تعيين هذه الصورة كشاشة رئيسية للمشروع ⭐' : 'Set as primary screen ⭐');
+  }
+
+  const fProjUploadMultiInput = $('#fProjUploadMulti');
+  if (fProjUploadMultiInput) {
+    fProjUploadMultiInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      showToast(currentLang === 'ar' ? `جاري ضغط ومعالجة ${files.length} صورة...` : `Optimizing ${files.length} screens...`);
+      for (const file of files) {
+        try {
+          const compressed = await compressImage(file, 900, 0.85);
+          activeProjectScreens.push(compressed);
+        } catch (err) {
+          console.warn('Error compressing project screen:', err);
+        }
+      }
+      renderProjectScreensList();
+      showToast(currentLang === 'ar' ? `تمت إضافة ${files.length} صورة بنجاح إلى سلايدر المشروع ✓` : 'Screens added to carousel ✓');
+      e.target.value = '';
+    });
   }
 
   // Certificate Badge Upload Handlers
@@ -2062,7 +2549,9 @@
     $('#editProjId').value = '';
     $('#fProjId').readOnly = false;
     $('#fProjVisible').checked = true;
-    removeProjCustomImage();
+    activeProjectScreens = ["brainguard-home"];
+    if ($('#fProjCustomUrlInput')) $('#fProjCustomUrlInput').value = '';
+    renderProjectScreensList();
     $('#projectModal').style.display = 'flex';
   }
 
@@ -2085,19 +2574,10 @@
     $('#fPointsEn').value = (p.points?.en || []).join('\n');
     $('#fLink').value = p.links?.[0]?.href || '';
 
-    // Handle project mockup / screenshot
-    const customImg = (p.screens && p.screens[0]) || '';
-    if (customImg) {
-      $('#fProjCustomImage').value = customImg;
-      const previewSrc = customImg.startsWith('data:') ? customImg : ((window.SCREENS && window.SCREENS[customImg]) || customImg);
-      $('#fProjImgPreview').src = previewSrc;
-      $('#fProjImgPreviewBox').style.display = 'flex';
-      if ($('#fProjPresetSelect')) {
-        $('#fProjPresetSelect').value = ['brainguard-home', 'biscofa-home', 'alhayah-home', 'eventtime-home'].includes(customImg) ? customImg : '';
-      }
-    } else {
-      removeProjCustomImage();
-    }
+    // Load multi-screens
+    activeProjectScreens = (Array.isArray(p.screens) && p.screens.length) ? [...p.screens] : ["brainguard-home"];
+    if ($('#fProjCustomUrlInput')) $('#fProjCustomUrlInput').value = '';
+    renderProjectScreensList();
 
     $('#projectModal').style.display = 'flex';
   }
@@ -2110,11 +2590,12 @@
     e.preventDefault();
     const editId = $('#editProjId').value;
     const isEdit = !!editId;
+    const oldProj = isEdit ? (portfolioData.projects || []).find(x => x.id === editId) : null;
     const stack = $('#fStack').value.split(',').map(s => s.trim()).filter(Boolean);
     const pointsAr = $('#fPointsAr').value.split('\n').map(s => s.trim()).filter(Boolean);
     const pointsEn = $('#fPointsEn').value.split('\n').map(s => s.trim()).filter(Boolean);
     const linkHref = $('#fLink').value.trim();
-    const customImg = $('#fProjCustomImage').value.trim() || ($('#fProjPresetSelect') ? $('#fProjPresetSelect').value.trim() : '') || "brainguard-home";
+    const screens = activeProjectScreens.length ? [...activeProjectScreens] : ["brainguard-home"];
 
     const projObj = {
       id: $('#fProjId').value.trim(),
@@ -2122,15 +2603,15 @@
       name: { ar: $('#fNameAr').value, en: $('#fNameEn').value },
       tag: { ar: $('#fTagAr').value, en: $('#fTagEn').value },
       desc: { ar: $('#fDescAr').value, en: $('#fDescEn').value },
-      bg: "linear-gradient(160deg, #1E293B 0%, #0F172A 100%)",
-      screens: [customImg],
+      bg: oldProj?.bg || "linear-gradient(160deg, #1E293B 0%, #0F172A 100%)",
+      screens: screens,
       points: {
         ar: pointsAr.length ? pointsAr : ["تطبيق فلاتر عالي الأداء"],
         en: pointsEn.length ? pointsEn : ["High-performance Flutter application"]
       },
-      metrics: [{ v: "100%", l: { ar: "دقة وجودة", en: "Quality" } }],
+      metrics: oldProj?.metrics || [{ v: "100%", l: { ar: "دقة وجودة", en: "Quality" } }],
       stack: stack.length ? stack : ["Flutter"],
-      links: linkHref ? [{ label: { ar: "رابط المشروع", en: "Project Link" }, href: linkHref }] : []
+      links: linkHref ? [{ label: { ar: "رابط المشروع", en: "Project Link" }, href: linkHref }] : (oldProj?.links || [])
     };
 
     if (!portfolioData.projects) portfolioData.projects = [];
@@ -2143,7 +2624,7 @@
     }
 
     closeProjectModal();
-    syncAllPortfolio(isEdit ? (currentLang === 'ar' ? 'تم تحديث بيانات المشروع بنجاح!' : 'Project updated!') : (currentLang === 'ar' ? 'تمت إضافة المشروع الجديد بنجاح!' : 'Project added!'));
+    syncAllPortfolio(isEdit ? (currentLang === 'ar' ? 'تم تحديث بيانات وسلايدر المشروع بنجاح!' : 'Project and screens updated!') : (currentLang === 'ar' ? 'تمت إضافة المشروع وسلايدر الصور بنجاح!' : 'Project added!'));
   });
 
   async function deleteProject(id) {
@@ -2313,6 +2794,94 @@
     loadData();
   }
 
+  // AI Bot Conversations Management
+  async function loadAIChatsData() {
+    let chats = [];
+    if (window.PORTFOLIO_DB && typeof window.PORTFOLIO_DB.getAIChats === 'function') {
+      try {
+        chats = await window.PORTFOLIO_DB.getAIChats();
+      } catch (e) {}
+    }
+    if (!chats || !chats.length) {
+      try {
+        const res = await fetch('/api/ai/logs', { headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) chats = await res.json();
+      } catch (e) {}
+    }
+    if (!chats || !chats.length) {
+      try {
+        chats = JSON.parse(localStorage.getItem('ms_ai_chats') || '[]');
+      } catch (e) {}
+    }
+    $('#ovAiChatsCount').textContent = (chats || []).length;
+    renderAIChatsList(chats || []);
+  }
+
+  function renderAIChatsList(chats) {
+    const box = $('#aiChatsListContainer');
+    if (!box) return;
+    if (!chats.length) {
+      box.innerHTML = `
+        <div class="card" style="text-align:center; padding:36px; color:var(--muted);">
+          <span style="font-size:2rem; display:block; margin-bottom:8px;">🤖</span>
+          <b>لا توجد محادثات مسجلة حتى الآن</b>
+          <p style="font-size:.85rem; margin-top:4px;">عندما يقوم أي زائر بسؤال المساعد الذكي في الموقع، ستظهر الأسئلة والردود الذكية وتاريخها هنا فورياً.</p>
+        </div>
+      `;
+      return;
+    }
+
+    box.innerHTML = chats.map(c => {
+      const q = c.question || '';
+      const a = (c.answer || '').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+      const dateStr = new Date(c.created_at || Date.now()).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US');
+      const langBadge = c.lang === 'en' ? 'EN' : 'عربي';
+
+      return `
+        <div class="card" style="margin-bottom: 16px; border-inline-start: 4px solid var(--primary);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:var(--soft); color:var(--primary); font-size:.75rem; font-weight:800; padding:2px 8px; border-radius:6px;">${langBadge}</span>
+              <span style="font-size:.8rem; color:var(--muted);">${dateStr}</span>
+            </div>
+            <button class="btn btn--danger btn--sm" onclick="deleteAIChatLog('${c.id}')" style="padding:2px 10px; min-height:30px; font-size:.78rem;">
+              حذف 🗑️
+            </button>
+          </div>
+
+          <!-- Visitor Question -->
+          <div style="background:var(--tint); padding:10px 14px; border-radius:10px; margin-bottom:10px; border:1px solid var(--line);">
+            <div style="font-size:.75rem; font-weight:800; color:var(--muted); margin-bottom:2px;">❓ سؤال الزائر:</div>
+            <b style="font-size:.95rem; color:var(--ink);">${q}</b>
+          </div>
+
+          <!-- AI Bot Response -->
+          <div style="background:#F8FAFC; padding:12px 14px; border-radius:10px; border:1px solid #E2E8F0;">
+            <div style="font-size:.75rem; font-weight:800; color:var(--primary); margin-bottom:4px;">🤖 رد المساعد الذكي (SiddiqBot):</div>
+            <div style="font-size:.88rem; color:#1E293B; line-height:1.6;">${a}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function deleteAIChatLog(id) {
+    if (!confirm(currentLang === 'ar' ? 'هل تريد حذف هذا السجل من قاعدة البيانات؟' : 'Delete this AI log?')) return;
+    if (window.PORTFOLIO_DB && typeof window.PORTFOLIO_DB.deleteAIChat === 'function') {
+      try {
+        await window.PORTFOLIO_DB.deleteAIChat(id);
+      } catch (e) {}
+    }
+    try {
+      await fetch(`/api/ai/logs/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch (e) {}
+    showToast(currentLang === 'ar' ? 'تم حذف السجل بنجاح' : 'Log deleted');
+    loadAIChatsData();
+  }
+
   // Color Pickers
   function pickColor(hex) {
     $('#primaryColorPick').value = hex;
@@ -2436,10 +3005,15 @@
   // Save Profile
   $('#profileForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const customPhoto = $('#profCustomPhoto').value.trim() || portfolioData.profile?.photo || "assets/img/me/mohammed-siddiq.png";
+    const customPhoto = $('#profCustomPhoto').value.trim() || ($('#profPhotoUrl') ? $('#profPhotoUrl').value.trim() : '') || portfolioData.profile?.photo || "assets/img/me/mohammed-siddiq.png";
+    const customAboutPhoto = $('#profCustomAboutPhoto').value.trim() || ($('#profAboutPhotoUrl') ? $('#profAboutPhotoUrl').value.trim() : '') || portfolioData.profile?.aboutPhoto || customPhoto;
+    const customBotPhoto = $('#profCustomBotPhoto').value.trim() || ($('#profBotPhotoUrl') ? $('#profBotPhotoUrl').value.trim() : '') || portfolioData.profile?.botPhoto || customPhoto;
+
     portfolioData.profile = {
       ...(portfolioData.profile || {}),
       photo: customPhoto,
+      aboutPhoto: customAboutPhoto,
+      botPhoto: customBotPhoto,
       name: $('#profName').value,
       title: $('#profTitle').value,
       email: $('#profEmail').value,
@@ -2450,8 +3024,268 @@
       summary: $('#profSummary').value
     };
 
-    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ البيانات الشخصية والصورة بنجاح!' : 'Profile and photo saved successfully!');
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ البيانات الشخصية وكافة الصور المستقلة بنجاح!' : 'Profile and independent photos saved successfully!');
   });
+
+  // ==========================================
+  // Section Order Manager Logic (ترتيب سكاشن البورتفوليو)
+  // ==========================================
+  const DEFAULT_SECTION_ORDER = [
+    "hero", "stats", "stackStrip", "projects", "activities",
+    "experience", "skills", "certs", "about", "contact"
+  ];
+
+  const SECTION_METADATA = {
+    hero: { label: "قسم البطل والـ 3D Hero التفاعلي", icon: "🚀", desc: "الصورة ثلاثية الأبعاد والشعار التفاعلي والنصوص الرئيسية" },
+    stats: { label: "شريط الإحصائيات الحية", icon: "📊", desc: "+2 سنوات خبرة، +4 تطبيقات، 100% كود نظيف" },
+    stackStrip: { label: "شريط التقنيات المتحرك (Tech Ticker)", icon: "⚡", desc: "الشريط المتحرك المتواصل لمهارات فلاتر ودارت" },
+    projects: { label: "معرض المشاريع وتطبيقات الموبايل", icon: "📱", desc: "تطبيقات BrainGuard, Biscofa, Al Hayah, Event Time" },
+    activities: { label: "معرض الفعاليات والأنشطة (Dual Marquee)", icon: "🎪", desc: "شريط صور الفعاليات وورش IEEE والهاكاثونات المتعاكس" },
+    experience: { label: "المسار المهني والخبرات والتعليم", icon: "💼", desc: "الجدول الزمني للخبرات العملية ومشاريع التخرج" },
+    skills: { label: "المهارات المتخصصة والتقنيات", icon: "🛠️", desc: "كروت المهارات التفاعلية ومكتبات فلاتر وإدارة الحالة" },
+    certs: { label: "الشهادات والاعتمادات الموثقة", icon: "📜", desc: "بطاقات الشهادات المعتمدة وأرقام التوثيق وروابط التحقق" },
+    about: { label: "نبذة عني والصورة الشخصية", icon: "👤", desc: "الصورة الشخصية للاستوديو والنبذة ولغات العمل" },
+    contact: { label: "قسم التواصل ونموذج الرسائل المباشر", icon: "✉️", desc: "كروت التواصل المباشرة والنموذج المتناسق المتوازن" }
+  };
+
+  function renderSectionOrder(order) {
+    const container = $('#sectionOrderList');
+    if (!container) return;
+
+    let currentOrder = Array.isArray(order) && order.length ? [...order] : [...DEFAULT_SECTION_ORDER];
+
+    // Ensure all known sections exist in order
+    DEFAULT_SECTION_ORDER.forEach(secKey => {
+      if (!currentOrder.includes(secKey)) currentOrder.push(secKey);
+    });
+
+    portfolioData.sectionOrder = currentOrder;
+
+    container.innerHTML = currentOrder.map((secKey, idx) => {
+      const meta = SECTION_METADATA[secKey] || { label: secKey, icon: "📌", desc: "قسم البورتفوليو" };
+      const isFirst = idx === 0;
+      const isLast = idx === currentOrder.length - 1;
+      return `
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; background:var(--tint); border:1px solid var(--line); border-radius:12px; transition:transform .15s ease;">
+          <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+            <div style="width:32px; height:32px; border-radius:8px; background:var(--primary); color:#fff; display:grid; place-items:center; font-weight:800; font-size:.85rem; flex-shrink:0;">
+              ${idx + 1}
+            </div>
+            <span style="font-size:1.3rem;">${meta.icon}</span>
+            <div>
+              <b style="font-size:.95rem; color:var(--ink);">${meta.label}</b>
+              <p style="font-size:.78rem; color:var(--muted); margin-top:2px;">${meta.desc}</p>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+            <button type="button" class="btn btn--ghost btn--sm" onclick="moveSection(${idx}, -1)" ${isFirst ? 'disabled style="opacity:0.4;"' : ''} title="تحريك لأعلى">
+              ▲
+            </button>
+            <button type="button" class="btn btn--ghost btn--sm" onclick="moveSection(${idx}, 1)" ${isLast ? 'disabled style="opacity:0.4;"' : ''} title="تحريك لأسفل">
+              ▼
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function moveSection(idx, direction) {
+    if (!portfolioData.sectionOrder) portfolioData.sectionOrder = [...DEFAULT_SECTION_ORDER];
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= portfolioData.sectionOrder.length) return;
+
+    const temp = portfolioData.sectionOrder[idx];
+    portfolioData.sectionOrder[idx] = portfolioData.sectionOrder[targetIdx];
+    portfolioData.sectionOrder[targetIdx] = temp;
+
+    renderSectionOrder(portfolioData.sectionOrder);
+  }
+
+  async function saveSectionOrder() {
+    if (!portfolioData.sectionOrder) portfolioData.sectionOrder = [...DEFAULT_SECTION_ORDER];
+    await syncAllPortfolio(currentLang === 'ar' ? 'تم حفظ الترتيب الجديد لسكاشن البورتفوليو بنجاح ✓' : 'Section order saved successfully ✓');
+  }
+
+  function resetSectionOrder() {
+    if (!confirm(currentLang === 'ar' ? 'هل تريد استعادة الترتيب الافتراضي لسكاشن البورتفوليو؟' : 'Reset to default section order?')) return;
+    portfolioData.sectionOrder = [...DEFAULT_SECTION_ORDER];
+    renderSectionOrder(portfolioData.sectionOrder);
+    syncAllPortfolio(currentLang === 'ar' ? 'تمت استعادة الترتيب الافتراضي بنجاح ✓' : 'Default section order restored ✓');
+  }
+
+  // ==========================================
+  // Activities & Events Management (إدارة الفعاليات)
+  // ==========================================
+  function renderActivitiesList(activities) {
+    const container = $('#activitiesListContainer');
+    if (!container) return;
+
+    if (!activities || !activities.length) {
+      container.innerHTML = '<div class="card" style="grid-column:1/-1; text-align:center; color:var(--muted); padding:30px;">لا توجد فعاليات مسجلة. اضغط زر "إضافة فعالية جديدة" لإضافة ورش العمل والهاكاثونات.</div>';
+      return;
+    }
+
+    container.innerHTML = activities.map(act => {
+      const isVis = act.visible !== false;
+      const title = act.title?.ar || act.title?.en || act.title || 'فعالية';
+      const tag = act.tag?.ar || act.tag?.en || act.tag || 'Activity';
+      const date = act.date?.ar || act.date?.en || act.date || '';
+      const sub = act.sub?.ar || act.sub?.en || act.sub || '';
+      const img = act.image || 'assets/img/activities/activity-ieee.svg';
+
+      return `
+        <div class="card ${isVis ? '' : 'is-hidden'}" style="display:flex; flex-direction:column; overflow:hidden; padding:0; border:1px solid var(--line);">
+          <div style="position:relative; width:100%; height:160px; background:#0E1B2C; overflow:hidden;">
+            <img src="${img}" style="width:100%; height:100%; object-fit:cover;" alt="${title}">
+            <div style="position:absolute; top:10px; right:10px; display:flex; gap:6px;">
+              <span class="status-pill ${isVis ? 'is-active' : 'is-off'}">${isVis ? 'ظاهرة' : 'مخفية'}</span>
+            </div>
+            <div style="position:absolute; bottom:8px; left:10px; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); color:#fff; font-size:.74rem; font-weight:700; padding:2px 8px; border-radius:6px;">
+              ${date}
+            </div>
+          </div>
+          <div style="padding:16px; flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span class="item-badge" style="font-size:.72rem;">${tag}</span>
+              </div>
+              <h4 style="font-size:1.05rem; font-weight:800; color:var(--ink); line-height:1.4;">${title}</h4>
+              ${sub ? `<p style="font-size:.82rem; color:var(--muted); margin-top:4px;">${sub}</p>` : ''}
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-top:12px; border-top:1px solid var(--line); gap:8px; flex-wrap:wrap;">
+              <button type="button" class="btn btn--ghost btn--sm" onclick="toggleActivityVisibility('${act.id}')">
+                ${isVis ? 'إخفاء 👁️' : 'إظهار 👁️'}
+              </button>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="btn btn--ghost btn--sm" onclick="openEditActivityModal('${act.id}')">تعديل ✏️</button>
+                <button type="button" class="btn btn--danger btn--sm" onclick="deleteActivity('${act.id}')">حذف 🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Activity Photo Handlers
+  const fActUploadInput = $('#fActUpload');
+  if (fActUploadInput) {
+    fActUploadInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        showToast(currentLang === 'ar' ? 'جاري ضغط ومعالجة صورة الفعالية...' : 'Processing activity banner...');
+        const compressed = await compressImage(file, 1000, 0.88);
+        $('#fActCustomImage').value = compressed;
+        $('#fActImgPreview').src = compressed;
+        $('#fActImgPreviewBox').style.display = 'flex';
+        if ($('#fActPresetSelect')) $('#fActPresetSelect').value = '';
+        showToast(currentLang === 'ar' ? 'تم تجهيز صورة الفعالية بنجاح ✓' : 'Activity photo ready ✓');
+      } catch (err) {
+        alert('خطأ في معالجة صورة الفعالية: ' + err.message);
+      }
+    });
+  }
+
+  function applyActPreset(val) {
+    if (!val) return;
+    $('#fActCustomImage').value = val;
+    $('#fActImgPreview').src = val;
+    $('#fActImgPreviewBox').style.display = 'flex';
+  }
+
+  function removeActCustomImage() {
+    $('#fActCustomImage').value = '';
+    $('#fActImgPreviewBox').style.display = 'none';
+    if ($('#fActPresetSelect')) $('#fActPresetSelect').value = '';
+    if ($('#fActUpload')) $('#fActUpload').value = '';
+  }
+
+  function openAddActivityModal() {
+    $('#actModalHeaderTitle').textContent = currentLang === 'ar' ? 'إضافة فعالية جديدة' : 'Add New Activity';
+    $('#activityForm').reset();
+    $('#editActId').value = '';
+    $('#actVisible').checked = true;
+    removeActCustomImage();
+    $('#activityModal').style.display = 'flex';
+  }
+
+  function openEditActivityModal(id) {
+    const act = (portfolioData.activities || []).find(x => x.id === id);
+    if (!act) return;
+    $('#actModalHeaderTitle').textContent = currentLang === 'ar' ? 'تعديل الفعالية' : 'Edit Activity';
+    $('#editActId').value = act.id;
+    $('#actTitleAr').value = act.title?.ar || act.title || '';
+    $('#actTitleEn').value = act.title?.en || act.title || '';
+    $('#actTag').value = act.tag?.ar || act.tag?.en || act.tag || '';
+    $('#actDate').value = act.date?.ar || act.date?.en || act.date || '';
+    $('#actSubAr').value = act.sub?.ar || act.sub || '';
+    $('#actSubEn').value = act.sub?.en || act.sub || '';
+    $('#actDescAr').value = act.desc?.ar || act.desc || '';
+    $('#actDescEn').value = act.desc?.en || act.desc || '';
+    $('#actVisible').checked = act.visible !== false;
+
+    if (act.image) {
+      $('#fActCustomImage').value = act.image;
+      $('#fActImgPreview').src = act.image;
+      $('#fActImgPreviewBox').style.display = 'flex';
+      if ($('#fActPresetSelect')) $('#fActPresetSelect').value = act.image.startsWith('assets/') ? act.image : '';
+    } else {
+      removeActCustomImage();
+    }
+
+    $('#activityModal').style.display = 'flex';
+  }
+
+  function closeActivityModal() {
+    $('#activityModal').style.display = 'none';
+  }
+
+  $('#activityForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const editId = $('#editActId').value;
+    const isEdit = !!editId;
+    const img = $('#fActCustomImage').value.trim() || 'assets/img/activities/activity-ieee.svg';
+
+    const actObj = {
+      id: editId || ('act_' + Date.now()),
+      title: { ar: $('#actTitleAr').value.trim(), en: $('#actTitleEn').value.trim() },
+      tag: { ar: $('#actTag').value.trim(), en: $('#actTag').value.trim() },
+      sub: { ar: $('#actSubAr').value.trim(), en: $('#actSubEn').value.trim() },
+      desc: { ar: $('#actDescAr').value.trim(), en: $('#actDescEn').value.trim() },
+      date: { ar: $('#actDate').value.trim(), en: $('#actDate').value.trim() },
+      image: img,
+      visible: $('#actVisible').checked
+    };
+
+    if (!portfolioData.activities) portfolioData.activities = [];
+    if (isEdit) {
+      const idx = portfolioData.activities.findIndex(x => x.id === editId);
+      if (idx !== -1) portfolioData.activities[idx] = actObj;
+      else portfolioData.activities.push(actObj);
+    } else {
+      portfolioData.activities.push(actObj);
+    }
+
+    closeActivityModal();
+    syncAllPortfolio(isEdit ? (currentLang === 'ar' ? 'تم تحديث الفعالية بنجاح!' : 'Activity updated!') : (currentLang === 'ar' ? 'تمت إضافة الفعالية بنجاح للشريط التفاعلي!' : 'Activity added!'));
+  });
+
+  async function toggleActivityVisibility(id) {
+    const act = (portfolioData.activities || []).find(x => x.id === id);
+    if (!act) return;
+    act.visible = !(act.visible !== false);
+    syncAllPortfolio(currentLang === 'ar' ? (act.visible ? 'الفعالية ظاهرة الآن بالمعرض' : 'تم إخفاء الفعالية') : 'Activity visibility updated');
+  }
+
+  async function deleteActivity(id) {
+    if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذه الفعالية؟' : 'Delete this activity?')) return;
+    if (portfolioData.activities) {
+      portfolioData.activities = portfolioData.activities.filter(x => x.id !== id);
+    }
+    syncAllPortfolio(currentLang === 'ar' ? 'تم حذف الفعالية بنجاح' : 'Activity removed');
+  }
 
   // Initialize
   applyAdminLang('ar');

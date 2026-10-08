@@ -33,12 +33,23 @@ CREATE TABLE IF NOT EXISTS public.portfolio_messages (
   is_read BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+-- 3. Table for AI Bot Conversations & Inquiries History
+CREATE TABLE IF NOT EXISTS public.portfolio_ai_chats (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  lang TEXT DEFAULT 'ar',
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- ============================================================
 -- 3. SECURITY & ROW LEVEL SECURITY (RLS) POLICIES
 -- ============================================================
--- Enable RLS on both tables
+-- Enable RLS on all tables
 ALTER TABLE public.portfolio_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.portfolio_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.portfolio_ai_chats ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies if re-running
 DROP POLICY IF EXISTS "Public can view portfolio data" ON public.portfolio_data;
@@ -46,6 +57,30 @@ DROP POLICY IF EXISTS "Anyone can update portfolio data with key" ON public.port
 DROP POLICY IF EXISTS "Public can submit contact messages" ON public.portfolio_messages;
 DROP POLICY IF EXISTS "Allow reading messages" ON public.portfolio_messages;
 DROP POLICY IF EXISTS "Allow deleting messages" ON public.portfolio_messages;
+DROP POLICY IF EXISTS "Public can insert ai chats" ON public.portfolio_ai_chats;
+DROP POLICY IF EXISTS "Allow reading ai chats" ON public.portfolio_ai_chats;
+DROP POLICY IF EXISTS "Allow deleting ai chats" ON public.portfolio_ai_chats;
+
+-- Policy for AI Chats: Visitors can insert conversation logs
+CREATE POLICY "Public can insert ai chats"
+  ON public.portfolio_ai_chats
+  FOR INSERT
+  TO public
+  WITH CHECK (true);
+
+-- Policy for AI Chats: Allow reading logs in admin
+CREATE POLICY "Allow reading ai chats"
+  ON public.portfolio_ai_chats
+  FOR SELECT
+  TO public
+  USING (true);
+
+-- Policy for AI Chats: Allow deleting logs in admin
+CREATE POLICY "Allow deleting ai chats"
+  ON public.portfolio_ai_chats
+  FOR DELETE
+  TO public
+  USING (true);
 
 -- Policy 1: Anyone (visitors) can READ portfolio data
 CREATE POLICY "Public can view portfolio data"

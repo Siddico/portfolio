@@ -84,7 +84,7 @@ window.PROJECTS = [
     name: { en: "Al Hayah", ar: "مساهمي الحياة" },
     tag: { en: "Enterprise App · Supabase Realtime", ar: "تطبيق مؤسسي · Supabase Realtime" }  ,
     bg: "linear-gradient(160deg, #064E3B 0%, #022C22 100%)",
-    screens: ["alhayah-home"],
+    screens: ["alhayah-home", "brainguard-ai"],
     desc: {
       en: "A secure mobile portal for private hospital shareholders with exclusive access to hospital services, dividend tracking, and executive benefits.",
       ar: "تطبيق موبايل آمن لمساهمي مستشفى خاصة يتيح الوصول الحصري للخدمات الطبية، متابعة الأرباح، ومزايا كبار المساهمين."
@@ -118,7 +118,7 @@ window.PROJECTS = [
     name: { en: "Event Time", ar: "إدارة الفعاليات" },
     tag: { en: "Event Tech · Realtime Sync & Check-In", ar: "تنظيم الفعاليات · مزامنة لحظية ودخول بـ QR" },
     bg: "linear-gradient(160deg, #312E81 0%, #1E1B4B 100%)",
-    screens: ["event-home"],
+    screens: ["event-home", "brainguard-home"],
     desc: {
       en: "A mobile application for conference registrations, attendee ticketing, and live event check-in management with real-time sync.",
       ar: "تطبيق موبايل متين لتسجيل حضور المؤتمرات والفعاليات، وإدارة التذاكر، وتسجيل الدخول السريع أثناء الفعاليات الحية."
@@ -145,3 +145,87 @@ window.PROJECTS = [
     ]
   }
 ];
+
+window.ACTIVITIES = [
+  {
+    id: "act-ieee",
+    title: { ar: "ورشة عمل IEEE Flutter المتخصصة", en: "IEEE Flutter Workshop & Mentorship" },
+    tag: { ar: "IEEE Student Branch", en: "IEEE Student Branch" },
+    sub: { ar: "معمارية Clean Architecture وإدارة الحالة بـ BLoC", en: "Clean Architecture & BLoC Deep Dive" },
+    desc: { ar: "قيادة ورش عمل تقنية وتدريب أكثر من 120 طالب ومهندس على أساسيات ومفاهيم المعمارية النظيفة وبناء تطبيقات فلاتر إنتاجية قابلة للتوسع.", en: "Led hands-on workshops mentoring 120+ student developers in clean architecture, testable code, and high-performance Flutter app engineering." },
+    date: { ar: "أكتوبر 2025 - الحالي", en: "Oct 2025 – Present" },
+    image: "assets/img/activities/activity-ieee.svg",
+    visible: true
+  },
+  {
+    id: "act-codeavour",
+    title: { ar: "مسابقة Codeavour العالمية للذكاء الاصطناعي والروبوتات", en: "Codeavour International AI & Robotics 2026" },
+    tag: { ar: "لجنة التنظيم الدولية", en: "Organizing Committee" },
+    sub: { ar: "تنظيم أكبر حدث عالمي للذكاء الاصطناعي 2026", en: "Global AI & Robotics Championship 2026" },
+    desc: { ar: "عضو اللجنة المنظمة للبطولة الدولية في مصر، إدارة الفرق المشاركة، وتحكيم المشاريع البرمجية التنافسية بمجال الذكاء الاصطناعي.", en: "Organizing committee member coordinating national and international student teams, evaluating AI projects, and managing event operations." },
+    date: { ar: "2026", en: "2026" },
+    image: "assets/img/activities/activity-codeavour.svg",
+    visible: true
+  },
+  {
+    id: "act-depi",
+    title: { ar: "ملتقى وتخرج مبادرة DEPI من وزارة الاتصالات وIBM", en: "DEPI IBM Data Science & AI Summit" },
+    tag: { ar: "مبادرة رواد مصر الرقمية", en: "IBM & DEPI Track" },
+    sub: { ar: "تطوير نماذج تعلم الآلة وتحليل البيانات الطبية", en: "Machine Learning & Predictive Modeling" },
+    desc: { ar: "المشاركة الفعالة في برنامج رواد مصر الرقمية، تدريب مكثف على بايثون، استخراج الأنماط، وتدريب نماذج التنبؤ بالمخاطر الصحية.", en: "Intensive immersion in advanced Python, exploratory data analysis, and developing machine learning models for real-world healthcare decision-making." },
+    date: { ar: "مايو 2025", en: "May 2025" },
+    image: "assets/img/activities/activity-depi.svg",
+    visible: true
+  },
+  {
+    id: "act-nti",
+    title: { ar: "معسكر المعهد القومي للاتصالات NTI لتطبيقات الموبايل", en: "NTI Mobile Engineering Bootcamp" },
+    tag: { ar: "NTI Trainee", en: "National Telecom Institute" },
+    sub: { ar: "سبرنت برمجي مكثف لتطبيقات فلاتر الحية", en: "Full-Cycle Flutter App Development Sprint" },
+    desc: { ar: "إنجاز مشاريع موبايل متكاملة بأحدث ممارسات السوق، دمج الخدمات السحابية، وضغط الأداء والذاكرة لأقصى كفاءة.", en: "Engineered production-grade cross-platform apps adhering to modern software lifecycle guidelines, REST APIs, and memory optimization." },
+    date: { ar: "أبريل 2026", en: "Apr 2026" },
+    image: "assets/img/activities/activity-nti.svg",
+    visible: true
+  },
+  {
+    id: "act-brainguard",
+    title: { ar: "معرض مشاريع التخرج وتكريم BrainGuard", en: "BrainGuard AI Healthcare Expo" },
+    tag: { ar: "مشروع التخرج · امتياز", en: "Graduation Expo · Excellent" },
+    sub: { ar: "عرض منظومة التنبؤ بالسكتات الدماغية أمام لجنة التحكيم", en: "Live Clinical IoT & AI Defense" },
+    desc: { ar: "عرض تطبيقي المريض والطبيب مع شات Gemini السريري وربط الحساسات الحيوية لحظياً، وحصد تقدير امتياز وإشادة واسعة.", en: "Delivered public keynote defense of BrainGuard AI ecosystem, featuring real-time PPG analysis, live patient-doctor pairing, and OCR analysis." },
+    date: { ar: "2024", en: "2024" },
+    image: "assets/img/activities/activity-brainguard.svg",
+    visible: true
+  },
+  {
+    id: "act-cleanarch",
+    title: { ar: "جلسة تدريبية: Clean Architecture في مشاريع الفلاتر الحقيقية", en: "Clean Architecture & Design Patterns Session" },
+    tag: { ar: "Technical Session", en: "Architecture Masterclass" },
+    sub: { ar: "تطبيق SOLID Principles وعزل طبقات البيانات والـ Domain", en: "Domain-Driven Design & Separation of Concerns" },
+    desc: { ar: "شرح عملي حي لكيفية هيكلة مشاريع فلاتر المؤسسية لسهولة الصيانة والفحص الآلي وعزل منطق الأعمال عن الواجهات.", en: "Live coding session demonstrating how to decouple presentation, domain, and data layers with repository patterns and dependency injection." },
+    date: { ar: "2025", en: "2025" },
+    image: "assets/img/activities/activity-cleanarch.svg",
+    visible: true
+  },
+  {
+    id: "act-gdsc",
+    title: { ar: "هاكاثون وورشة عمل مجتمعات جوجل للطلبة GDSC", en: "GDSC Flutter Code Jam & Tech Talk" },
+    tag: { ar: "Google Developers", en: "GDSC Community" },
+    sub: { ar: "التكامل مع السحابة وإدارة الحالة المتقدمة", en: "Firebase & Supabase Cloud Integration" },
+    desc: { ar: "تقديم محتوى تعليمي تطبيقي لبناء تطبيقات سريعة الاستجابة وربط قواعد البيانات اللحظية والتوثيق الآمن.", en: "Hands-on live demo on constructing reactive mobile experiences, real-time Firestore synchronization, and secure OAuth flows." },
+    date: { ar: "2025", en: "2025" },
+    image: "assets/img/activities/activity-gdsc.svg",
+    visible: true
+  },
+  {
+    id: "act-hackathon",
+    title: { ar: "مسابقة الابتكار البرمجي والهاكاثون الجامعي", en: "Faculty Innovation Hackathon" },
+    tag: { ar: "جائزة أفضل معمارية برمجية", en: "Best Architecture Award" },
+    sub: { ar: "بناء نموذج أولي خلال 48 ساعة بـ Flutter و AI", en: "Rapid Prototyping Under 48h Sprint" },
+    desc: { ar: "تطوير حل ذكي متكامل خلال 48 ساعة حصد المركز الأول في جودة المعمارية وتكامل الذكاء الاصطناعي مع تجربة المستخدم.", en: "Collaborative 48-hour sprint building a functional mobile prototype with AI analytics, winning recognition for code quality." },
+    date: { ar: "2024", en: "2024" },
+    image: "assets/img/activities/activity-hackathon.svg",
+    visible: true
+  }
+];
+

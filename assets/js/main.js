@@ -40,6 +40,7 @@
     renderCerts();
     renderExperience();
     renderSkills();
+    renderActivities();
     store.set("lang", lang);
   }
 
@@ -140,6 +141,145 @@
     did: { en: "What I did", ar: "أبرز الإنجازات" },
     follow: { en: "More on GitHub", ar: "المزيد على GitHub" }
   };
+  let activeProjectSlideTimers = [];
+
+  function wireProjectSliders() {
+    activeProjectSlideTimers.forEach(t => clearInterval(t));
+    activeProjectSlideTimers = [];
+
+    $$(".project").forEach((projEl) => {
+      const pId = projEl.dataset.id;
+      const proj = (window.PROJECTS || []).find(p => p.id === pId);
+      if (!proj || !proj.screens || proj.screens.length <= 1) return;
+      const visual = projEl.querySelector(".project__visual");
+      if (!visual) return;
+      const screens = proj.screens;
+      let cur = 0;
+      let isAnimating = false;
+      let isHovered = false;
+
+      const prevBtn = visual.querySelector(".proj-nav-btn--prev");
+      const nextBtn = visual.querySelector(".proj-nav-btn--next");
+      const dots = visual.querySelectorAll(".proj-dot");
+      const curEl = visual.querySelector(".proj-cur");
+      const liveDevice = visual.querySelector(".device--live");
+      const imgs = liveDevice ? liveDevice.querySelectorAll("img") : [];
+      const screensBox = visual.querySelector(".device__screens");
+
+      function showSlide(idx, source = "manual") {
+        if (!screens.length || (isAnimating && source === "manual")) return;
+        const prevIdx = cur;
+        cur = (idx + screens.length) % screens.length;
+
+        if (curEl) curEl.textContent = String(cur + 1);
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === cur));
+
+        if (imgs.length) {
+          const doSwap = () => {
+            imgs.forEach((im, i) => {
+              im.classList.toggle("is-on", i === cur);
+            });
+            isAnimating = false;
+          };
+
+          const cardFlipAllowed = canAnimate && (!window.__MOTION_SETTINGS || window.__MOTION_SETTINGS.cardFlip !== false);
+          if (cardFlipAllowed && screensBox && prevIdx !== cur && typeof gsap !== "undefined") {
+            isAnimating = true;
+            const dir = (idx >= prevIdx) ? 1 : -1;
+            gsap.timeline()
+              .to(screensBox, {
+                rotationY: dir * 90,
+                scale: 0.96,
+                duration: 0.22,
+                ease: "power2.in",
+                onComplete: doSwap
+              })
+              .fromTo(screensBox,
+                { rotationY: -dir * 90, scale: 0.96 },
+                { rotationY: 0, scale: 1, duration: 0.38, ease: "back.out(1.4)" }
+              );
+          } else {
+            doSwap();
+          }
+        }
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          showSlide(cur - 1, "manual");
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          showSlide(cur + 1, "manual");
+        });
+      }
+      dots.forEach((d, i) => {
+        d.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          showSlide(i, "manual");
+        });
+      });
+
+      // Auto-slide every 4.8 seconds when not hovered
+      const timer = setInterval(() => {
+        if (document.hidden || isHovered) return;
+        showSlide(cur + 1, "auto");
+      }, 4800);
+      activeProjectSlideTimers.push(timer);
+
+      visual.addEventListener("mouseenter", () => { isHovered = true; });
+      visual.addEventListener("mouseleave", () => { isHovered = false; });
+
+      // Mobile Touch Swipe Navigation
+      let touchStartX = 0;
+      let touchStartY = 0;
+      visual.addEventListener("touchstart", (e) => {
+        isHovered = true;
+        if (!e.touches || !e.touches[0]) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      visual.addEventListener("touchend", (e) => {
+        isHovered = false;
+        if (!e.changedTouches || !e.changedTouches[0]) return;
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) {
+          if (deltaX < 0) {
+            // Swiped left -> next screenshot
+            showSlide(cur + 1, "manual");
+          } else {
+            // Swiped right -> previous screenshot
+            showSlide(cur - 1, "manual");
+          }
+        }
+      }, { passive: true });
+    });
+  }
+
+  function resolveScreenPath(src) {
+    if (!src) return "assets/img/screens/brainguard-home.svg";
+    if (src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://") || src.startsWith("assets/")) {
+      return src;
+    }
+    const map = (window.SCREENS || {
+      "brainguard-home": "assets/img/screens/brainguard-home.svg",
+      "brainguard-ai": "assets/img/screens/brainguard-ai.svg",
+      "biscofa-home": "assets/img/screens/biscofa-home.svg",
+      "biscofa-admin": "assets/img/screens/biscofa-admin.svg",
+      "alhayah-home": "assets/img/screens/alhayah-home.svg",
+      "event-home": "assets/img/screens/event-home.svg"
+    });
+    return map[src] || `assets/img/screens/${src}.svg`;
+  }
+
   function renderProjects() {
     const activeProjects = (window.PROJECTS || []).filter(p => p && p.visible !== false);
     const listEl = $("#projectList");
@@ -147,13 +287,21 @@
     listEl.innerHTML = activeProjects.map((p) => {
       const pName = p.name ? (typeof p.name === "object" ? (p.name[lang] || p.name.en || p.name.ar || "") : String(p.name)) : "";
       const pEnName = p.name ? (typeof p.name === "object" ? (p.name.en || p.name.ar || "") : String(p.name)) : "";
-      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc((window.SCREENS && window.SCREENS[k]) || k)}" alt="${esc(pEnName)} screen" loading="lazy" width="540" height="1200">`;
-      const sc = p.screens && p.screens.length ? p.screens : ["brainguard-home"];
-      const devices = sc.length === 1
-        ? `<div class="device" data-depth="1"><div class="device__screens">${img(sc[0], true)}</div></div>`
-        : `<div class="device" data-depth=".6"><div class="device__screens">${img(sc[0], true)}</div></div>`
-          + `<div class="device device--live" data-depth="1.2"><div class="device__screens">${sc.map((k, i) => img(k, i === 1)).join("")}</div></div>`
-          + `<div class="device" data-depth=".6"><div class="device__screens">${img(sc[sc.length - 1], true)}</div></div>`;
+      const sc = (p.screens && Array.isArray(p.screens) && p.screens.length) ? p.screens : ["brainguard-home"];
+      const hasMultiple = sc.length > 1;
+
+      const img = (k, on) => `<img class="${on ? "is-on" : ""}" src="${esc(resolveScreenPath(k))}" alt="${esc(pEnName)} screen" loading="lazy" width="540" height="1200" onerror="this.onerror=null;this.src='assets/img/screens/brainguard-home.svg';">`;
+
+      const navControls = hasMultiple ? `
+        <button class="proj-nav-btn proj-nav-btn--prev" type="button" aria-label="${lang === 'ar' ? 'السابق' : 'Previous'}"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="proj-nav-btn proj-nav-btn--next" type="button" aria-label="${lang === 'ar' ? 'التالي' : 'Next'}"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <div class="proj-slider-bar">
+          <div class="proj-dots">${sc.map((_, i) => `<button class="proj-dot ${i === 0 ? "is-active" : ""}" data-slide="${i}" type="button" aria-label="Slide ${i+1}"></button>`).join('')}</div>
+          <span class="proj-counter"><span class="proj-cur">1</span> / ${sc.length}</span>
+        </div>
+      ` : "";
+
+      const devices = `<div class="device device--live" data-depth="1.1"><div class="device__screens">${sc.map((k, i) => img(k, i === 0)).join("")}</div></div>`;
       
       const metrics = (p.metrics && p.metrics.length) ? `<div class="metrics">${p.metrics.map((m) => {
         const lbl = m.l ? (typeof m.l === "object" ? (m.l[lang] || m.l.en || "") : String(m.l)) : "";
@@ -181,7 +329,11 @@
       const didText = L.did ? (L.did[lang] || L.did.en || "What I did") : "What I did";
 
       return `<article class="project" data-id="${esc(p.id)}">
-        <div class="project__visual" style="background:${p.bg || '#1E293B'}"><span class="project__word" aria-hidden="true">${esc(pEnName)}</span><div class="project__phones">${devices}</div></div>
+        <div class="project__visual" style="background:${p.bg || '#1E293B'}">
+          <span class="project__word" aria-hidden="true">${esc(pEnName)}</span>
+          <div class="project__phones">${devices}</div>
+          ${navControls}
+        </div>
         <div class="project__body">
           <span class="project__tag">${esc(pTag)}</span>
           <h3 class="project__name" aria-label="${esc(pName)}">${split}</h3>
@@ -195,6 +347,135 @@
         </div>
       </article>`;
     }).join("");
+
+    wireProjectSliders();
+    if (typeof revealProjects === "function") {
+      try { revealProjects(); } catch (e) {}
+    }
+  }
+
+  /* ----------------------------------------------------------- activities */
+  function renderActivities() {
+    const marqueeWrap = $("#activitiesMarquee");
+    if (!marqueeWrap) return;
+    const acts = (window.__PORTFOLIO_ACTIVITIES || window.ACTIVITIES || []).filter(a => a && a.visible !== false);
+    if (!acts.length) return;
+
+    const L = (o) => (o && typeof o === "object") ? (o[lang] || o.en || o.ar || "") : (o || "");
+    const viewLabel = lang === "ar" ? "عرض التفاصيل ↗" : "View Details ↗";
+
+    const row1Acts = acts.filter((_, i) => i % 2 === 0);
+    const row2Acts = acts.filter((_, i) => i % 2 === 1);
+    const list1 = row1Acts.length ? row1Acts : acts;
+    const list2 = row2Acts.length ? row2Acts : acts;
+
+    const makeCard = (a) => {
+      const title = esc(L(a.title));
+      const sub = esc(L(a.sub || a.desc));
+      const tag = esc(L(a.tag));
+      const date = esc(L(a.date));
+      const imgSrc = esc(a.image || "assets/img/activities/activity-ieee.svg");
+      return `
+        <div class="act-card" data-act-id="${esc(a.id)}" role="button" tabindex="0">
+          <div class="act-card__media">
+            <img src="${imgSrc}" alt="${title}" loading="lazy">
+            ${tag ? `<span class="act-card__tag">${tag}</span>` : ""}
+            ${date ? `<span class="act-card__date">${date}</span>` : ""}
+          </div>
+          <div class="act-card__content">
+            <h3 class="act-card__title">${title}</h3>
+            <p class="act-card__sub">${sub}</p>
+            <div class="act-card__footer">
+              <span>${viewLabel}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    const track1Html = [...list1, ...list1].map(makeCard).join("");
+    const track2Html = [...list2, ...list2].map(makeCard).join("");
+
+    marqueeWrap.innerHTML = `
+      <div class="act-row">
+        <div class="act-track act-track--left">${track1Html}</div>
+        <div class="act-track act-track--left">${track1Html}</div>
+      </div>
+      <div class="act-row">
+        <div class="act-track act-track--right">${track2Html}</div>
+        <div class="act-track act-track--right">${track2Html}</div>
+      </div>
+    `;
+
+    wireActivityModal();
+  }
+
+  function wireActivityModal() {
+    const modal = $("#actModal");
+    if (!modal) return;
+    const imgEl = $("#actModalImg");
+    const tagEl = $("#actModalTag");
+    const dateEl = $("#actModalDate");
+    const titleEl = $("#actModalTitle");
+    const descEl = $("#actModalDesc");
+
+    function openModal(a) {
+      const L = (o) => (o && typeof o === "object") ? (o[lang] || o.en || o.ar || "") : (o || "");
+      if (imgEl) imgEl.src = a.image || "assets/img/activities/activity-ieee.svg";
+      if (tagEl) tagEl.textContent = L(a.tag);
+      if (dateEl) dateEl.textContent = L(a.date);
+      if (titleEl) titleEl.textContent = L(a.title);
+      if (descEl) descEl.textContent = L(a.desc || a.sub);
+      modal.hidden = false;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.removeProperty("overflow");
+    }
+
+    $$(".act-card").forEach(c => {
+      c.addEventListener("click", () => {
+        const id = c.dataset.actId;
+        const acts = (window.__PORTFOLIO_ACTIVITIES || window.ACTIVITIES || []);
+        const found = acts.find(a => a.id === id);
+        if (found) openModal(found);
+      });
+    });
+
+    modal.querySelectorAll("[data-close]").forEach(el => {
+      el.addEventListener("click", closeModal);
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.hidden) closeModal();
+    });
+  }
+
+  /* ----------------------------------------------------------- section reordering */
+  function applySectionOrder(order) {
+    if (!order || !Array.isArray(order) || !order.length) return;
+    const main = $("main#top");
+    if (!main) return;
+    const SEC_MAP = {
+      hero: $("#hero"),
+      stackStrip: $(".strip"),
+      projects: $("#projects"),
+      experience: $("#experience"),
+      certs: $("#certs"),
+      skills: $("#skills"),
+      about: $("#about"),
+      activities: $("#activities"),
+      contact: $("#contact")
+    };
+    order.forEach(key => {
+      const el = SEC_MAP[key];
+      if (el && el.parentNode === main) {
+        main.appendChild(el);
+      }
+    });
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
   }
 
   applyLang(lang);
@@ -281,18 +562,34 @@
         window.__PORTFOLIO_DATA = portData;
         window.__SCRAPBOOK_SETTINGS = portData.scrapbookSettings || {};
 
-        // 1. Profile Photo & Bio sync
+        // 1. Profile Photo & Bio sync (فصل صورة البداية وصورة قسم من أنا وصورة المساعد)
         if (portData.profile) {
           const pr = portData.profile;
-          if (pr.photo) {
-            document.querySelectorAll('.hero__photo, .about__img, #heroPhoto').forEach(img => {
-              img.src = pr.photo;
-            });
-            if (window.CONTENT) {
-              window.CONTENT.photo = pr.photo;
-              window.CONTENT.aboutPhoto = pr.photo;
-            }
+          const heroPhoto = pr.photo || pr.heroPhoto || "assets/img/me/mohammed-siddiq.png";
+          const aboutPhoto = pr.aboutPhoto || heroPhoto;
+          const botPhoto = pr.botPhoto || heroPhoto;
+
+          // Hero Section Photo
+          document.querySelectorAll('.hero__photo, #heroPhoto').forEach(img => {
+            img.src = heroPhoto;
+          });
+
+          // About Section Photo (منفصلة ومستقلة)
+          document.querySelectorAll('.about__img, #aboutPhoto').forEach(img => {
+            img.src = aboutPhoto;
+          });
+
+          // AI Chatbot Avatar
+          document.querySelectorAll('.siddiq-bot__toggle-avatar img, .siddiq-bot__avatar-ring img').forEach(img => {
+            img.src = botPhoto;
+          });
+
+          if (window.CONTENT) {
+            window.CONTENT.photo = heroPhoto;
+            window.CONTENT.aboutPhoto = aboutPhoto;
+            window.CONTENT.botPhoto = botPhoto;
           }
+
           if (pr.name) {
             document.querySelectorAll('.brand__name, #aboutName').forEach(el => el.textContent = pr.name);
           }
@@ -422,6 +719,7 @@
             experience: "#experience",
             certs: "#certs",
             about: "#about",
+            activities: "#activities",
             contact: "#contact",
             whatsapp: ".whatsapp",
             mailcard: ".mailcard",
@@ -435,6 +733,17 @@
               else el.style.removeProperty('display');
             }
           }
+        }
+
+        // 10. Activities sync
+        if (portData.activities && Array.isArray(portData.activities) && portData.activities.length) {
+          window.__PORTFOLIO_ACTIVITIES = portData.activities;
+          renderActivities();
+        }
+
+        // 11. Section Ordering sync
+        if (portData.sectionOrder && Array.isArray(portData.sectionOrder) && portData.sectionOrder.length) {
+          applySectionOrder(portData.sectionOrder);
         }
 
         if (portData.scrapbookSettings && portData.scrapbookSettings.enabled === false) {
@@ -452,7 +761,7 @@
     try {
       const S = window.SCREENS;
       scene3d = window.HeroScene.create($("#sceneStage"), {
-        photo: "assets/img/me/mohammed-siddiq.png",
+        photo: (window.__PORTFOLIO_DATA?.profile?.photo) || "assets/img/me/mohammed-siddiq.png",
         screens: [S["brainguard-home"], S["brainguard-ai"], S["biscofa-home"], S["biscofa-admin"], S["alhayah-home"], S["event-home"]],
         tip: $("#sceneTip"), reduced,
         label: (k) => tr("tip." + k)
@@ -466,19 +775,7 @@
     } catch (e) { scene3d = null; }
   }
 
-  // live screen inside the middle phone of each project
-  setInterval(() => {
-    if (document.hidden) return;
-    if (window.__MOTION_SETTINGS && window.__MOTION_SETTINGS.cardFlip === false) return;
-    $$(".device--live .device__screens").forEach((box) => {
-      const imgs = $$("img", box);
-      const i = imgs.findIndex((x) => x.classList.contains("is-on"));
-      const swap = () => { imgs[i].classList.remove("is-on"); imgs[(i + 1) % imgs.length].classList.add("is-on"); };
-      if (!canAnimate) return swap();
-      // the screen flips like a card to the next one
-      gsap.timeline().to(box, { rotationY: 90, duration: .28, ease: "power2.in", onComplete: swap }).fromTo(box, { rotationY: -90 }, { rotationY: 0, duration: .5, ease: "back.out(1.6)" });
-    });
-  }, 2600);
+  // Multi-screen project sliders are managed with full synchronization in wireProjectSliders()
 
   if (!canAnimate) {
     if (scene3d) scene3d.start();

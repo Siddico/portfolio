@@ -57,7 +57,7 @@ window.CONTENT = {
     links: [
       { label: "LinkedIn ↗", href: "https://www.linkedin.com/in/mohammedsiddico/" },
       { label: "GitHub ↗", href: "https://github.com/Siddico" },
-      { label: "Portfolio ↗", href: "https://mohammed-siddiq.lovable.app" }
+      { label: "Portfolio ↗", href: "https://siddico.github.io/portfolio/" }
     ]
   },
   nav: [["projects", "nav.projects"], ["experience", "nav.experience"], ["skills", "nav.skills"], ["about", "nav.about"], ["contact", "nav.contact"]]

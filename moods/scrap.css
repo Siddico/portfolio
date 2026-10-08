@@ -247,7 +247,7 @@ html.mood-scrap body { background: #EFE8D8; }
   border: 1px solid #E4DAC4; outline: 1px dashed color-mix(in oklab, var(--olive) 40%, transparent); outline-offset: -10px; transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
 .sb-cert:hover { transform: rotate(0) translateY(-6px) scale(1.02); }
 [dir="rtl"] .sb-cert { padding: 30px 100px 24px 26px; }
-.sb-seal { position: absolute; top: 26px; inset-inline-start: 22px; display: grid; place-items: center; width: 60px; height: 60px; border-radius: 50%; background: var(--c); color: #fff; font: 800 .95rem/1 "Plus Jakarta Sans", sans-serif; direction: ltr;
+.sb-seal { position: absolute; top: 26px; inset-inline-start: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 62px; height: 62px; padding: 4px; border-radius: 50%; background: var(--c); color: #fff; font: 800 .86rem/1.15 "Plus Jakarta Sans", sans-serif; direction: ltr;
   box-shadow: 0 0 0 4px #FFFDF7, 0 0 0 6px color-mix(in oklab, var(--c) 50%, transparent); transform: rotate(-10deg); }
 .sb-cert b { font: 800 1.2rem/1.25 var(--disp); }
 .sb-cert > span:not(.sb-seal):not(.sb-cert__go) { color: var(--muted); }

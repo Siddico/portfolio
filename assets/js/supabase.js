@@ -58,11 +58,13 @@
           facts: facts,
           motionSettings: motionSettings,
           sectionVisibility: data.section_visibility || {},
+          sectionOrder: data.section_order || [],
           scrapbookSettings: data.scrapbook_settings || {},
           projects: data.projects || [],
           skills: data.skills || [],
           certs: data.certs || [],
-          experience: data.experience || []
+          experience: data.experience || [],
+          activities: data.activities || []
         };
       } catch (err) {
         console.warn("Supabase fetch failed, using local offline-first fallback:", err);
@@ -106,6 +108,7 @@
           motion: motion
         },
         section_visibility: fullData.sectionVisibility || {},
+        section_order: fullData.sectionOrder || [],
         scrapbook_settings: {
           ...(fullData.scrapbookSettings || {}),
           motion: motion
@@ -114,6 +117,7 @@
         skills: fullData.skills || [],
         certs: fullData.certs || [],
         experience: fullData.experience || [],
+        activities: fullData.activities || [],
         updated_at: new Date().toISOString()
       };
 
@@ -152,6 +156,101 @@
         .delete()
         .eq("id", id);
       return !error;
+    },
+
+    // 6. AI Assistant: Log conversation to database
+    async logAIChat(question, answer, lang = "ar", metadata = {}) {
+      const db = getClient();
+      const chatItem = {
+        question: String(question).slice(0, 1500),
+        answer: String(answer).slice(0, 3000),
+        lang: lang || "ar",
+        metadata: metadata || {},
+        created_at: new Date().toISOString()
+      };
+
+      if (!db) {
+        // Local offline fallback
+        try {
+          const localLogs = JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+          localLogs.unshift({ id: "local_" + Date.now(), ...chatItem });
+          localStorage.setItem("ms_ai_chats", JSON.stringify(localLogs.slice(0, 100)));
+        } catch (e) {}
+        return { success: true, local: true };
+      }
+
+      try {
+        const { data, error } = await db
+          .from("portfolio_ai_chats")
+          .insert([chatItem])
+          .select();
+        if (error) {
+          // If table doesn't exist yet, save locally without breaking
+          console.warn("Could not write to portfolio_ai_chats, caching locally:", error);
+          const localLogs = JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+          localLogs.unshift({ id: "local_" + Date.now(), ...chatItem });
+          localStorage.setItem("ms_ai_chats", JSON.stringify(localLogs.slice(0, 100)));
+          return { success: true, local: true };
+        }
+        return { success: true, data };
+      } catch (err) {
+        return { success: false, error: err.message };
+      }
+    },
+
+    // 7. Admin: Get all AI chat logs
+    async getAIChats() {
+      const db = getClient();
+      if (!db) {
+        try {
+          return JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+        } catch (e) {
+          return [];
+        }
+      }
+      try {
+        const { data, error } = await db
+          .from("portfolio_ai_chats")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error || !data || !data.length) {
+          const localLogs = JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+          return (data && data.length) ? data : localLogs;
+        }
+        return data;
+      } catch (err) {
+        try {
+          return JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+        } catch (e) {
+          return [];
+        }
+      }
+    },
+
+    // 8. Admin: Delete AI chat log
+    async deleteAIChat(id) {
+      const db = getClient();
+      if (String(id).startsWith("local_")) {
+        try {
+          let localLogs = JSON.parse(localStorage.getItem("ms_ai_chats") || "[]");
+          localLogs = localLogs.filter(x => x.id !== id);
+          localStorage.setItem("ms_ai_chats", JSON.stringify(localLogs));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      if (!db) return false;
+      try {
+        const { error } = await db
+          .from("portfolio_ai_chats")
+          .delete()
+          .eq("id", id);
+        return !error;
+      } catch (e) {
+        return false;
+      }
     }
   };
 })();

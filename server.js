@@ -58,7 +58,8 @@ function authMiddleware(req, res, next) {
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // API Routes
 
@@ -261,6 +262,40 @@ app.post('/api/scrapbook', authMiddleware, (req, res) => {
   else res.status(500).json({ error: 'Failed to update scrapbook settings' });
 });
 
+// 4e. Activities CRUD
+app.get('/api/activities', (req, res) => {
+  const data = readJson(PORTFOLIO_FILE, { activities: [] });
+  res.json(data.activities || []);
+});
+
+app.post('/api/activities', authMiddleware, (req, res) => {
+  const act = req.body;
+  if (!act.id) act.id = 'act_' + Date.now();
+  const data = readJson(PORTFOLIO_FILE, {});
+  data.activities = data.activities || [];
+  data.activities.unshift(act);
+  if (writeJson(PORTFOLIO_FILE, data)) res.json({ success: true, activity: act });
+  else res.status(500).json({ error: 'Failed to add activity' });
+});
+
+app.delete('/api/activities/:id', authMiddleware, (req, res) => {
+  const { id } = req.params;
+  const data = readJson(PORTFOLIO_FILE, {});
+  data.activities = (data.activities || []).filter(a => a.id !== id);
+  if (writeJson(PORTFOLIO_FILE, data)) res.json({ success: true });
+  else res.status(500).json({ error: 'Failed to remove activity' });
+});
+
+// 4f. Section Order
+app.post('/api/section-order', authMiddleware, (req, res) => {
+  const { order } = req.body;
+  if (!Array.isArray(order)) return res.status(400).json({ error: 'Order must be an array' });
+  const data = readJson(PORTFOLIO_FILE, {});
+  data.sectionOrder = order;
+  if (writeJson(PORTFOLIO_FILE, data)) res.json({ success: true, sectionOrder: order });
+  else res.status(500).json({ error: 'Failed to save section order' });
+});
+
 // 5. Contact Inquiries & Messages
 app.post('/api/contact', (req, res) => {
   const { name, email, message } = req.body;
@@ -300,6 +335,39 @@ app.delete('/api/messages/:id', authMiddleware, (req, res) => {
   } else {
     res.status(500).json({ error: 'Failed to delete message' });
   }
+});
+
+// 6. AI Assistant Conversations
+const AI_LOGS_FILE = path.join(DATA_DIR, 'ai_chats.json');
+
+app.post('/api/ai/log', (req, res) => {
+  const { question, answer, lang, metadata } = req.body;
+  if (!question || !answer) return res.status(400).json({ error: 'Question and answer required' });
+  const logs = readJson(AI_LOGS_FILE, []);
+  const item = {
+    id: 'ai_' + Date.now(),
+    question: String(question).slice(0, 1500),
+    answer: String(answer).slice(0, 3000),
+    lang: lang || 'ar',
+    metadata: metadata || {},
+    created_at: new Date().toISOString()
+  };
+  logs.unshift(item);
+  writeJson(AI_LOGS_FILE, logs);
+  res.json({ success: true, item });
+});
+
+app.get('/api/ai/logs', authMiddleware, (req, res) => {
+  const logs = readJson(AI_LOGS_FILE, []);
+  res.json(logs);
+});
+
+app.delete('/api/ai/logs/:id', authMiddleware, (req, res) => {
+  const { id } = req.params;
+  const logs = readJson(AI_LOGS_FILE, []);
+  const filtered = logs.filter(l => l.id !== id);
+  writeJson(AI_LOGS_FILE, filtered);
+  res.json({ success: true });
 });
 
 // Serve Admin Dashboard page
