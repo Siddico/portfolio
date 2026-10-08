@@ -217,8 +217,9 @@ html.mood-scrap body { background: #EFE8D8; }
   border: 10px solid transparent; border-image: repeating-linear-gradient(45deg, #B5532F 0 14px, #FBF8F0 14px 28px, #56682B 28px 42px, #FBF8F0 42px 56px) 10; display: grid; gap: 16px; justify-items: center; }
 .sb-big { margin: 0; font: 900 clamp(2.4rem, 6vw, 4.4rem)/1.05 var(--disp); }
 .sb-envelope > p { margin: 0; color: var(--muted); }
-.sb-mail { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; font: 700 1.25rem var(--note); }
-.sb-stampbtn { padding: 10px 16px; border: 2.5px dashed var(--olive); color: var(--olive); background: transparent; font: 700 1rem var(--note); text-transform: uppercase; transform: rotate(-4deg); cursor: pointer; border-radius: 6px; }
+.sb-mail { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 14px; font: 700 1.25rem var(--note); max-width: 100%; }
+.sb-mail a { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.sb-stampbtn { padding: 10px 16px; border: 2.5px dashed var(--olive); color: var(--olive); background: transparent; font: 700 1rem var(--note); text-transform: uppercase; transform: rotate(-4deg); cursor: pointer; border-radius: 6px; flex-shrink: 0; white-space: nowrap; }
 .sb-stampbtn:hover { background: var(--olive); color: var(--paper); }
 .sb-envelope .sb-tickets { justify-content: center; }
 .sb-envelope .sb-ticket::before { background: #F3E9D2; }
