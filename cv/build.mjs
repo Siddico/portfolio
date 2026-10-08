@@ -1,4 +1,4 @@
-// Renders cv/cv.html to assets/Sherif-Fahmy-CV.pdf (A4).
+// Renders cv/cv.html to assets/Mohammed-Siddiq-CV.pdf (A4).
 // Usage: npm i -D playwright && node cv/build.mjs
 import { chromium } from "playwright";
 import { fileURLToPath, pathToFileURL } from "node:url";

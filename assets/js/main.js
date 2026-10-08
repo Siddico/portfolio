@@ -965,7 +965,7 @@
       if (!saver) return;
       e.preventDefault();
       fetch(dl.getAttribute("href")).then((r) => r.blob())
-        .then((blob) => saver.save({ filename: "Mohammed-Siddiq-CV.pdf", data: blob }))
+        .then((blob) => saver.save({ filename: "Flutter_Developer_Mohammed_Siddiq.pdf", data: blob }))
         .catch(() => { /* declined or unavailable: the preview stays visible */ });
     });
   }

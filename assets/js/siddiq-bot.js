@@ -21,7 +21,7 @@
       github: "https://github.com/Siddico",
       linkedin: "https://www.linkedin.com/in/mohammedsiddico/",
       portfolio: "https://siddico.github.io/portfolio/",
-      cv: "assets/Mohammed-Siddiq-CV.pdf"
+      cv: "assets/Flutter_Developer_Mohammed_Siddiq.pdf"
     },
     education: {
       degree: { ar: "بكالوريوس علوم الحاسب (Bachelor of Computer Science)", en: "Bachelor of Computer Science" },
@@ -169,7 +169,7 @@
     if (/تواصل|اتصال|ايميل|واتس|رقم|cv|سيرة|لينك|contact|email|phone|whatsapp|linkedin|github|resume/.test(q)) {
       return isAr
         ? `📬 **طرق التواصل مع الباشمهندس محمد:**\n\n• **البريد الإلكتروني:** [${KNOWLEDGE_BASE.identity.email}](mailto:${KNOWLEDGE_BASE.identity.email})\n• **واتساب المباشر:** [${KNOWLEDGE_BASE.identity.phone}](${KNOWLEDGE_BASE.identity.whatsapp})\n• **LinkedIn:** [mohammedsiddico](${KNOWLEDGE_BASE.identity.linkedin})\n• **GitHub:** [Siddico](${KNOWLEDGE_BASE.identity.github})\n• **تحميل السيرة الذاتية (CV):** [تحميل ملف PDF](${KNOWLEDGE_BASE.identity.cv})\n\nأو يمكنك ملء نموذج الرسائل المباشر في قسم التواصل بالأسفل!`
-        : `📬 **Connect with Mohammed Siddiq:**\n\n• **Email:** [${KNOWLEDGE_BASE.identity.email}](mailto:${KNOWLEDGE_BASE.identity.email})\n• **WhatsApp Direct:** [${KNOWLEDGE_BASE.identity.phone}](${KNOWLEDGE_BASE.identity.whatsapp})\n• **LinkedIn:** [mohammedsiddico](${KNOWLEDGE_BASE.identity.linkedin})\n• **GitHub:** [Siddico](${KNOWLEDGE_BASE.identity.github})\n• **Download CV:** [Mohammed-Siddiq-CV.pdf](${KNOWLEDGE_BASE.identity.cv})\n\nAlternatively, use the contact form at the bottom of the page!`;
+        : `📬 **Connect with Mohammed Siddiq:**\n\n• **Email:** [${KNOWLEDGE_BASE.identity.email}](mailto:${KNOWLEDGE_BASE.identity.email})\n• **WhatsApp Direct:** [${KNOWLEDGE_BASE.identity.phone}](${KNOWLEDGE_BASE.identity.whatsapp})\n• **LinkedIn:** [mohammedsiddico](${KNOWLEDGE_BASE.identity.linkedin})\n• **GitHub:** [Siddico](${KNOWLEDGE_BASE.identity.github})\n• **Download CV:** [Flutter_Developer_Mohammed_Siddiq.pdf](${KNOWLEDGE_BASE.identity.cv})\n\nAlternatively, use the contact form at the bottom of the page!`;
     }
 
     // 5. Education & Background
