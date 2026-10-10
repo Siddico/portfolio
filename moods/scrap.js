@@ -304,7 +304,20 @@
     if (window.ScrollTrigger) {
       ScrollTrigger.batch(root.querySelectorAll(".sb-drop, .sb-sticky"), {
         start: "top 90%", once: true,
-        onEnter: (els) => gsap.from(els, { y: -90, rotation: () => gsap.utils.random(-14, 14), opacity: 0, duration: .9, ease: "back.out(1.6)", stagger: .08 })
+        onEnter: (els) => {
+          const isMobile = window.innerWidth <= 600;
+          gsap.from(els, {
+            y: isMobile ? -40 : -90,
+            rotation: (idx, target) => {
+              if (isMobile && target.classList.contains("sb-envelope")) return 0;
+              return gsap.utils.random(isMobile ? -2 : -14, isMobile ? 2 : 14);
+            },
+            opacity: 0,
+            duration: .9,
+            ease: "back.out(1.6)",
+            stagger: .08
+          });
+        }
       });
     }
     const stripDiv = root.querySelector(".sb-strip > div");

@@ -234,10 +234,99 @@ html.mood-scrap body { background: #EFE8D8; }
   .sb-notes, .sb-others { grid-template-columns: 1fr 1fr; }
   .sb-arrow, .sb-postmark { display: none; }
 }
+@media (max-width: 768px) {
+  .sb-wrap { width: min(1160px, 100% - 24px); }
+  .sb-envelope {
+    padding: clamp(28px, 6vw, 44px) clamp(16px, 4vw, 28px);
+    border-width: 8px;
+    border-image: repeating-linear-gradient(45deg, #B5532F 0 12px, #FBF8F0 12px 24px, #56682B 24px 36px, #FBF8F0 36px 48px) 8;
+    transform: none !important;
+    gap: 14px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .sb-big {
+    font-size: clamp(1.85rem, 6.5vw, 2.7rem);
+    line-height: 1.15;
+    word-break: break-word;
+    text-wrap: balance;
+  }
+  .sb-mail {
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+  .sb-mail a {
+    font-size: 1.12rem;
+    white-space: normal;
+    word-break: break-all;
+    text-align: center;
+  }
+}
 @media (max-width: 560px) {
+  .sb-wrap { width: min(1160px, 100% - 16px); }
   .sb-notes, .sb-others { grid-template-columns: 1fr; }
   .sb-sticky { width: calc(50% - 8px); }
   .sb-stamps span { width: 80px; height: 80px; }
+  .sb-envelope {
+    padding: 24px 12px 28px;
+    border-width: 6px;
+    border-image: repeating-linear-gradient(45deg, #B5532F 0 10px, #FBF8F0 10px 20px, #56682B 20px 30px, #FBF8F0 30px 40px) 6;
+    gap: 12px;
+    box-shadow: 0 16px 30px -14px rgba(0, 0, 0, .35);
+  }
+  .sb-big {
+    font-size: clamp(1.55rem, 7.5vw, 2rem);
+    line-height: 1.16;
+    letter-spacing: -.02em;
+  }
+  .sb-envelope > p {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+  .sb-mail {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  .sb-mail a {
+    font-size: clamp(0.92rem, 4.2vw, 1.05rem);
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 8px;
+    width: 100%;
+    word-break: break-all;
+    text-align: center;
+  }
+  .sb-stampbtn {
+    width: 100%;
+    max-width: 220px;
+    transform: none;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+    min-height: 40px;
+  }
+  .sb-envelope .sb-tickets {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .sb-envelope .sb-ticket {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.92rem;
+    padding: 10px 14px 10px 22px;
+    white-space: normal;
+    word-break: break-word;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 98% 50%, 100% 65%, 100% 100%, 0 100%, 0 65%, 2% 50%, 0 35%);
+  }
+  .sb-foot {
+    margin: 30px 0 0;
+    font-size: 1.05rem;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  }
 }
 .sb-lead mark { background: none; color: var(--wheat); text-decoration: underline wavy color-mix(in oklab, var(--wheat) 70%, transparent); text-underline-offset: 6px; }
 @media (max-width: 600px) { .sb-doodle--c { bottom: auto; top: 12%; right: 6%; } .sb-sticker { right: -6px; } }
