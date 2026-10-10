@@ -735,24 +735,25 @@
 
       @media (max-width: 640px) {
         .siddiq-bot {
-          bottom: 14px;
-          right: 14px;
+          bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+          right: calc(14px + env(safe-area-inset-right, 0px));
           left: auto;
-          inset-inline-end: 14px;
+          inset-inline-end: calc(14px + env(safe-area-inset-right, 0px));
           inset-inline-start: auto;
+          z-index: 9999;
         }
         .siddiq-bot__panel {
           position: fixed;
-          bottom: 14px;
-          right: 14px;
-          left: 14px;
-          width: calc(100vw - 28px);
-          max-width: none;
-          height: 82vh;
-          max-height: 82vh;
+          bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+          right: 12px;
+          left: 12px;
+          width: calc(100vw - 24px);
+          max-width: calc(100vw - 24px);
+          height: min(84dvh, 600px);
+          max-height: calc(100dvh - 28px);
           margin-bottom: 0;
           border-radius: 22px;
-          z-index: 9999;
+          z-index: 10000;
         }
         .siddiq-bot__toggle-text {
           display: none;
@@ -766,6 +767,9 @@
         }
         .siddiq-bot__toggle-sparkle {
           display: none;
+        }
+        .siddiq-bot__form input {
+          font-size: 16px;
         }
       }
     `;

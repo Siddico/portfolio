@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/css/main.css?v=20261008">
+<link rel="stylesheet" href="assets/css/main.css?v=20261010">
 </head>
 <body>
 
@@ -49,9 +49,45 @@
     <div class="nav__actions">
       <button class="lang" id="langToggle" type="button" aria-label="Switch language"><span class="lang__en">EN</span><span class="lang__ar">ع</span></button>
       <a class="btn btn--primary btn--sm" href="assets/Flutter_Developer_Mohammed_Siddiq.pdf" download="Flutter_Developer_Mohammed_Siddiq.pdf" data-cv><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span data-i18n="nav.cv">CV</span></a>
+      <button class="nav__burger" id="mobileNavToggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
 </header>
+
+<!-- ============ MOBILE NAV DRAWER ============ -->
+<div class="nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+  <div class="nav-drawer__backdrop" id="navDrawerBackdrop"></div>
+  <div class="nav-drawer__panel">
+    <div class="nav-drawer__head">
+      <a class="brand" href="#top" aria-label="Mohammed Siddiq, home">
+        <span class="brand__mark">MS</span>
+        <span class="brand__name">Mohammed Siddiq</span>
+      </a>
+      <button class="nav-drawer__close" id="mobileNavClose" type="button" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="nav-drawer__links" aria-label="Mobile sections">
+      <a href="#projects" data-i18n="nav.projects"><span>Projects</span><i>↗</i></a>
+      <a href="#experience" data-i18n="nav.experience"><span>Experience</span><i>↗</i></a>
+      <a href="#skills" data-i18n="nav.skills"><span>Skills</span><i>↗</i></a>
+      <a href="#about" data-i18n="nav.about"><span>About</span><i>↗</i></a>
+      <a href="#activities" data-i18n="nav.activities"><span>Activities</span><i>↗</i></a>
+      <a href="#contact" data-i18n="nav.contact"><span>Contact</span><i>↗</i></a>
+    </nav>
+    <div class="nav-drawer__footer">
+      <a class="btn btn--primary" href="assets/Flutter_Developer_Mohammed_Siddiq.pdf" download="Flutter_Developer_Mohammed_Siddiq.pdf" data-cv style="width:100%; justify-content:center;">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+        <span data-i18n="nav.cv">Download CV</span>
+      </a>
+      <div class="nav-drawer__status">
+        <span class="status" style="width:100%; justify-content:center;"><i></i><span data-i18n="hero.status">Available for Flutter roles · Cairo / Remote</span></span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main id="top">
 
@@ -78,6 +114,25 @@
       <div class="hero__glow" aria-hidden="true"></div>
       <div class="hero__stage" id="sceneStage"></div>
       <img class="hero__photo" id="heroPhoto" src="assets/img/me/mohammed-siddiq.png" alt="Mohammed Siddiq" width="433" height="577" fetchpriority="high">
+      
+      <!-- Interactive Floating Project Frame around photo (cycles through project screens) -->
+      <div class="hero__project-frame" id="heroProjectFrame" role="button" tabindex="0" aria-label="Project Screen Preview">
+        <div class="hero__frame-notch"></div>
+        <div class="hero__frame-screen" id="heroFrameScreen">
+          <img src="assets/img/screens/brainguard-home.svg" alt="BrainGuard" class="is-active" data-name="BrainGuard" data-sub-en="Patient Dashboard" data-sub-ar="لوحة المريض">
+          <img src="assets/img/screens/brainguard-ai.svg" alt="BrainGuard AI" data-name="BrainGuard AI" data-sub-en="AI Stroke Prediction" data-sub-ar="تنبؤ السكتة بالذكاء الاصطناعي">
+          <img src="assets/img/screens/biscofa-home.svg" alt="Biscofa" data-name="Biscofa" data-sub-en="Customer App" data-sub-ar="تطبيق العميل">
+          <img src="assets/img/screens/biscofa-admin.svg" alt="Biscofa Admin" data-name="Biscofa Admin" data-sub-en="Admin Portal" data-sub-ar="لوحة تحكم المتجر">
+          <img src="assets/img/screens/alhayah-home.svg" alt="Al Hayah" data-name="Al Hayah" data-sub-en="Pharmacy App" data-sub-ar="تطبيق الصيدلية">
+          <img src="assets/img/screens/event-home.svg" alt="Event Time" data-name="Event Time" data-sub-en="Event Booking" data-sub-ar="حجز الفعاليات">
+        </div>
+        <div class="hero__frame-badge" id="heroFrameBadge">
+          <span class="badge-dot"></span>
+          <span class="badge-text" id="heroBadgeText">BrainGuard</span>
+          <span class="badge-tap" aria-hidden="true">↻</span>
+        </div>
+      </div>
+
       <span class="scene-tip" id="sceneTip" role="status" aria-live="polite"></span>
       <span class="hero__hint" data-i18n="hero.hint">Hover the 3D objects · click them</span>
     </div>
@@ -356,9 +411,9 @@
 <script src="assets/js/scene.js?v=20261007"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase.js?v=20261007"></script>
-<script src="assets/js/main.js?v=20261007"></script>
+<script src="assets/js/main.js?v=20261010"></script>
 <script src="assets/js/moods.js?v=20261007"></script>
-<script src="assets/js/siddiq-bot.js?v=20261008c"></script>
+<script src="assets/js/siddiq-bot.js?v=20261010"></script>
 
 <script>
   // Handle contact form submissions with Cloud Supabase & Local Fallback

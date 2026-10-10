@@ -280,6 +280,53 @@
     return map[src] || `assets/img/screens/${src}.svg`;
   }
 
+  const collapsedProjects = new Set();
+
+  function wireProjectCollapsibles() {
+    $$(".project__toggle-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const pId = btn.dataset.projId;
+        const wrap = btn.closest(".project__body").querySelector(".project__collapse-wrap");
+        if (!wrap) return;
+
+        const isNowCollapsed = !wrap.classList.contains("is-collapsed");
+        wrap.classList.toggle("is-collapsed", isNowCollapsed);
+        btn.classList.toggle("is-collapsed", isNowCollapsed);
+        btn.setAttribute("aria-expanded", String(!isNowCollapsed));
+
+        if (isNowCollapsed) {
+          collapsedProjects.add(pId);
+        } else {
+          collapsedProjects.delete(pId);
+        }
+
+        const textEl = btn.querySelector(".toggle-btn__text");
+        if (textEl) {
+          textEl.textContent = isNowCollapsed
+            ? (lang === "ar" ? "عرض التفاصيل كاملة" : "Show full details")
+            : (lang === "ar" ? "إخفاء التفاصيل" : "Hide details");
+        }
+
+        const updateLayout = () => {
+          const cards = $$(".project");
+          if (cards.length && $("#projectList").classList.contains("is-stacked")) {
+            cards.forEach((c) => { c.style.minHeight = ""; });
+            const hmax = Math.max(...cards.map((c) => c.offsetHeight));
+            cards.forEach((c) => { c.style.minHeight = hmax + "px"; });
+          }
+          if (window.ScrollTrigger) ScrollTrigger.refresh();
+          if (window.__lenis) window.__lenis.resize();
+        };
+
+        updateLayout();
+        setTimeout(updateLayout, 160);
+        setTimeout(updateLayout, 340);
+      });
+    });
+  }
+
   function renderProjects() {
     const activeProjects = (window.PROJECTS || []).filter(p => p && p.visible !== false);
     const listEl = $("#projectList");
@@ -328,6 +375,11 @@
       const socialLinks = (p.social || []).map((x) => `<a href="${esc(x.href || "#")}" target="_blank" rel="noopener">${esc(x.label || "Social")} ↗</a>`).join("");
       const didText = L.did ? (L.did[lang] || L.did.en || "What I did") : "What I did";
 
+      const isCollapsed = collapsedProjects.has(p.id);
+      const toggleText = isCollapsed
+        ? (lang === "ar" ? "عرض التفاصيل كاملة" : "Show full details")
+        : (lang === "ar" ? "إخفاء التفاصيل" : "Hide details");
+
       return `<article class="project" data-id="${esc(p.id)}">
         <div class="project__visual" style="background:${p.bg || '#1E293B'}">
           <span class="project__word" aria-hidden="true">${esc(pEnName)}</span>
@@ -338,8 +390,18 @@
           <span class="project__tag">${esc(pTag)}</span>
           <h3 class="project__name" aria-label="${esc(pName)}">${split}</h3>
           <p class="project__desc">${esc(pDesc)}</p>
-          <p class="project__label">${didText}</p>
-          <ul class="project__points">${pts.map((t) => `<li>${esc(typeof t === "object" ? (t[lang] || t.en || "") : t)}</li>`).join("")}</ul>
+          <div class="project__details-head">
+            <p class="project__label">${didText}</p>
+            <button class="project__toggle-btn ${isCollapsed ? "is-collapsed" : ""}" type="button" aria-expanded="${!isCollapsed}" aria-controls="proj-pts-${esc(p.id)}" data-proj-id="${esc(p.id)}">
+              <span class="toggle-btn__text">${toggleText}</span>
+              <svg class="toggle-btn__chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+          </div>
+          <div class="project__collapse-wrap ${isCollapsed ? "is-collapsed" : ""}" id="proj-pts-${esc(p.id)}">
+            <div class="project__collapse-inner">
+              <ul class="project__points">${pts.map((t) => `<li>${esc(typeof t === "object" ? (t[lang] || t.en || "") : t)}</li>`).join("")}</ul>
+            </div>
+          </div>
           ${metrics}
           <ul class="tags">${stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
           <div class="project__links">${links}</div>
@@ -349,6 +411,7 @@
     }).join("");
 
     wireProjectSliders();
+    wireProjectCollapsibles();
     if (typeof revealProjects === "function") {
       try { revealProjects(); } catch (e) {}
     }
@@ -481,6 +544,7 @@
   applyLang(lang);
   wireCv();
   wireCopy();
+  wireMobileNav();
   // what the hot-reload sites (moods.js) use: the same text, data and helpers as this page
   window.SITE = {
     t: tr, esc, canAnimate, reduced,
@@ -780,13 +844,94 @@
     }
   }
   syncWithBackend();
+  const heroScreenMeta = [
+    { name: "BrainGuard", sub: { en: "AI Stroke Risk & Biometrics", ar: "تنبؤ السكتة بالذكاء الاصطناعي والمؤشرات الحيوية" } },
+    { name: "BrainGuard AI", sub: { en: "Biometric Dashboard", ar: "لوحة المريض والمؤشرات الحيوية" } },
+    { name: "Biscofa", sub: { en: "Customer Coffee Ordering App", ar: "تطبيق العميل وطلب المشروبات" } },
+    { name: "Biscofa Admin", sub: { en: "Live Store Management Portal", ar: "لوحة تحكم المتجر والطلبات اللحظية" } },
+    { name: "Al Hayah", sub: { en: "Pharmacy & Medicine Delivery", ar: "تطبيق الصيدلية وتوصيل الأدوية" } },
+    { name: "Event Time", sub: { en: "Event Ticketing & Booking", ar: "حجز الفعاليات والتذاكر" } }
+  ];
+
+  function updateHeroPhoneTip(idx) {
+    const item = heroScreenMeta[idx] || heroScreenMeta[0];
+    const sub = lang === "ar" ? item.sub.ar : item.sub.en;
+    const tipAr = `📱 ${item.name} · ${sub} (انقر للتبديل)`;
+    const tipEn = `📱 ${item.name} · ${sub} (Click to switch)`;
+    EN["tip.phone"] = tipEn;
+    if (window.I18N_AR) window.I18N_AR["tip.phone"] = tipAr;
+    const tipEl = $("#sceneTip");
+    if (tipEl && tipEl.dataset.key === "phone") {
+      tipEl.textContent = lang === "ar" ? tipAr : tipEn;
+    }
+  }
+
+  function wireHeroProjectFrame() {
+    const frame = $("#heroProjectFrame");
+    if (!frame) return;
+    const imgs = $$("#heroFrameScreen img", frame);
+    const badgeText = $("#heroBadgeText", frame);
+    if (!imgs.length) return;
+
+    let cur = 0;
+    let timer = null;
+
+    function setFrameSlide(idx) {
+      cur = (idx + imgs.length) % imgs.length;
+      imgs.forEach((img, i) => {
+        img.classList.toggle("is-active", i === cur);
+      });
+      const activeImg = imgs[cur];
+      if (activeImg && badgeText) {
+        const name = activeImg.dataset.name || "Project";
+        const sub = (lang === "ar" ? activeImg.dataset.subAr : activeImg.dataset.subEn) || "";
+        badgeText.textContent = sub ? `${name} · ${sub}` : name;
+      }
+    }
+
+    function nextSlide() {
+      setFrameSlide(cur + 1);
+    }
+
+    timer = setInterval(() => {
+      if (!document.hidden) nextSlide();
+    }, 3200);
+
+    frame.addEventListener("click", () => {
+      clearInterval(timer);
+      nextSlide();
+      timer = setInterval(() => {
+        if (!document.hidden) nextSlide();
+      }, 3200);
+      frame.style.transform = (root.dir === "rtl" ? "rotate(-6deg) " : "rotate(6deg) ") + "scale(0.96)";
+      setTimeout(() => { frame.style.transform = ""; }, 220);
+    });
+  }
+
   let scene3d = null;
   if (window.HeroScene && window.HeroScene.supported()) {
     try {
-      const S = window.SCREENS;
+      const S = window.SCREENS || {
+        "brainguard-home": "assets/img/screens/brainguard-home.svg",
+        "brainguard-ai": "assets/img/screens/brainguard-ai.svg",
+        "biscofa-home": "assets/img/screens/biscofa-home.svg",
+        "biscofa-admin": "assets/img/screens/biscofa-admin.svg",
+        "alhayah-home": "assets/img/screens/alhayah-home.svg",
+        "event-home": "assets/img/screens/event-home.svg"
+      };
       scene3d = window.HeroScene.create($("#sceneStage"), {
         photo: (window.__PORTFOLIO_DATA?.profile?.photo) || "assets/img/me/mohammed-siddiq.png",
-        screens: [S["brainguard-home"], S["brainguard-ai"], S["biscofa-home"], S["biscofa-admin"], S["alhayah-home"], S["event-home"]],
+        screens: [
+          S["brainguard-home"] || "assets/img/screens/brainguard-home.svg",
+          S["brainguard-ai"] || "assets/img/screens/brainguard-ai.svg",
+          S["biscofa-home"] || "assets/img/screens/biscofa-home.svg",
+          S["biscofa-admin"] || "assets/img/screens/biscofa-admin.svg",
+          S["alhayah-home"] || "assets/img/screens/alhayah-home.svg",
+          S["event-home"] || "assets/img/screens/event-home.svg"
+        ],
+        onScreenChange: (idx) => {
+          updateHeroPhoneTip(idx);
+        },
         tip: $("#sceneTip"), reduced,
         label: (k) => tr("tip." + k)
       });
@@ -798,6 +943,8 @@
       }
     } catch (e) { scene3d = null; }
   }
+
+  wireHeroProjectFrame();
 
   // Multi-screen project sliders are managed with full synchronization in wireProjectSliders()
 
@@ -981,6 +1128,60 @@
       const fallback = () => { const r = document.createRange(); r.selectNodeContents($("#mailLink")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(email).then(done, fallback);
       else fallback();
+    });
+  }
+
+  function wireMobileNav() {
+    const burger = $("#mobileNavToggle");
+    const drawer = $("#mobileNavDrawer");
+    const closeBtn = $("#mobileNavClose");
+    const backdrop = $("#navDrawerBackdrop");
+    if (!burger || !drawer) return;
+
+    function openDrawer() {
+      drawer.classList.add("is-open");
+      burger.classList.add("is-active");
+      burger.setAttribute("aria-expanded", "true");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("is-open");
+      burger.classList.remove("is-active");
+      burger.setAttribute("aria-expanded", "false");
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.style.removeProperty("overflow");
+    }
+
+    burger.addEventListener("click", () => {
+      if (drawer.classList.contains("is-open")) closeDrawer();
+      else openDrawer();
+    });
+
+    if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+    if (backdrop) backdrop.addEventListener("click", closeDrawer);
+
+    $$(".nav-drawer__links a", drawer).forEach(link => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        closeDrawer();
+        if (href && href.startsWith("#")) {
+          const target = $(href);
+          if (target) {
+            e.preventDefault();
+            if (window.__lenis) {
+              window.__lenis.scrollTo(target, { offset: -70 });
+            } else {
+              target.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        }
+      });
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("is-open")) closeDrawer();
     });
   }
 })();

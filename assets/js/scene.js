@@ -53,7 +53,7 @@
     return g;
   }
 
-  function phone(screens) {
+  function phone(screens, onScreenChange) {
     const g = new T.Group();
     const body = new T.Mesh(extrude(roundRect(1.02, 2.1, .17), .09, .035),
       new T.MeshPhysicalMaterial({ color: "#14161c", roughness: .25, metalness: .6, clearcoat: 1, clearcoatRoughness: .1 }));
@@ -70,16 +70,28 @@
     g.add(scr);
     const notch = new T.Mesh(new T.CapsuleGeometry(.035, .16, 4, 12), new T.MeshBasicMaterial({ color: "#000" }));
     notch.rotation.z = Math.PI / 2; notch.position.set(0, .9, .09); g.add(notch);
+
     screens.forEach((src, i) => loader.load(src, (t) => {
       t.colorSpace = T.SRGBColorSpace; t.anisotropy = 8; mats[i] = t;
       if (i === 0) { scr.material.map = t; scr.material.needsUpdate = true; }
     }));
     let cur = 0;
-    g.userData.next = () => {
-      const n = (cur + 1) % screens.length;
-      if (!mats[n]) return; cur = n;
-      scr.material.map = mats[n]; scr.material.needsUpdate = true;
+    const showScreen = (idx) => {
+      if (!screens.length) return;
+      cur = (idx + screens.length) % screens.length;
+      if (mats[cur]) {
+        scr.material.map = mats[cur];
+        scr.material.needsUpdate = true;
+      }
+      if (typeof onScreenChange === "function") {
+        onScreenChange(cur);
+      }
     };
+    g.userData.next = () => {
+      showScreen(cur + 1);
+    };
+    g.userData.getCur = () => cur;
+    g.userData.showScreen = showScreen;
     return g;
   }
 
@@ -188,7 +200,7 @@
 
     // objects: [mesh, base position, base rotation, scale, label key, click action]
     const logo = flutterLogo();
-    const ph = phone(opts.screens || []);
+    const ph = phone(opts.screens || [], opts.onScreenChange);
     const bubble = chatBubble();
     const items = [
       { mesh: logo, pos: [-1.75, 1.25, -2.2], rot: [.1, .3, -.05], s: 1, tip: "flutter", spinY: .25 },
@@ -217,6 +229,7 @@
       world.add(it.mesh);
       if (it.tip) it.mesh.traverse((o) => { if (o.isMesh) { o.userData.item = it; pickables.push(o); } });
     });
+    ph.userData.item = items[1];
 
     // confetti burst pool
     const burstGeo = new T.SphereGeometry(.05, 12, 8);
@@ -289,13 +302,17 @@
       it.spin.y += 16 + Math.random() * 4;
       it.vel.z += 4; it.scaleT = 1.25;
       const wp = new T.Vector3(); it.mesh.getWorldPosition(wp); burst(wp);
-      if (it.mesh === ph) ph.userData.next();
+      if (it.mesh === ph) {
+        ph.userData.next();
+        phoneTimer = 0;
+      }
       if (it.mesh === logo) logo.userData.pieces.forEach((p) => p.userData.vel.set((Math.random() - .5) * 9, (Math.random() - .5) * 9, Math.random() * 7));
       if (opts.onHit) opts.onHit(it.tip);
     }
 
     /* ---------------- loop */
     let visible = true, last = performance.now(), time = 0, introT = -1, exit = 0;
+    let phoneTimer = 0;
     new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(container);
     const tmp = new T.Vector3(), lookAt = new T.Vector3(0, .1, 0);
     const reduced = !!opts.reduced;
@@ -307,6 +324,24 @@
       time += dt;
       if (introT >= 0) introT += dt;
       const it0 = reduced ? 99 : Math.max(0, introT);
+
+      // auto-cycle project screens on phone every 3.2s
+      if (!reduced && ph && typeof ph.userData.next === "function" && opts.screens && opts.screens.length > 1) {
+        const isPhHovered = hovered && (hovered === ph.userData.item || hovered.mesh === ph);
+        if (!isPhHovered) {
+          phoneTimer += dt;
+          if (phoneTimer >= 3.2) {
+            phoneTimer = 0;
+            ph.userData.next();
+            const phItem = ph.userData.item;
+            if (phItem) {
+              phItem.spin.y += 2.4;
+              phItem.vel.z += 1.4;
+              phItem.scaleT = 1.15;
+            }
+          }
+        }
+      }
 
       // camera parallax
       const k = 1 - Math.exp(-dt * 3);
