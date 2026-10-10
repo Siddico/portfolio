@@ -889,10 +889,49 @@ html.in-mood body > :not(#mood, .hr, .hr-scan, .cv-modal, #siddiqBotContainer, s
     font-size: 0.9rem;
   }
 }
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 16px;
+  background: #25D366;
+  color: #06331B;
+  font-weight: 600;
+  transition: transform .2s var(--ease), background .2s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+  text-decoration: none;
+}
+.whatsapp:hover {
+  transform: translateY(-2px);
+  background: #22bf5b;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+.whatsapp svg {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: #06331B;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.whatsapp > span {
+  display: grid;
+  text-align: start;
+  line-height: 1.25;
+}
+.whatsapp__num {
+  direction: ltr;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
 .contact__info-card .whatsapp {
   width: 100%;
-  padding: 12px 16px;
-  min-height: 48px;
+  padding: 12px 18px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -905,8 +944,10 @@ html.in-mood body > :not(#mood, .hr, .hr-scan, .cv-modal, #siddiqBotContainer, s
     border-radius: 14px;
   }
   .contact__info-card .whatsapp svg {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
   }
   .contact__info-card .whatsapp__num {
     font-size: 0.98rem;
